@@ -1,0 +1,105 @@
+{
+  "_schemaVersion": 1,
+  "_provenance": {
+    "sources": [
+      {
+        "name": "Game8 — Best Attributes and How to Get More",
+        "url": "https://game8.co/games/Clair-Obscur-Expedition-33/archives/515688",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["attribute effects", "points per level"]
+      },
+      {
+        "name": "Maxroll — Weapon, Attributes & Upgrades Guide",
+        "url": "https://maxroll.gg/clair-obscur-expedition-33/guides/weapon-attributes-upgrades-guide",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["attribute effects", "points per level"]
+      },
+      {
+        "name": "HowToPlayHub — Attributes & Leveling Guide",
+        "url": "https://howtoplayhub.com/clair-obscur-expedition-33/attributes-leveling-guide",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["points per level"]
+      },
+      {
+        "name": "mein-mmo — Attributes guide",
+        "url": "https://mein-mmo.de/en/clair-obscur-expedition-33-attributes-in-the-guide-how-to-best-distribute-your-points,1253553/",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["points per level", "crit damage modifier"]
+      },
+      {
+        "name": "ethugamer — Ultimate Attribute Guide",
+        "url": "https://ethugamer.com/clair-obscur-expedition-33/ultimate-clair-obscur-expedition-33-attribute-guide/",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["lifetime attribute point estimate (single-sourced, treat as approximate)"]
+      },
+      {
+        "name": "GamerGuides — Best Attributes and Breakpoints",
+        "url": "https://www.gamerguides.com/clair-obscur-expedition-33/guide/getting-started/gameplay/best-attributes-and-breakpoints",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["existence of the breakpoints mechanic (NOT the specific numbers — see knownUnknowns)"]
+      },
+      {
+        "name": "Game8 — Leveling Guide",
+        "url": "https://game8.co/games/Clair-Obscur-Expedition-33/archives/517398",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["level cap"]
+      },
+      {
+        "name": "gamepressure.com — What is the maximum character level?",
+        "url": "https://www.gamepressure.com/clair-obscur-expedition-33/what-is-the-maximum-character-level/z01192c",
+        "accessedDate": "2026-09-16",
+        "fieldsUsed": ["level cap"]
+      }
+    ],
+    "transformations": [
+      "All facts below marked confidence:'corroborated' were independently stated by 3+ of the sources above during Phase 1B research.",
+      "'approxLifetimeAttributePoints' is a single-sourced, derived figure (3 points × 98 level-ups) and is explicitly marked lower confidence.",
+      "No numeric breakpoint/soft-cap values are included anywhere in this file: two sources (GamerGuides and ethugamer) gave contradictory numbers for the same attributes, so none could be verified. Only the fact that a breakpoints/diminishing-returns mechanic is community-believed to exist is recorded, in knownUnknowns."
+    ]
+  },
+  "attributes": ["Vitality", "Might", "Agility", "Defense", "Luck"],
+  "pointsPerLevelUp": 3,
+  "skillPointsPerLevelUp": 1,
+  "levelCap": 99,
+  "approxLifetimeAttributePoints": {
+    "value": 294,
+    "confidence": "single-source-derived",
+    "note": "3 points/level × 98 level-ups (level 1→99). Stated outright by ethugamer; consistent with the corroborated per-level rate but not independently double-confirmed as a total."
+  },
+  "attributeEffects": {
+    "Vitality": {
+      "primary": "Increases max HP",
+      "confidence": "corroborated"
+    },
+    "Might": {
+      "primary": "Increases Attack Power / base physical damage scaling",
+      "confidence": "corroborated"
+    },
+    "Agility": {
+      "primary": "Increases Speed (turn frequency)",
+      "secondary": "Possible minor Defense bonus",
+      "confidence": "corroborated-primary, disputed-secondary"
+    },
+    "Defense": {
+      "primary": "Reduces incoming damage",
+      "secondary": "Possible minor Critical Rate bonus",
+      "confidence": "corroborated-primary, disputed-secondary"
+    },
+    "Luck": {
+      "primary": "Increases Critical Hit Rate",
+      "secondary": "Disputed — some sources say Speed, one says increased status-effect (Burn/Mark/Stun) chance",
+      "confidence": "corroborated-primary, unresolved-secondary"
+    }
+  },
+  "criticalHitDamageModifier": {
+    "value": 0.5,
+    "description": "Critical hits deal a flat +50% damage, independent of attribute investment.",
+    "confidence": "corroborated"
+  },
+  "knownUnknowns": [
+    "Exact numeric soft-cap / breakpoint values per attribute — two sources gave contradictory numbers, so none are treated as fact here.",
+    "Whether individual characters have unique base-stat growth curves, or all six share the same underlying formula — undocumented either way in every source checked.",
+    "Any exact damage or critical-hit formula combining attributes, weapon scaling, and level numerically — not publicly documented anywhere found in Phase 1B research.",
+    "Whether the +3 points/level rate ever changes at very high levels — no source reports a change, but this was not exhaustively verified level-by-level."
+  ]
+}

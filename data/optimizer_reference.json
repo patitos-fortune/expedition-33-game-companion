@@ -1,0 +1,87 @@
+{
+  "_schemaVersion": 1,
+  "_documentation": "This file centralizes every heuristic weight and assumption the optimizer uses. Nothing here is a verified game formula — all of it is an explicit, editable design choice (HEURISTIC / ASSUMPTION tier from OPTIMIZER_MODEL.md), kept in one place instead of scattered as magic numbers across the codebase. Edit these numbers to retune recommendations; no code changes required.",
+
+  "pictoStatReferenceScale": {
+    "_documentation": "Divisors used to bring Health/Defense/Critical Rate/Speed onto a comparable scale before applying strategy weights. Without this, Health (which is stored in the hundreds/thousands) would always dominate scoring over Critical Rate/Speed (stored in the tens) regardless of strategy profile, purely because of unit magnitude — not because it's actually more valuable for that strategy. These are rough, editable heuristic constants, not verified game values.",
+    "Health": 300,
+    "Defense": 50,
+    "Critical Rate": 15,
+    "Speed": 50
+  },
+
+  "scalingGradeWeight": {
+    "_documentation": "How strongly a weapon's S/A/B/C/D scaling grade on an attribute should influence that attribute's suggested priority. This is our own scoring convention, not an in-game number — the game does not publish a numeric value per grade letter.",
+    "S": 5,
+    "A": 4,
+    "B": 3,
+    "C": 2,
+    "D": 1,
+    "unscored": 0
+  },
+
+  "attributeAllocationFloorRatio": {
+    "value": 0.05,
+    "_documentation": "Fraction of the point budget reserved and spread evenly across all 5 attributes before the remainder is allocated by weight, so the optimizer never suggests reducing any attribute to exactly zero. This is a heuristic guardrail we chose for build stability, not a game rule."
+  },
+
+  "strategyProfiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "No strategic tilt — equal weight on every attribute and Picto/Lumina category. Useful as a neutral baseline or when you don't know a character's role yet.",
+      "attributeWeights": { "Vitality": 1.0, "Might": 1.0, "Agility": 1.0, "Defense": 1.0, "Luck": 1.0 },
+      "pictoStatWeights": { "Health": 1.0, "Defense": 1.0, "Critical Rate": 1.0, "Speed": 1.0 },
+      "luminaTypeWeights": { "Offensive": 1.0, "Defensive": 1.0, "Support": 1.0 }
+    },
+    "damage": {
+      "label": "Damage",
+      "description": "Favors raw offense: Might, Agility (turn speed / more actions) and Luck (crit rate), at the expense of Vitality/Defense.",
+      "attributeWeights": { "Vitality": 0.6, "Might": 1.3, "Agility": 1.15, "Defense": 0.5, "Luck": 1.2 },
+      "pictoStatWeights": { "Health": 0.7, "Defense": 0.6, "Critical Rate": 1.3, "Speed": 1.15 },
+      "luminaTypeWeights": { "Offensive": 1.3, "Defensive": 0.6, "Support": 1.0 }
+    },
+    "defensive": {
+      "label": "Defensive",
+      "description": "Favors survivability: Vitality and Defense, with a smaller Agility allowance for turn order, at the expense of Might/Luck.",
+      "attributeWeights": { "Vitality": 1.3, "Might": 0.6, "Agility": 0.9, "Defense": 1.3, "Luck": 0.6 },
+      "pictoStatWeights": { "Health": 1.3, "Defense": 1.3, "Critical Rate": 0.6, "Speed": 0.9 },
+      "luminaTypeWeights": { "Offensive": 0.6, "Defensive": 1.3, "Support": 1.1 }
+    },
+    "break": {
+      "label": "Break",
+      "description": "Favors attributes generally associated with filling/breaking the Break bar (frequent, high-hit-count offense) — Agility and Might, with Luck for crit-driven Break contributions. This profile is a more speculative guess than the others: Phase 1B research did not turn up a dedicated, sourced breakdown of the Break mechanic's attribute scaling, so treat its weights as a rougher starting point to hand-tune.",
+      "attributeWeights": { "Vitality": 0.8, "Might": 1.2, "Agility": 1.3, "Defense": 0.8, "Luck": 0.9 },
+      "pictoStatWeights": { "Health": 0.8, "Defense": 0.8, "Critical Rate": 1.0, "Speed": 1.2 },
+      "luminaTypeWeights": { "Offensive": 1.2, "Defensive": 0.8, "Support": 1.0 }
+    },
+    "status_burn": {
+      "label": "Status / Burn",
+      "description": "Favors Luck (crit rate, and per one source possibly status-effect chance) for status/damage-over-time-oriented builds, with Support-leaning Luminas.",
+      "attributeWeights": { "Vitality": 0.9, "Might": 1.0, "Agility": 1.0, "Defense": 0.8, "Luck": 1.3 },
+      "pictoStatWeights": { "Health": 0.9, "Defense": 0.8, "Critical Rate": 1.3, "Speed": 1.0 },
+      "luminaTypeWeights": { "Offensive": 1.1, "Defensive": 0.7, "Support": 1.2 }
+    },
+    "custom": {
+      "label": "Custom",
+      "description": "Starts identical to Balanced. Edit the weights in data/optimizer_reference.json under strategyProfiles.custom to define your own strategy without touching any code.",
+      "attributeWeights": { "Vitality": 1.0, "Might": 1.0, "Agility": 1.0, "Defense": 1.0, "Luck": 1.0 },
+      "pictoStatWeights": { "Health": 1.0, "Defense": 1.0, "Critical Rate": 1.0, "Speed": 1.0 },
+      "luminaTypeWeights": { "Offensive": 1.0, "Defensive": 1.0, "Support": 1.0 }
+    }
+  },
+
+  "genericWeaponScalingThresholdLevels": {
+    "value": [4, 10, 20, 33],
+    "confidence": "generic community-cited approximation, not a verified per-weapon table",
+    "_documentation": "Commonly-cited levels at which weapon scaling grades and passives tend to step up, per Phase 1B research (Game8/Maxroll/KeenGamer/GamerGuides). No source gave a single authoritative per-weapon table, so this is shown to the user as an approximate, labeled reference only — never used as if it were exact for a specific weapon."
+  },
+
+  "knownUnknowns": [
+    "No verified formula converts a scaling grade + attribute points into an exact damage or DPS number. The optimizer must never state one.",
+    "Per-weapon exact scaling-grade transition levels (only the generic 4/10/20/33 approximation above is available).",
+    "Weapon passive effects and unlock levels are missing for almost all weapons in data/weapons.json (left as empty arrays) — not populated for v0.1.",
+    "Skill mechanical effects are flavor text only (src/assets/characters.json), not structured numeric data — skills are intentionally outside the optimizer for v0.1.",
+    "Attribute soft-caps / breakpoints (see data/attribute_progression.json knownUnknowns).",
+    "Whether unlocking a Picto as a Lumina also grants its attribute bonus table (which otherwise only applies when a Picto is equipped in one of the 3 Picto slots) is unverified. The Lumina optimizer therefore scores Luminas only by their 'type' category (Offensive/Defensive/Support) and strategy fit, never by the attribute-bonus table, to avoid conflating two mechanics that may not both apply."
+  ]
+}

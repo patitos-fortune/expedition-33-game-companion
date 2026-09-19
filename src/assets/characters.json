@@ -1,0 +1,1185 @@
+[
+    {
+        "name": "Gustave",
+        "icon": "gustave.avif",
+        "id": 1,
+        "skills": [
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/from-fire",
+                "name": "From Fire",
+                "effect": "Deals medium single target damage. 3 hits.Uses weapon’s element.Heals self by 20% if the target Burns",
+                "cost": 4,
+                "id": 1
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/lumiere-assault",
+                "name": "Lumière Assault",
+                "effect": "Deals low single target damage. 5 hits.Uses weapon’s element.Critical Hits generate 1 additional Charge",
+                "cost": 3,
+                "id": 2
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/marking-shot",
+                "name": "Marking Shot",
+                "effect": "Deals low single target Lightning damage. 1 hit.Applies Mark",
+                "cost": 2,
+                "id": 3
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/overcharge",
+                "name": "Overcharge",
+                "effect": "Deals high single target Lightning damage based on the amount of Charges 1 hit.Can BreakResets Charges",
+                "cost": 4,
+                "id": 4
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/powerful",
+                "name": "Powerful",
+                "effect": "Applies Powerful to 1-3 allies, increasing the damage they deal for 3 turns.Gives 0 to 2 Charges",
+                "cost": 3,
+                "id": 5
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/recovery",
+                "name": "Recovery",
+                "effect": "Recovers 50% Health and dispels Status Effects.Gives 0 to 2 Charges",
+                "cost": 3,
+                "id": 6
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/shatter",
+                "name": "Shatter",
+                "effect": "Deals High Lightning damage to all enemies. 1 hit.Can BreakIf a target is Broken by the hit, Overcharge is fully Charged",
+                "cost": 5,
+                "id": 7
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/gustave/strike-storm",
+                "name": "Strike Storm",
+                "effect": "Deals very high single target damage. 6 hits.Uses weapon’s element.Critical Hits generate 2 additional Charges",
+                "cost": 7,
+                "id": 8
+            }
+        ]
+    },
+    {
+        "name": "Maelle",
+        "icon": "maelle.avif",
+        "id": 2,
+        "skills": [
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/breaking-rules",
+                "name": "Breaking Rules",
+                "effect": "Deals low single target Physical damage. 2 hits.Destroys all target’s Shields Gains 1 AP per Shield destroyed.If target is Defenceless, play a second turn.",
+                "cost": 3,
+                "id": 9
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/burning-canvas",
+                "name": "Burning Canvas",
+                "effect": "Deals high single target Void damage. 5 hits.Applies 1 Burn per hit. Damage increased for each Burn on the target.",
+                "cost": 5,
+                "id": 10
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/combustion",
+                "name": "Combustion",
+                "effect": "Deals medium single target Physical Damage. 2 hits.Consumes up to 10 Burn for increased damage.",
+                "cost": 4,
+                "id": 11
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/degagement",
+                "name": "Degagement",
+                "effect": "Deals low single target Fire damage. 1 hit.Target becomes weak to Fire damage for 2 turns",
+                "cost": 2,
+                "id": 12
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/egide",
+                "name": "Égide",
+                "effect": "Protects allies by taking damage in their place, for 2 turns.Duration is extended by 1 on gaining Shell.",
+                "cost": 3,
+                "id": 13
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/fencers-flurry",
+                "name": "Fencer's Flurry",
+                "effect": "Deals medium damage to all enemies. 1 hit.Uses weapon’s element.Applies Defenceless for 1 turn.",
+                "cost": 4,
+                "id": 14
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/fleuret-fury",
+                "name": "Fleuret Fury",
+                "effect": "Deals high single target Physical damage. 3 hits.If in Virtuose Stance, stay in Virtuose Stance.Can Break.",
+                "cost": 6,
+                "id": 15
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/gommage",
+                "name": "Gommage",
+                "effect": "Kills weak targets.Otherwise deals extreme Void damage. 1 hit.",
+                "cost": 3,
+                "id": 16
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/gustaves-homage",
+                "name": "Gustave's Homage",
+                "effect": "Deals high single target Lightning damage. 8 hits.Increased damage to Marked targets.Doesn’t remove Mark.",
+                "cost": 8,
+                "id": 17
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/guard-down",
+                "name": "Guard Down",
+                "effect": "Applies Defenceless to all enemies for 3 turns.",
+                "cost": 3,
+                "id": 18
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/guard-up",
+                "name": "Guard Up",
+                "effect": "Applies Shell, reducing damage taken, to up to 3 allies for 3 turns.",
+                "cost": 3,
+                "id": 19
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/last-chance",
+                "name": "Last Chance",
+                "effect": "Reduces self-Health to 1 but refills all AP.Switches to Virtuose Stance.",
+                "cost": 1,
+                "id": 20
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/mezzo-forte",
+                "name": "Mezzo Forte",
+                "effect": "Reapplies current stance and gives 2-4 AP.",
+                "cost": 1,
+                "id": 21
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/momentum-strike",
+                "name": "Momentum Strike",
+                "effect": "Deals high single target damage. 1 hit.Uses weapon’s element.Increased damage to Marked targets.Virtuose Stance: Costs 4 AP.",
+                "cost": 7,
+                "id": 22
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/offensive-switch",
+                "name": "Offensive Switch",
+                "effect": "Deals low single target damage and applies Defenceless for 3 turns. 1 hit.Uses weapon’s element.",
+                "cost": 1,
+                "id": 23
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/payback",
+                "name": "Payback",
+                "effect": "Deals very high single target Physical damage. 1 hit.Reduced AP cost for each attack parried since last turn.Can Break.",
+                "cost": 9,
+                "id": 24
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/percee",
+                "name": "Percée",
+                "effect": "Deals medium single target Physical damage. 1 hit.Increased damage to Marked targets.Virtuose Stance: Costs 2 AP.",
+                "cost": 5,
+                "id": 25
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/phantom-strike",
+                "name": "Phantom Strike",
+                "effect": "Deals very high Void damage to all enemies. 4 hits.Also gives +35% of a Gradient Charge.",
+                "cost": 7,
+                "id": 26
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/phoenix-flame",
+                "name": "Phoenix Flame",
+                "effect": "Applies 10 Burn to all enemies and revives all allies with 50 to 70% Health.",
+                "cost": 2,
+                "id": 27
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/pyrolyse",
+                "name": "Pyrolyse",
+                "effect": "Deals extreme single target Fire damage. 3 hits.Applies 5 Burn per hit.Offensive Stance: Applies 2 more Burn per hit.",
+                "cost": 9,
+                "id": 28
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/rain-of-fire",
+                "name": "Rain of Fire",
+                "effect": "Deals medium single target Fire damage. 2 hits.Applies 3 Burn per hit.Defensive Stance: applies 2 more Burn per hit.",
+                "cost": 5,
+                "id": 29
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/revenge",
+                "name": "Revenge",
+                "effect": "Deals high single target Fire damage. 1 hit.Damage increased for each hit received since the previous turn.Can Break.",
+                "cost": 5,
+                "id": 30
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/spark",
+                "name": "Spark",
+                "effect": "Deals low single target Fire damage. 1 hit.Applies 3 Burn.Offensive Stance: Applies 2 more Burn.",
+                "cost": 3,
+                "id": 31
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/stendhal",
+                "name": "Stendhal",
+                "effect": "Deals extreme single target Void damage. 1 hit.Removes self-Shields and self applies Defenceless.",
+                "cost": 8,
+                "id": 32
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/swift-stride",
+                "name": "Swift Stride",
+                "effect": "Deals low single target Physical damage. 1 hit.Switches to Virtuose Stance if target is Burning.Regains 0 to 2 AP.",
+                "cost": 3,
+                "id": 33
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/sword-ballet",
+                "name": "Sword Ballet",
+                "effect": "Deals extreme single target damage. 5 hits.Uses weapon’s element.Critical Hits deal double damage.",
+                "cost": 9,
+                "id": 34
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/maelle/virtuose-strike",
+                "name": "Virtuose Strike",
+                "effect": "Deals high single target Physical damage. 5 hits.",
+                "cost": 1,
+                "id": 35
+            }
+        ]
+    },
+    {
+        "name": "Sciel",
+        "icon": "sciel.avif",
+        "id": 3,
+        "skills": [
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/all-set",
+                "name": "All Set",
+                "effect": "Applies Shell, Powerful, and Rush to all allies.",
+                "cost": 6,
+                "id": 36
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/bad-omen",
+                "name": "Bad Omen",
+                "effect": "Deals low Dark damage to all enemies. 2 hits.Applies 2 Foretell per hit.",
+                "cost": 3,
+                "id": 37
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/card-weaver",
+                "name": "Card Weaver",
+                "effect": "Deals low single target Physical damage. 1 hit.Propagates target’s Foretell to all enemies.Plays a second turn.",
+                "cost": 3,
+                "id": 38
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/dark-wave",
+                "name": "Dark Wave",
+                "effect": "Deals high Dark damage to all enemies. 3 hits.Consumes all Foretell for increased damage.",
+                "cost": 6,
+                "id": 39
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/dark-cleansing",
+                "name": "Dark Cleansing",
+                "effect": "Cleanses an ally of their Status Effects and propagates the target’s buff to all allies.",
+                "cost": 2,
+                "id": 40
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/delaying-slash",
+                "name": "Delaying Slash",
+                "effect": "Deals medium single target damage. 2 hits.Uses weapon’s element.Consumes Foretell to increase damage and delay target’s turn.",
+                "cost": 5,
+                "id": 41
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/doom",
+                "name": "Doom",
+                "effect": "Deals very high single target Dark damage. 3 hits.Applies Powerless, Defenceless, and Slow for 3 turns.Can Break.",
+                "cost": 2,
+                "id": 42
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/end-slice",
+                "name": "End Slice",
+                "effect": "Deals extreme single target Physical damage. 1 hit.Damage is increased for each Foretell consumed since the beginning of the battle.",
+                "cost": 3,
+                "id": 43
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/final-path",
+                "name": "Final Path",
+                "effect": "Deals extreme single target Dark damage and applies 10 Foretell 1 hit.Can Break.",
+                "cost": 9,
+                "id": 44
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/focused-foretell",
+                "name": "Focused Foretell",
+                "effect": "Deals medium single target Physical damage. 1 hit.Applies 2 Foretell.Applies 3 additional Foretell if target has 0 Foretell.",
+                "cost": 2,
+                "id": 45
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/firing-shadow",
+                "name": "Firing Shadow",
+                "effect": "Deals low Dark damage to all enemies. 3 hits.Consumes 1 Foretell per hit for increased damage.",
+                "cost": 3,
+                "id": 46
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/fortunes-fury",
+                "name": "Fortune's Fury",
+                "effect": "Targeted ally deals double damage for 1 turn.",
+                "cost": 5,
+                "id": 47
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/grim-harvest",
+                "name": "Grim Harvest",
+                "effect": "Deals medium single target Dark damage. 1 hit.Heals all allies by 30% Health.Consumes Foretell to increase Heal by 5% per Foretell.",
+                "cost": 5,
+                "id": 48
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/harvest",
+                "name": "Harvest",
+                "effect": "Deals medium single target damage. 1 hit.Uses weapon’s element.Heals self by 40% Health.Consumes all Foretell to increase Heal by 5% per Foretell.",
+                "cost": 3,
+                "id": 49
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/intervention",
+                "name": "Intervention",
+                "effect": "Targeted ally plays immediately and gains 4 AP.",
+                "cost": 5,
+                "id": 50
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/marking-card",
+                "name": "Marking Card",
+                "effect": "Deals medium single target Dark damage. 2 hits.Applies Mark to the target.Applies 3 Foretell.",
+                "cost": 3,
+                "id": 51
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/our-sacrifice",
+                "name": "Our Sacrifice",
+                "effect": "Deals extreme Dark damage to all enemies. 1 hit.Absorbs allies’ Health and enemies’ Foretell to deal increased damage.",
+                "cost": 4,
+                "id": 52
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/phantom-blade",
+                "name": "Phantom Blade",
+                "effect": "Deals high single target Dark damage. 1 hit.Consumes all Foretell to deal additional damage.Can Break.",
+                "cost": 5,
+                "id": 53
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/plentiful-harvest",
+                "name": "Plentiful Harvest",
+                "effect": "Deals medium single target Physical damage. 2 hits.Consumes all Foretell on a target and gives 1 AP to a party member for each Foretell consumed.",
+                "cost": 4,
+                "id": 54
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/rush",
+                "name": "Rush",
+                "effect": "Applies Rush to 1-3 allies, increasing their speed for 3 turns.",
+                "cost": 3,
+                "id": 55
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/sealed-fate",
+                "name": "Sealed Fate",
+                "effect": "Deals high single target damage. 5-7 hits.Uses weapon’s element.Each hit can consume 1 Foretell to deal 200% more damage.Critical Hits don’t remove the Foretell but still gets the damage increase.",
+                "cost": 4,
+                "id": 56
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/searing-bond",
+                "name": "Searing Bond",
+                "effect": "Deals medium single target Dark damage. 1 hit.Applies 5 Foretell.Also deals damage and applies Foretell to every other Burning enemies.",
+                "cost": 4,
+                "id": 57
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/shadow-bringer",
+                "name": "Shadow Bringer",
+                "effect": "Deals high single target Dark damage to random enemies. 10 hits.Applies 1 Foretell per hit.",
+                "cost": 1,
+                "id": 58
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/spectral-sweep",
+                "name": "Spectral Sweep",
+                "effect": "Deals medium single target damage. 2 to 6 hits.Uses weapon’s element.Applies 1 Foretell per hit.Critical Hits apply an additional Foretell.",
+                "cost": 7,
+                "id": 59
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/twilight-dance",
+                "name": "Twilight Dance",
+                "effect": "Deals extreme single target Dark damage. 4 hits.During Twilight, extends Twilight duration by 1 turn.Consumes all Foretell to deal additional damage.",
+                "cost": 9,
+                "id": 60
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/sciel/twilight-slash",
+                "name": "Twilight Slash",
+                "effect": "Deals low single target Dark damage. 1 hit.Consumes all Foretell to deal additional damage.",
+                "cost": 2,
+                "id": 61
+            }
+        ]
+    },
+    {
+        "name": "Lune",
+        "icon": "lune.avif",
+        "id": 4,
+        "skills": [
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/crippling-tsunami",
+                "name": "Crippling Tsunami",
+                "effect": "Deals medium Ice damage to all enemies. 1 hit.Applies Slow for 3 turns.Consumes Stains for greatly increased damage.",
+                "cost": 5,
+                "id": 62
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/crustal-crush",
+                "name": "Crustal Crush",
+                "effect": "Deals high single target Earth and Break damage 5 hits.Consumes Stains for Increased damage.",
+                "cost": 7,
+                "id": 63
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/earth-rising",
+                "name": "Earth Rising",
+                "effect": "Deals low Earth damage to all enemies. 1 hit.Consumes Stains for increased damage.",
+                "cost": 3,
+                "id": 64
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/electrify",
+                "name": "Electrify",
+                "effect": "Deals low single target Lightning damage. 3 hits.Critical Hits trigger an additional hit.Consumes Stains to generate one Light Stain.",
+                "cost": 1,
+                "id": 65
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/elemental-genesis",
+                "name": "Elemental Genesis",
+                "effect": "Deals extreme damage to all enemies. 8 hits.Each hit deals damage in a random element.Can only be cast with Stains.",
+                "cost": 4,
+                "id": 66
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/elemental-trick",
+                "name": "Elemental Trick",
+                "effect": "Deals low single target Ice, Fire, Lightning, and Earth damage. 4 hits.Critical Hits generate the corresponding Stain.",
+                "cost": 3,
+                "id": 67
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/fire-rage",
+                "name": "Fire Rage",
+                "effect": "Deals increasingly high Fire damage to all enemies every turn until Lune receives damage.Stuns self if interrupted.Consumes Stains for Increased damage.",
+                "cost": 5,
+                "id": 68
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/healing-light",
+                "name": "Healing Light",
+                "effect": "Heals the targeted ally by 30-50% Health and dispels Status Effects.Consumes Stains: Costs 0 AP.",
+                "cost": 3,
+                "id": 69
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/hell",
+                "name": "Hell",
+                "effect": "Deals very high Fire damage that applies 5 Burn per hit to all enemies. 2 hits.Deals self-damage if failed.Consumes Stains for Greatly increased damage.",
+                "cost": 9,
+                "id": 70
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/ice-lance",
+                "name": "Ice Lance",
+                "effect": "Deals medium single target Ice damage that Slows the target. 1 hit.Consumes Stains to deal increased damage.",
+                "cost": 4,
+                "id": 71
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/immolation",
+                "name": "Immolation",
+                "effect": "Deals low single target Fire damage and 3 Burn. 1 hit.Applies 2 more Burns if the target is Marked.Consumes Stains for increased damage.",
+                "cost": 2,
+                "id": 72
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/lightning-dance",
+                "name": "Lightning Dance",
+                "effect": "Deals very high single target Lightning damage. 6 hits.Critical Hits trigger an additional hit.Consumes Stains for greatly increased damage.",
+                "cost": 7,
+                "id": 73
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/mayhem",
+                "name": "Mayhem",
+                "effect": "Consumes all Stains to deal high elemental damage to the target.Can Break if 4 Stains are consumed.",
+                "cost": 3,
+                "id": 74
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/rebirth",
+                "name": "Rebirth",
+                "effect": "Revives an ally with 30-70% Health and 2 additional AP.Consumes Stains: Costs 0 AP.",
+                "cost": 5,
+                "id": 75
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/revitalization",
+                "name": "Revitalization",
+                "effect": "Heals 1-3 allies by 40-60% Health.Consumes Stains to also apply Regen that heals on turn start for 3 turns.",
+                "cost": 5,
+                "id": 76
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/rockslide",
+                "name": "Rockslide",
+                "effect": "Deals medium single target Earth damage. 2 hits.Can Break.Consumes Stains for greatly increased damage.",
+                "cost": 5,
+                "id": 77
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/sky-break",
+                "name": "Sky Break",
+                "effect": "Deals extreme damage to all enemies. 1 hit.Element depends on which Stains Lune has the most.Can Break.",
+                "cost": 3,
+                "id": 78
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/storm-caller",
+                "name": "Storm Caller",
+                "effect": "All enemies receive medium Lightning damage at the end of their turn, and low Lightning damage when they receive damage.Duration: 3 turns.Consumes Stains for double thunder strikes on turn end.",
+                "cost": 6,
+                "id": 79
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/terraquake",
+                "name": "Terraquake",
+                "effect": "Deals low Earth damage and Break damage to all enemies every turn.Also increases all Break damage received by 50%.Duration: 3 turns.Consumes Stains to increase the Duration to 5 turns.",
+                "cost": 5,
+                "id": 80
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/thermal-transfer",
+                "name": "Thermal Transfer",
+                "effect": "Deals low single target Ice damage. 2 hits.Gains 4 AP if target is Burning.Consumes Stains: Play a second turn.",
+                "cost": 2,
+                "id": 81
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/tree-of-life",
+                "name": "Tree of Life",
+                "effect": "Cleanses all status effects and Heals all allies.",
+                "cost": 2,
+                "id": 82
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/thunderfall",
+                "name": "Thunderfall",
+                "effect": "Deals medium Lightning damage to random enemies. 2-6 hits.Critical Hits trigger an additional hit.Consumes Stains for increased damage.",
+                "cost": 5,
+                "id": 83
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/tremor",
+                "name": "Tremor",
+                "effect": "Deals high Earth damage to all enemies. 1 hit.Removes all enemies’ Shields.",
+                "cost": 1,
+                "id": 84
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/typhoon",
+                "name": "Typhoon",
+                "effect": "On turn start, deals high Ice damage to all enemies and Heals allies.Consumes Stains: Duration increased from 3 to 5 turns.",
+                "cost": 8,
+                "id": 85
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/lune/wildfire",
+                "name": "Wildfire",
+                "effect": "Deals medium Fire damage to all enemies. 1 hit.Applies 3 Burn.Consumes Stains: Increased damage.",
+                "cost": 4,
+                "id": 86
+            }
+        ]
+    },
+    {
+        "name": "Monoco",
+        "icon": "monoco.avif",
+        "id": 5,
+        "skills": [
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/abbest-wind",
+                "name": "Abbest Wind",
+                "effect": "Deals low single target Physical damage. 1 hit.Plays a second turn.Agile Mask: Costs 0 AP.",
+                "cost": 2,
+                "id": 87
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/aberration-light",
+                "name": "Aberration Light",
+                "effect": "Deals high Light damage to all enemies. 2 hits.Applies 4 Burn per hit.Agile Mask: Applies 2 more Burn per hit.",
+                "cost": 7,
+                "id": 88
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/ballet-charm",
+                "name": "Ballet Charm",
+                "effect": "Deals low single target Light damage. 1 hit.Applies Powerless to the target for 3 turns.Caster Mask: Increased damage.",
+                "cost": 2,
+                "id": 89
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/benisseur-mortar",
+                "name": "Bénisseur Mortar",
+                "effect": "Deals medium single target Ice damage. 3 hits.Change to Almighty Mask if target is Marked.Caster Mask: Increased damage.",
+                "cost": 5,
+                "id": 90
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/boucheclier-fortify",
+                "name": "Boucheclier Fortify",
+                "effect": "Applies Shell to 1-3 allies for 3 turns.Heavy Mask: Also applies 1 Shield.",
+                "cost": 3,
+                "id": 91
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/braseleur-smash",
+                "name": "Braseleur Smash",
+                "effect": "Deals medium single target Fire damage and applies 3 Burn. 2 hits.Balanced Mask: Increased damage.",
+                "cost": 4,
+                "id": 92
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/break-point",
+                "name": "Break Point",
+                "effect": "Deals extreme single target damage. 1 hit.Uses weapon’s element.Fills the target’s Break Bar and Breaks it.",
+                "cost": 3,
+                "id": 93
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/bruler-bash",
+                "name": "Bruler Bash",
+                "effect": "Deals medium single target Physical damage. 3 hits.Can Break.Caster Mask: Increased damage.",
+                "cost": 4,
+                "id": 94
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/chapelier-slash",
+                "name": "Chapelier Slash",
+                "effect": "Deals high Physical damage to all enemies. 3 hits.Applies Mark.Agile Mask: Increased damage.",
+                "cost": 7,
+                "id": 95
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/chalier-combo",
+                "name": "Chalier Combo",
+                "effect": "Deals high single target Physical damage. 6 hits.Interrupted if failed.Balanced Mask: Increased damage.",
+                "cost": 7,
+                "id": 96
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/chevaliere-piercing",
+                "name": "Chevalière Piercing",
+                "effect": "Deals single target Physical damage through Shields. 6 hits.Damage increased for each Shield on the target.Agile Mask: Increased damage.",
+                "cost": 3,
+                "id": 97
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/chevaliere-ice",
+                "name": "Chevalière Ice",
+                "effect": "Deals high Ice damage to all enemies. 3 hits.Applies Slow to the targets for 3 turns.Balanced Mask: Increased damage.",
+                "cost": 6,
+                "id": 98
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/chevaliere-thrusts",
+                "name": "Chevalière Thrusts",
+                "effect": "Deals high Physical damage to all enemies. 3 hits.Critical Hits deal double damage.Heavy Mask: Increased damage.",
+                "cost": 7,
+                "id": 99
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/clair-enfeeble",
+                "name": "Clair Enfeeble",
+                "effect": "Deals medium Light damage to all enemies. 1 hit.Applies Powerless for 3 turns.Balanced Mask: Increased damage.",
+                "cost": 5,
+                "id": 100
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/contorsionniste-blast",
+                "name": "Contorsionniste Blast",
+                "effect": "Deals medium Physical damage to all enemies. 1 hit.Heals all allies by 10% Health for each enemy hit.Balanced Mask: Increased damage.",
+                "cost": 6,
+                "id": 101
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/cruler-barrier",
+                "name": "Cruler Barrier",
+                "effect": "Applies 1-2 Shields to the target.Heavy Mask: Gives 2 AP to the target.",
+                "cost": 4,
+                "id": 102
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/creation-void",
+                "name": "Création Void",
+                "effect": "Deals extreme Void damage to random targets. 3 hits.More damage if the same target is hit multiple times.Caster Mask: Increased damage.",
+                "cost": 9,
+                "id": 103
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/cultist-slashes",
+                "name": "Cultist Slashes",
+                "effect": "Deals medium single target Dark damage. 3 hits.Deals more damage the less Health Monoco has.Agile Mask: Increased damage.",
+                "cost": 5,
+                "id": 104
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/cultist-blood",
+                "name": "Cultist Blood",
+                "effect": "Deals medium Dark damage to all enemies. 3 hits.Sacrifices 90% Health to increase damage.Heavy Mask: Increased damage.",
+                "cost": 3,
+                "id": 105
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/danseuse-waltz",
+                "name": "Danseuse Waltz",
+                "effect": "Deals high single target Fire damage. 3 hits.Deals more damage against Burning targets.Balanced Mask: Increased damage.",
+                "cost": 8,
+                "id": 106
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/duallist-storm",
+                "name": "Duallist Storm",
+                "effect": "Deals extreme single target Physical damage. 4 hits.Can Break.Almighty Mask: Increased damage.",
+                "cost": 8,
+                "id": 107
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/demineur-thunder",
+                "name": "Démineur Thunder",
+                "effect": "Deals low single target Lightning damage. 1 hit.Deals extra Break Damage.Caster Mask: Increased Break damage.",
+                "cost": 2,
+                "id": 108
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/echassier-stabs",
+                "name": "Échassier Stabs",
+                "effect": "Deals medium single target Physical damage. 2 hits.Second hit applies Mark to the target.Agile Mask: Increased damage",
+                "cost": 4,
+                "id": 109
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/eveque-spear",
+                "name": "Évêque Spear",
+                "effect": "Deals high single target Earth damage and applies Powerless for 3 turns. 1 hit.Heavy Mask: Increased damage.",
+                "cost": 6,
+                "id": 110
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/gault-fury",
+                "name": "Gault Fury",
+                "effect": "Deals low single target Physical damage. 4 hits.Applies Mark.Balanced Mask: Increased damage.",
+                "cost": 3,
+                "id": 111
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/glaise-earthquakes",
+                "name": "Glaise Earthquakes",
+                "effect": "Deals medium Earth damage to all enemies. 3 hits.Applies Powerful to self.Heavy Mask: applies Powerful to all allies.",
+                "cost": 4,
+                "id": 112
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/grosse-tete-whack",
+                "name": "Grosse Tête Whack",
+                "effect": "Deals high single target Physical damage. 5 hits.Applies Defenceless for 3 turns.Heavy Mask: Increased damage.",
+                "cost": 6,
+                "id": 113
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/hexga-crush",
+                "name": "Hexga Crush",
+                "effect": "Deals medium single target Earth damage. 2 hits.Applies Defenceless to the target for 3 turns.Heavy Mask: Increases Defenceless duration to 5 turns.",
+                "cost": 5,
+                "id": 114
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/lampmaster-light",
+                "name": "Lampmaster Light",
+                "effect": "Deals high Light damage to all enemies. 1 hit.Increased damage at each cast.Almighty Mask: Increased damage.",
+                "cost": 5,
+                "id": 115
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/jar-lampstorm",
+                "name": "Jar Lampstorm",
+                "effect": "Deals medium Physical damage to all enemies. 4 hits.Heavy Mask: Increased damage.",
+                "cost": 5,
+                "id": 116
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/lancelier-impale",
+                "name": "Lancelier Impale",
+                "effect": "Deals low single target Ice damage. 1 hit.Slows the target for 3 turns.Agile Mask: Increased damage.",
+                "cost": 2,
+                "id": 117
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/luster-slices",
+                "name": "Luster Slices",
+                "effect": "Deals low single target Physical damage. 3 hits.Applies Rush to self for 3 turns.Agile Mask: Increased damage.",
+                "cost": 3,
+                "id": 118
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/mighty-strike",
+                "name": "Mighty Strike",
+                "effect": "Deals high single target damage. 2 hits.Uses weapon’s element.Deals double damage if the target is Stunned.Goes to Almighty Mask.",
+                "cost": 1,
+                "id": 119
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/moissonneuse-vendange",
+                "name": "Moissonneuse Vendange",
+                "effect": "Deals High single target Physical damage. 3 hits.Can Break.Balanced Mask: Increased damage.",
+                "cost": 5,
+                "id": 120
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/obscur-sword",
+                "name": "Obscur Sword",
+                "effect": "Deals high single target Dark damage. 5 hits.Deals more damage against Powerless targets.Heavy Mask: Increased damage.",
+                "cost": 6,
+                "id": 121
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/orphelin-cheers",
+                "name": "Orphelin Cheers",
+                "effect": "Applies Powerful to 1-3 allies.Caster Mask: Also gives 3 AP to targets.",
+                "cost": 3,
+                "id": 122
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/pelerin-heal",
+                "name": "Pèlerin Heal",
+                "effect": "Applies Regen to all allies.Caster Mask: also Heals 40% Health.",
+                "cost": 5,
+                "id": 123
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/portier-crash",
+                "name": "Portier Crash",
+                "effect": "Deals high Physical damage to all enemies. 1 hit.Can Break.Heavy Mask: Increased damage.",
+                "cost": 8,
+                "id": 124
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/potier-energy",
+                "name": "Potier Energy",
+                "effect": "Gives 1-3 AP to all allies.Caster Mask: Gives 1 additional AP.",
+                "cost": 4,
+                "id": 125
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/ramasseur-bonk",
+                "name": "Ramasseur Bonk",
+                "effect": "Deals low single target Dark damage. 1 hit.Can Break.Agile Mask: fills 20% of the target’s Break Bar.",
+                "cost": 2,
+                "id": 126
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/rocher-hammering",
+                "name": "Rocher Hammering",
+                "effect": "Deals medium single target Physical damage. 4 hits.Can Break.Heavy Mask: Increased damage.",
+                "cost": 3,
+                "id": 127
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/sakapatate-estoc",
+                "name": "Sakapatate Estoc",
+                "effect": "Deals low single target Lightning damage. 1 hit.Deals more damage if the target is Stunned.Balanced Mask: Increased damage.",
+                "cost": 3,
+                "id": 128
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/sakapatate-explosion",
+                "name": "Sakapatate Explosion",
+                "effect": "Deals medium Lightning damage to random enemies. 3 hits.Critical Hits trigger an additional hit.Caster Mask: Increased damage.",
+                "cost": 4,
+                "id": 129
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/sakapatate-fire",
+                "name": "Sakapatate Fire",
+                "effect": "Deals extreme Fire to all enemies. 3 hits.Apply 3 Burn per hit.Almighty Mask: Increased damage.",
+                "cost": 9,
+                "id": 130
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/sakapatate-slam",
+                "name": "Sakapatate Slam",
+                "effect": "Deals high Physical damage to all enemies. 1 hit.Increased damage to Marked targets.Heavy Mask: Increased damage.",
+                "cost": 7,
+                "id": 131
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/sanctuary",
+                "name": "Sanctuary",
+                "effect": "Gives 2 Shields and applies Regen to all allies for 3 turns.",
+                "cost": 2,
+                "id": 132
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/sapling-absorption",
+                "name": "Sapling Absorption",
+                "effect": "Deals high Dark damage. 3 hits.Recovers 5% Health on hit.Caster Mask: Increased damage and double Heal.",
+                "cost": 6,
+                "id": 133
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/stalact-punches",
+                "name": "Stalact Punches",
+                "effect": "Deals medium single target Ice damage. 4 hits.High Break damageHeavy Mask: Increased damage.",
+                "cost": 4,
+                "id": 134
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/monoco/troubadour-trumpet",
+                "name": "Troubadour Trumpet",
+                "effect": "Applies a random buff to 1 to 3 allies.Caster Mask: applies a second random buff.",
+                "cost": 3,
+                "id": 135
+            }
+        ]
+    },
+    {
+        "name": "Verso",
+        "icon": "verso.avif",
+        "id": 6,
+        "skills": [
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/ascending-assault",
+                "name": "Ascending Assault",
+                "effect": "Deals low single target damage. 1 hit.Uses weapon’s element.Increased damage at each cast.S Rank: Costs 2 AP.",
+                "cost": 5,
+                "id": 136
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/angels-eyes",
+                "name": "Angel's Eyes",
+                "effect": "Deals extreme Physical Damage. 8 hits.Gain 1 additional Perfection per hit.Applies Aureole to Verso, reviving him if he dies.",
+                "cost": 3,
+                "id": 137
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/assault-zero",
+                "name": "Assault Zero",
+                "effect": "Deals low single target damage. 5 hits.Uses weapon’s element.Critical Hits generate 1 additional Perfection.B Rank: Increased damage.",
+                "cost": 3,
+                "id": 138
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/berserk-slash",
+                "name": "Berserk Slash",
+                "effect": "Deals medium single target Physical damage. 3 hits.Damage is increased for each Health Verso is missing.C Rank: Increased damage.",
+                "cost": 4,
+                "id": 139
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/blitz",
+                "name": "Blitz",
+                "effect": "Deals low single target Physical damage. 1 hit.Plays a second time. Kills non-boss enemies with less than 10% Health.B Rank: Increased damage.",
+                "cost": 3,
+                "id": 140
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/burden",
+                "name": "Burden",
+                "effect": "Removes all Status Effects from all allies and applies them to Verso.Gains 1 Rank.",
+                "cost": 1,
+                "id": 141
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/defiant-strike",
+                "name": "Defiant Strike",
+                "effect": "Deals high single target Physical damage that applies Mark 2 hits.Costs 30% of current Health.B Rank: Increased damage.",
+                "cost": 3,
+                "id": 142
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/end-bringer",
+                "name": "End Bringer",
+                "effect": "Deals extreme single target Physical damage. 6 hits.Increased damage if the target is Stunned.A Rank: Can reapply Stun.",
+                "cost": 9,
+                "id": 143
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/follow-up",
+                "name": "Follow Up",
+                "effect": "Deals medium single target Light damage. 1 hit.Damage increased for each Free Aim shot this turn, up to 10 times.S Rank: Costs 2 AP.",
+                "cost": 5,
+                "id": 144
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/from-fire",
+                "name": "From Fire (Verso)",
+                "effect": "Deals medium single target damage. 3 hits.Uses weapon’s element.Heals self by 20% Health if the target Burns.B Rank: Increased damage.",
+                "cost": 4,
+                "id": 145
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/leadership",
+                "name": "Leadership",
+                "effect": "Reduces current Rank.Gives 2-4 AP to other allies.C Rank: +1 more AP to other allies.",
+                "cost": 3,
+                "id": 146
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/light-holder",
+                "name": "Light Holder",
+                "effect": "Medium single target Light damage. 5 hits.At completion, gains 1 Rank.A Rank: +2 AP.",
+                "cost": 4,
+                "id": 147
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/marking-shot-verso",
+                "name": "Marking Shot (Verso)",
+                "effect": "Deals low single target damage. 1 hit.Uses weapon’s element.Applies Mark.C Rank: Increased damage.",
+                "cost": 2,
+                "id": 148
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/overload",
+                "name": "Overload",
+                "effect": "Increases Rank to “A” and refills all AP But sets self-Health to 1.",
+                "cost": 6,
+                "id": 149
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/paradigm-shift",
+                "name": "Paradigm Shift",
+                "effect": "Deals low Physical single target damage and gives 1-3 AP back. 3 hits.C Rank: +1 AP.",
+                "cost": 1,
+                "id": 150
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/perfect-break",
+                "name": "Perfect Break",
+                "effect": "Deals very high single target Light damage. 1 hit.Can Break.Rank S on Break.B Rank: Costs 5 AP.",
+                "cost": 7,
+                "id": 151
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/perfect-recovery",
+                "name": "Perfect Recovery",
+                "effect": "Recovers 50% Health and dispels Status Effects.Gives 0-2 Perfection.C Rank: Increased heal to 100% Health.",
+                "cost": 3,
+                "id": 152
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/phantom-stars",
+                "name": "Phantom Stars",
+                "effect": "Deals extreme Light damage to all enemies. 5 hits.Can Break.S Rank: Costs 5 AP.",
+                "cost": 9,
+                "id": 153
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/powerful-verso",
+                "name": "Powerful (Verso)",
+                "effect": "Applies Powerful to 1-3 allies, increasing damage they deal for 3 turns.Gives 0-2 Perfection.A Rank: Duration increased to 5 turns.",
+                "cost": 3,
+                "id": 154
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/purification",
+                "name": "Purification",
+                "effect": "Deals single target medium Light damage. 2 hits.Dispels self status effects.B Rank: Increased damage.",
+                "cost": 5,
+                "id": 155
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/quick-strike",
+                "name": "Quick Strike",
+                "effect": "Deals low single target Physical damage. 1 hit.D Rank: Gives more Perfection.",
+                "cost": 2,
+                "id": 156
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/radiant-slash",
+                "name": "Radiant Slash",
+                "effect": "Deals low Light damage to all enemies. 1 hit.Can Break.C Rank: Increased damage.",
+                "cost": 2,
+                "id": 157
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/radiant-strike",
+                "name": "Radiant Strike",
+                "effect": "1 hit Aoe damage.B Rank: increase damage.",
+                "cost": 4,
+                "id": 158
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/sabotage",
+                "name": "Sabotage",
+                "effect": "Deals medium Physical damage to all enemies. 1 hit.Applies Mark.",
+                "cost": 1,
+                "id": 159
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/speed-burst",
+                "name": "Speed Burst",
+                "effect": "Deals high single target Light damage. 5 hits.Damage increased by Speed difference with the target.C Rank: Increased damage.",
+                "cost": 6,
+                "id": 160
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/steeled-strike",
+                "name": "Steeled Strike",
+                "effect": "After 1 turn, deals extreme single target Physical damage. 13 hits.Interrupted if any damage taken.S Rank: Increased damage.",
+                "cost": 9,
+                "id": 161
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/striker",
+                "name": "Striker",
+                "effect": "Deals high single target Physical damage. 1 hit.Can Break.",
+                "cost": 2,
+                "id": 162
+            },
+            {
+                "full_url": "https://www.gamerguides.com/clair-obscur-expedition-33/database/skills/verso/strike-storm-verso",
+                "name": "Strike Storm (Verso)",
+                "effect": "Deals very high single target damage. 5 hits.Uses weapon’s element.Critical Hits generate 2 additional Perfection.C Rank: Increased damage.",
+                "cost": 7,
+                "id": 163
+            }
+        ]
+    }
+]
