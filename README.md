@@ -1,9 +1,17 @@
-# Game Companion (v0.1)
+# Clair Obscur: Expedition 33 Game Companion
 
-A personal, local build-analysis companion for **Clair Obscur: Expedition 33**. Everything runs on your own machine —
-no account, no cloud service, no internet access required after the one-time setup, no telemetry.
+A spoiler-conscious build and inventory companion for **Clair Obscur: Expedition 33**.
 
-Referred to throughout this project simply as **"Game"** / "Game Companion".
+**[🎮 Try it online](https://tinyurl.com/exp33companion)**
+
+## What this is
+
+This is a personal build-analysis companion designed to work with your character's *actual* current state: level,
+attribute points, equipped weapon, and the Pictos and Luminas you own. Rather than presenting a generic build list,
+it analyzes what you have and suggests ways to improve your current setup.
+
+The companion can be used directly in the browser, with player data stored locally. It can also be run locally on
+your own machine. No account or cloud service is required, and the project includes no telemetry.
 
 ## What it does
 
@@ -17,13 +25,13 @@ Unlike a typical Picto/build browser, this app's main purpose is to look at your
 - **Lumina combination** — from the Luminas you've unlocked, finds a combination that fits your Lumina-point budget
   and favors your selected strategy.
 - **Analyze My Build** — the central screen: one button that runs all of the above against your current build and
-  shows CALCULATED facts, HEURISTIC recommendations, and explicitly labeled UNKNOWN/unmodeled mechanics, side by side
-  with your current setup.
+  shows **CALCULATED** facts, **HEURISTIC** recommendations, and explicitly labeled **UNKNOWN**/unmodeled mechanics,
+  side by side with your current setup.
 
 It deliberately does **not** claim to compute exact damage numbers or a single "optimal" build — see
 `OPTIMIZER_MODEL.md` for exactly what is and isn't modeled, and why.
 
-## How to launch it
+## How to launch it locally
 
 1. Make sure [Node.js](https://nodejs.org) (LTS) is installed on this Windows machine. If you're not sure, just try
    step 2 — the launcher checks for you and tells you plainly if it's missing.
@@ -61,8 +69,9 @@ without touching any Vue code. Its heuristic weights live in `data/optimizer_ref
 the code — edit that file to retune recommendations.
 
 Key folders:
-- `src/assets/characters.json`, `src/assets/pictos_list.json` — the original, **unmodified** upstream picto-builder
-  data files (MIT licensed). Never edited in place; normalization happens in `src/gamedata/loadGameData.ts`.
+- `src/assets/characters.json`, `src/assets/pictos_list.json` — the original, **unmodified** upstream
+  [picto-builder](https://github.com/fmarlats/picto-builder) data files (MIT licensed). Never edited in place;
+  normalization happens in `src/gamedata/loadGameData.ts`.
 - `data/weapons.json`, `data/attribute_progression.json`, `data/optimizer_reference.json` — new datasets researched
   for this project, each carrying its own provenance/confidence metadata. See `SOURCE_ATTRIBUTION.md`.
 - `src/optimizer/` — the CALCULATED / HEURISTIC / UNKNOWN-tiered recommendation engine, with unit tests in
@@ -84,6 +93,16 @@ priority* and Lumina/Picto *fit* for a chosen strategy, not a combat simulator.
 
 ## License / attribution
 
-This project adapts data and structure from [picto-builder](https://github.com/fmarlats/picto-builder) (MIT
-licensed) — see `LICENSE` and `SOURCE_ATTRIBUTION.md` for full details on what was reused and what was newly
-researched for this project.
+This project builds on data and structure from
+[fmarlats/picto-builder](https://github.com/fmarlats/picto-builder), which is MIT licensed. The upstream
+`characters.json` and `pictos_list.json` data files are retained unmodified, while additional datasets,
+normalization, analysis, and recommendation logic were developed for this companion.
+
+See `LICENSE` and `SOURCE_ATTRIBUTION.md` for full details on what was reused, its licensing, and what was newly
+researched or developed for this project.
+
+## Unofficial fan project
+
+This is an unofficial fan-made companion for **Clair Obscur: Expedition 33**. It is not affiliated with, endorsed by,
+or sponsored by Sandfall Interactive or the game's publishers. Game names and related trademarks belong to their
+respective owners.
