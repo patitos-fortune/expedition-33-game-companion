@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { analyzeBuild } from '../analyzeBuild'
+import { filterOwnedPictos } from '../spoilerFilter'
 import { loadGameData } from '../../gamedata/loadGameData'
 import type { CharacterBuild, InventoryState } from '../../types'
 
@@ -36,6 +37,14 @@ function makeBuild(): CharacterBuild {
 }
 
 describe('analyzeBuild', () => {
+  it('treats Lumina-unlocked Pictos as still owned/equippable', () => {
+    const inventory = makeInventory()
+    const visible = filterOwnedPictos(gameData.pictos, inventory)
+    const visibleIds = new Set(visible.map((p) => p.id))
+    expect(visibleIds.has(ownedPictos[0].id)).toBe(true)
+    expect(visibleIds.has(unlockedLuminas[0].id)).toBe(true)
+  })
+
   it('is fully deterministic for identical inputs', () => {
     const inventory = makeInventory()
     const build = makeBuild()
