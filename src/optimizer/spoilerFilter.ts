@@ -8,7 +8,12 @@ import type { InventoryState, NormalizedPicto, Weapon } from '../types'
 
 export function filterOwnedPictos(pictos: NormalizedPicto[], inventory: InventoryState): NormalizedPicto[] {
   if (!inventory.spoilerProtection) return pictos
-  return pictos.filter((p) => inventory.pictoStatus[p.id] === 'owned')
+  return pictos.filter((p) => {
+    const status = inventory.pictoStatus[p.id]
+    // Unlocking a Picto's Lumina does not consume or replace the Picto itself.
+    // `unlocked_lumina` therefore means "owned AND Lumina unlocked".
+    return status === 'owned' || status === 'unlocked_lumina'
+  })
 }
 
 export function filterUnlockedLuminas(pictos: NormalizedPicto[], inventory: InventoryState): NormalizedPicto[] {
