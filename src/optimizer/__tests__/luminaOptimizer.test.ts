@@ -74,6 +74,31 @@ describe('suggestLuminaCombination', () => {
     expect(result.suggestedLuminaIds.sort()).toEqual(['l1', 'l4'])
   })
 
+  it('charges zero Lumina points for a learned passive supplied by an equipped Picto', () => {
+    const result = suggestLuminaCombination({
+      unlockedLuminas: luminas,
+      profile: getStrategyProfile('balanced'),
+      budget: 8,
+      currentLuminaIds: ['l1', 'l4'],
+      freePictoIds: ['l1'],
+    })
+    expect(result.suggestedLuminaIds).toContain('l1')
+    expect(result.suggestedLuminaIds).toContain('l4')
+    expect(result.totalCost).toBe(8)
+  })
+
+  it('can include an equipped Picto passive even when its normal Lumina cost exceeds the budget', () => {
+    const result = suggestLuminaCombination({
+      unlockedLuminas: luminas,
+      profile: getStrategyProfile('balanced'),
+      budget: 0,
+      currentLuminaIds: [],
+      freePictoIds: ['l2'],
+    })
+    expect(result.suggestedLuminaIds).toContain('l2')
+    expect(result.totalCost).toBe(0)
+  })
+
   it('returns an empty, valid result for a zero budget instead of throwing', () => {
     const result = suggestLuminaCombination({
       unlockedLuminas: luminas,
