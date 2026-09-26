@@ -37,7 +37,7 @@ export function defaultBuild(characterId: number): CharacterBuild {
 }
 
 export function defaultInventory(): InventoryState {
-  return { pictoStatus: {}, weaponStatus: {}, spoilerProtection: true }
+  return { pictoStatus: {}, weaponStatus: {}, spoilerProtection: true, colourOfLuminaAvailable: 0 }
 }
 
 export interface ValidationResult {
@@ -132,6 +132,13 @@ function sanitizeInventory(raw: unknown, errors: string[]): InventoryState {
     }
   }
   out.spoilerProtection = typeof r.spoilerProtection === 'boolean' ? r.spoilerProtection : true
+  out.colourOfLuminaAvailable =
+    typeof r.colourOfLuminaAvailable === 'number' &&
+    Number.isFinite(r.colourOfLuminaAvailable) &&
+    r.colourOfLuminaAvailable >= 0 &&
+    Number.isInteger(r.colourOfLuminaAvailable)
+      ? r.colourOfLuminaAvailable
+      : 0
 
   return out
 }
