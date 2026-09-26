@@ -95,13 +95,16 @@ export function suggestLuminaCombination(params: {
   profile: StrategyProfile
   budget: number
   currentLuminaIds: string[]
+  /** Passives supplied by equipped Pictos consume no Lumina-point capacity. */
+  freePictoIds?: string[]
 }): LuminaCombinationSuggestion {
   const { unlockedLuminas, profile, currentLuminaIds } = params
+  const freePictoIds = new Set(params.freePictoIds ?? [])
   const budget = Number.isFinite(params.budget) && params.budget > 0 ? Math.floor(params.budget) : 0
 
   const items = unlockedLuminas
-    .filter((p) => p.cost > 0 && p.cost <= budget)
-    .map((p) => ({ id: p.id, cost: p.cost, value: valueOf(p, profile) }))
+    .filter((p) => p.cost > 0 && (freePictoIds.has(p.id) || p.cost <= budget))
+    .map((p) => ({ id: p.id, cost: freePictoIds.has(p.id) ? 0 : p.cost, value: valueOf(p, profile) }))
 
   const isExactSolution = budget <= MAX_BUDGET_FOR_EXACT_DP
   const { chosenIds, totalValue } = budget === 0 || items.length === 0
@@ -115,13 +118,16 @@ export function suggestLuminaCombination(params: {
   const currentSet = new Set(currentLuminaIds)
   const additions = chosenIds.filter((id) => !currentSet.has(id))
   const removals = currentLuminaIds.filter((id) => !suggestedSet.has(id))
-  const totalCost = chosenIds.reduce((sum, id) => sum + (pictoById.get(id)?.cost ?? 0), 0)
+  const totalCost = chosenIds.reduce(
+    (sum, id) => sum + (freePictoIds.has(id) ? 0 : (pictoById.get(id)?.cost ?? 0)),
+    0,
+  )
 
   const reasons: Record<string, string> = {}
   for (const id of chosenIds) {
     const p = pictoById.get(id)
     if (p) {
-      reasons[id] = `"${p.name}" (${p.type}, cost ${p.cost}) matches the ${profile.label} profile's Lumina-type priorities.`
+      reasons[id] = `"${p.name}" (${p.type}, ${freePictoIds.has(id) ? '0 Lumina points because its Picto is equipped' : `cost ${p.cost}`}) matches the ${profile.label} profile's Lumina-type priorities.`
     }
   }
   for (const id of removals) {
