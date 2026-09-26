@@ -5,12 +5,14 @@ import InventoryView from '../views/InventoryView.vue'
 import BuildView from '../views/BuildView.vue'
 import AnalyzeView from '../views/AnalyzeView.vue'
 import SettingsView from '../views/SettingsView.vue'
+import PartySummaryView from '../views/PartySummaryView.vue'
 
 export const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/characters' },
   { path: '/characters', name: 'characters', component: CharactersView },
   { path: '/inventory', name: 'inventory', component: InventoryView },
   { path: '/build', name: 'build', component: BuildView },
+  { path: '/party', name: 'party', component: PartySummaryView },
   { path: '/analyze', name: 'analyze', component: AnalyzeView },
   { path: '/settings', name: 'settings', component: SettingsView },
 ]
