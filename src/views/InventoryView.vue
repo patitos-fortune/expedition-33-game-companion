@@ -61,6 +61,7 @@ const filteredWeapons = computed(() => {
 })
 
 const pictoOwnedCount = computed(() => Object.values(state.inventory.pictoStatus).filter((s) => s === 'owned' || s === 'unlocked_lumina').length)
+const luminaUnlockedCount = computed(() => Object.values(state.inventory.pictoStatus).filter((s) => s === 'unlocked_lumina').length)
 const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStatus).filter((s) => s === 'owned').length)
 </script>
 
@@ -68,13 +69,15 @@ const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStat
   <div>
     <h1>My Inventory</h1>
     <p class="hint">
-      Mark what you actually have. Recommendations only ever use what's marked here — turn off spoiler protection in
+      Mark what you actually have. For Pictos, click each row to cycle <strong>Not discovered → Owned → Lumina unlocked</strong>.
+      “Lumina unlocked” means you still own the Picto, and its passive is now available to every character; each character
+      has their own Lumina-point capacity. Recommendations only use what is marked here — turn off spoiler protection in
       Settings to browse the full reference database instead.
     </p>
 
     <div class="toolbar">
       <div class="tabs">
-        <button :class="{ active: tab === 'pictos' }" @click="tab = 'pictos'">Pictos & Luminas ({{ pictoOwnedCount }}/{{ gameData.pictos.length }})</button>
+        <button :class="{ active: tab === 'pictos' }" @click="tab = 'pictos'">Pictos & Luminas ({{ pictoOwnedCount }} owned · {{ luminaUnlockedCount }} Luminas unlocked)</button>
         <button :class="{ active: tab === 'weapons' }" @click="tab = 'weapons'">Weapons ({{ weaponOwnedCount }}/{{ gameData.weapons.length }})</button>
       </div>
       <input v-model="search" type="search" placeholder="Search by name..." class="search-input" />
