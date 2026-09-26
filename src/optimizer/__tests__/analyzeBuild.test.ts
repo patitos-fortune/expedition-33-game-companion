@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { analyzeBuild } from '../analyzeBuild'
+import { filterOwnedPictos } from '../spoilerFilter'
 import { loadGameData } from '../../gamedata/loadGameData'
 import type { CharacterBuild, InventoryState } from '../../types'
 
@@ -17,6 +18,7 @@ function makeInventory(): InventoryState {
     pictoStatus,
     weaponStatus: { [firstWeapon.id]: 'owned' },
     spoilerProtection: true,
+    colourOfLuminaAvailable: 13,
   }
 }
 
@@ -36,6 +38,14 @@ function makeBuild(): CharacterBuild {
 }
 
 describe('analyzeBuild', () => {
+  it('treats Lumina-unlocked Pictos as still owned/equippable', () => {
+    const inventory = makeInventory()
+    const visible = filterOwnedPictos(gameData.pictos, inventory)
+    const visibleIds = new Set(visible.map((p) => p.id))
+    expect(visibleIds.has(ownedPictos[0].id)).toBe(true)
+    expect(visibleIds.has(unlockedLuminas[0].id)).toBe(true)
+  })
+
   it('is fully deterministic for identical inputs', () => {
     const inventory = makeInventory()
     const build = makeBuild()
@@ -50,7 +60,9 @@ describe('analyzeBuild', () => {
     const inventory = makeInventory()
     const build = makeBuild()
     const result = analyzeBuild({ build, gameData, inventory })
-    const ownedIds = new Set(ownedPictos.map((p) => p.id))
+    // A Picto whose Lumina has been unlocked is still owned and remains a valid
+    // Picto-slot candidate; mastery adds the Lumina, it does not consume the Picto.
+    const ownedIds = new Set([...ownedPictos, ...unlockedLuminas].map((p) => p.id))
     for (const id of result.pictos.suggestedEquippedIds) {
       expect(ownedIds.has(id)).toBe(true)
     }

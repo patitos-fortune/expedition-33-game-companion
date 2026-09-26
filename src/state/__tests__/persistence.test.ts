@@ -8,6 +8,7 @@ describe('serializeState / deserializeState round-trip', () => {
     inventory.pictoStatus['picto-7'] = 'unlocked_lumina'
     inventory.weaponStatus['gustave-lanceram'] = 'owned'
     inventory.spoilerProtection = false
+    inventory.colourOfLuminaAvailable = 13
 
     const build = defaultBuild(1)
     build.attributePointBudget = 90
@@ -87,6 +88,24 @@ describe('deserializeState with malformed input', () => {
       activeCharacterId: null,
     })
     expect(result.sanitized.builds[3].attributePointBudget).toBe(0)
+  })
+
+  it('imports an older save without Colour of Lumina as zero', () => {
+    const result = validatePersistedState({
+      inventory: { pictoStatus: {}, weaponStatus: {}, spoilerProtection: true },
+      builds: {},
+      activeCharacterId: null,
+    })
+    expect(result.sanitized.inventory.colourOfLuminaAvailable).toBe(0)
+  })
+
+  it('sanitizes invalid Colour of Lumina values', () => {
+    const result = validatePersistedState({
+      inventory: { pictoStatus: {}, weaponStatus: {}, spoilerProtection: true, colourOfLuminaAvailable: -3 },
+      builds: {},
+      activeCharacterId: null,
+    })
+    expect(result.sanitized.inventory.colourOfLuminaAvailable).toBe(0)
   })
 
   it('handles completely empty input gracefully', () => {

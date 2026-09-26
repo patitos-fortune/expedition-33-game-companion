@@ -141,6 +141,8 @@ export interface InventoryState {
   pictoStatus: Record<string, PictoStatus>;
   weaponStatus: Record<string, WeaponStatus>;
   spoilerProtection: boolean;
+  /** Shared, unspent Colour of Lumina currency available to raise character capacities. */
+  colourOfLuminaAvailable: number;
 }
 
 /** Everything persisted locally / exported to a backup file. */
