@@ -18,6 +18,7 @@ function makeInventory(): InventoryState {
     pictoStatus,
     weaponStatus: { [firstWeapon.id]: 'owned' },
     spoilerProtection: true,
+    colourOfLuminaAvailable: 13,
   }
 }
 
