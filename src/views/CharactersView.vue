@@ -17,8 +17,22 @@ function iconUrl(icon?: string): string | undefined {
 
 const characters = computed(() => gameData.characters)
 
-const plannedColourSpend = computed(() => 0)
-const colourRemaining = computed(() => Math.max(0, state.inventory.colourOfLuminaAvailable - plannedColourSpend.value))
+function plannedLuminaCost(characterId: number): number {
+  const build = state.builds[characterId]
+  if (!build) return 0
+  return build.activeLuminaIds.reduce((sum, id) => sum + (gameData.pictos.find((p) => p.id === id)?.cost ?? 0), 0)
+}
+
+function extraCapacityNeeded(characterId: number): number {
+  const build = state.builds[characterId]
+  if (!build) return 0
+  return Math.max(0, plannedLuminaCost(characterId) - build.luminaPointBudget)
+}
+
+const plannedColourSpend = computed(() =>
+  gameData.characters.reduce((sum, c) => sum + extraCapacityNeeded(c.id), 0),
+)
+const colourRemaining = computed(() => state.inventory.colourOfLuminaAvailable - plannedColourSpend.value)
 
 function selectCharacter(characterId: number) {
   state.activeCharacterId = characterId
@@ -37,7 +51,16 @@ function selectCharacter(characterId: number) {
         Shared Colours of Lumina available
         <input type="number" min="0" step="1" v-model.number="state.inventory.colourOfLuminaAvailable" />
       </label>
-      <div class="wallet-summary">Unspent: {{ colourRemaining }} · Current character capacities are shown on their build screens.</div>
+      <div class="wallet-summary">
+        Plan needs {{ plannedColourSpend }} / {{ state.inventory.colourOfLuminaAvailable }} Colours
+        · <span :class="{ shortfall: colourRemaining < 0 }">{{ colourRemaining >= 0 ? colourRemaining + ' left' : Math.abs(colourRemaining) + ' short' }}</span>
+      </div>
+      <div v-if="plannedColourSpend > 0" class="allocation-list">
+        <div v-for="c in characters" :key="c.id" v-show="extraCapacityNeeded(c.id) > 0">
+          {{ c.name }}: +{{ extraCapacityNeeded(c.id) }} capacity
+          ({{ state.builds[c.id]?.luminaPointBudget ?? 0 }} → {{ plannedLuminaCost(c.id) }})
+        </div>
+      </div>
       <p class="hint">Colours of Lumina are the shared currency used to raise individual character Lumina capacity. Learned Luminas themselves are tracked globally in Inventory.</p>
     </section>
 
@@ -94,6 +117,15 @@ function selectCharacter(characterId: number) {
 
 .wallet-summary {
   font-weight: 700;
+}
+
+.allocation-list {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.shortfall {
+  color: var(--warning-color);
 }
 
 .character-grid {
