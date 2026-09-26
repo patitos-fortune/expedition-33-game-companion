@@ -20,7 +20,11 @@ const characters = computed(() => gameData.characters)
 function plannedLuminaCost(characterId: number): number {
   const build = state.builds[characterId]
   if (!build) return 0
-  return build.activeLuminaIds.reduce((sum, id) => sum + (gameData.pictos.find((p) => p.id === id)?.cost ?? 0), 0)
+  const equipped = new Set(build.equippedPictoIds)
+  return build.activeLuminaIds.reduce(
+    (sum, id) => sum + (equipped.has(id) ? 0 : (gameData.pictos.find((p) => p.id === id)?.cost ?? 0)),
+    0,
+  )
 }
 
 function extraCapacityNeeded(characterId: number): number {
