@@ -24,7 +24,9 @@ Unlike a typical Picto/build browser, this app's main purpose is to look at your
 - **Picto loadout** — from the Pictos you've marked as owned, suggests which 3 to equip.
 - **Lumina combination** — tracks Picto mastery globally: a Picto marked **Lumina unlocked** remains an owned/equippable
   Picto and makes its passive available to every character. Each character separately records their own Lumina-point
-  capacity and active Luminas; the optimizer finds a combination that fits that character's capacity and strategy.
+  capacity and planned active Luminas; the optimizer finds a combination that fits that character's capacity and strategy.
+- **Colour of Lumina planner** — records the shared unspent Colour of Lumina currency, calculates how much extra capacity each
+  planned character loadout requires, and shows whether the whole party plan fits the available pool or how many Colours short it is.
 - **Analyze My Build** — the central screen: one button that runs all of the above against your current build and
   shows **CALCULATED** facts, **HEURISTIC** recommendations, and explicitly labeled **UNKNOWN**/unmodeled mechanics,
   side by side with your current setup.
