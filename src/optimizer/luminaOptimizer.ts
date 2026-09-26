@@ -108,8 +108,6 @@ export function suggestLuminaCombination(params: {
   const paidItems = unlockedLuminas
     .filter((p) => !freePictoIds.has(p.id) && p.cost > 0 && p.cost <= budget)
     .map((p) => ({ id: p.id, cost: p.cost, value: valueOf(p, profile) }))
-  const items = [...freeItems, ...paidItems]
-
   const isExactSolution = budget <= MAX_BUDGET_FOR_EXACT_DP
   const freeValue = freeItems.reduce((sum, item) => sum + item.value, 0)
   const paidResult =
