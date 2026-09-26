@@ -102,16 +102,24 @@ export function suggestLuminaCombination(params: {
   const freePictoIds = new Set(params.freePictoIds ?? [])
   const budget = Number.isFinite(params.budget) && params.budget > 0 ? Math.floor(params.budget) : 0
 
-  const items = unlockedLuminas
-    .filter((p) => p.cost > 0 && (freePictoIds.has(p.id) || p.cost <= budget))
-    .map((p) => ({ id: p.id, cost: freePictoIds.has(p.id) ? 0 : p.cost, value: valueOf(p, profile) }))
+  const freeItems = unlockedLuminas
+    .filter((p) => freePictoIds.has(p.id))
+    .map((p) => ({ id: p.id, cost: 0, value: valueOf(p, profile) }))
+  const paidItems = unlockedLuminas
+    .filter((p) => !freePictoIds.has(p.id) && p.cost > 0 && p.cost <= budget)
+    .map((p) => ({ id: p.id, cost: p.cost, value: valueOf(p, profile) }))
+  const items = [...freeItems, ...paidItems]
 
   const isExactSolution = budget <= MAX_BUDGET_FOR_EXACT_DP
-  const { chosenIds, totalValue } = budget === 0 || items.length === 0
-    ? { chosenIds: [] as string[], totalValue: 0 }
-    : isExactSolution
-      ? knapsackExact(items, budget)
-      : knapsackGreedyApprox(items, budget)
+  const freeValue = freeItems.reduce((sum, item) => sum + item.value, 0)
+  const paidResult =
+    budget === 0 || paidItems.length === 0
+      ? { chosenIds: [] as string[], totalValue: 0 }
+      : isExactSolution
+        ? knapsackExact(paidItems, budget)
+        : knapsackGreedyApprox(paidItems, budget)
+  const chosenIds = [...freeItems.map((item) => item.id), ...paidResult.chosenIds]
+  const totalValue = freeValue + paidResult.totalValue
 
   const pictoById = new Map(unlockedLuminas.map((p) => [p.id, p]))
   const suggestedSet = new Set(chosenIds)
