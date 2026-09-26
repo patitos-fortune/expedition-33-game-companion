@@ -17,6 +17,9 @@ function iconUrl(icon?: string): string | undefined {
 
 const characters = computed(() => gameData.characters)
 
+const plannedColourSpend = computed(() => 0)
+const colourRemaining = computed(() => Math.max(0, state.inventory.colourOfLuminaAvailable - plannedColourSpend.value))
+
 function selectCharacter(characterId: number) {
   state.activeCharacterId = characterId
   getOrCreateBuild(characterId)
@@ -28,6 +31,15 @@ function selectCharacter(characterId: number) {
   <div>
     <h1>Characters</h1>
     <p class="hint">Pick a character to set up their current build.</p>
+
+    <section class="lumina-wallet">
+      <label>
+        Shared Colours of Lumina available
+        <input type="number" min="0" step="1" v-model.number="state.inventory.colourOfLuminaAvailable" />
+      </label>
+      <div class="wallet-summary">Unspent: {{ colourRemaining }} · Current character capacities are shown on their build screens.</div>
+      <p class="hint">Colours of Lumina are the shared currency used to raise individual character Lumina capacity. Learned Luminas themselves are tracked globally in Inventory.</p>
+    </section>
 
     <div class="character-grid">
       <button
@@ -49,6 +61,39 @@ function selectCharacter(characterId: number) {
 .hint {
   color: var(--text-muted);
   margin-bottom: var(--spacing-lg);
+}
+
+.lumina-wallet {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.lumina-wallet label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 280px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.lumina-wallet input {
+  background-color: var(--bg-item);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  font-size: 1rem;
+}
+
+.wallet-summary {
+  font-weight: 700;
 }
 
 .character-grid {
