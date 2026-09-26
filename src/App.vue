@@ -10,6 +10,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/characters" class="app-tab">Characters</RouterLink>
         <RouterLink to="/inventory" class="app-tab">Inventory</RouterLink>
         <RouterLink to="/build" class="app-tab">Current Build</RouterLink>
+        <RouterLink to="/party" class="app-tab">Party Summary</RouterLink>
         <RouterLink to="/analyze" class="app-tab app-tab-primary">Analyze My Build</RouterLink>
         <RouterLink to="/settings" class="app-tab">Settings</RouterLink>
       </nav>
