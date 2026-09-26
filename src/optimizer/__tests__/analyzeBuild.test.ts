@@ -50,7 +50,9 @@ describe('analyzeBuild', () => {
     const inventory = makeInventory()
     const build = makeBuild()
     const result = analyzeBuild({ build, gameData, inventory })
-    const ownedIds = new Set(ownedPictos.map((p) => p.id))
+    // A Picto whose Lumina has been unlocked is still owned and remains a valid
+    // Picto-slot candidate; mastery adds the Lumina, it does not consume the Picto.
+    const ownedIds = new Set([...ownedPictos, ...unlockedLuminas].map((p) => p.id))
     for (const id of result.pictos.suggestedEquippedIds) {
       expect(ownedIds.has(id)).toBe(true)
     }
