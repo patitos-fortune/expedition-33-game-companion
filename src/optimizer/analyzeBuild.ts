@@ -72,6 +72,7 @@ export function analyzeBuild(params: {
     profile,
     budget: build.luminaPointBudget,
     currentLuminaIds,
+    freePictoIds: currentEquippedIds,
   })
 
   const skills = {
