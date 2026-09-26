@@ -9,6 +9,7 @@ const gameData = loadGameData()
 const tab = ref<'pictos' | 'weapons'>('pictos')
 const search = ref('')
 const characterFilter = ref<string>('all')
+const pictoFilter = ref<'all' | 'owned' | 'unlocked'>('all')
 
 const pictoStatusLabels: Record<PictoStatus, string> = {
   undiscovered: 'Not discovered',
@@ -45,8 +46,15 @@ function cycleWeaponStatus(id: string) {
 
 const filteredPictos = computed(() => {
   const q = search.value.trim().toLowerCase()
-  if (!q) return gameData.pictos
-  return gameData.pictos.filter((p) => p.name.toLowerCase().includes(q) || p.type.toLowerCase().includes(q))
+  return gameData.pictos.filter((p) => {
+    const status = pictoStatus(p.id)
+    const matchesSearch = !q || p.name.toLowerCase().includes(q) || p.type.toLowerCase().includes(q)
+    const matchesStatus =
+      pictoFilter.value === 'all' ||
+      (pictoFilter.value === 'owned' && (status === 'owned' || status === 'unlocked_lumina')) ||
+      (pictoFilter.value === 'unlocked' && status === 'unlocked_lumina')
+    return matchesSearch && matchesStatus
+  })
 })
 
 const characterNames = computed(() => gameData.characters.map((c) => c.name))
@@ -81,6 +89,11 @@ const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStat
         <button :class="{ active: tab === 'weapons' }" @click="tab = 'weapons'">Weapons ({{ weaponOwnedCount }}/{{ gameData.weapons.length }})</button>
       </div>
       <input v-model="search" type="search" placeholder="Search by name..." class="search-input" />
+      <div v-if="tab === 'pictos'" class="status-filters" aria-label="Filter Pictos by inventory status">
+        <button :class="{ active: pictoFilter === 'all' }" @click="pictoFilter = 'all'">All</button>
+        <button :class="{ active: pictoFilter === 'owned' }" @click="pictoFilter = 'owned'">Owned ({{ pictoOwnedCount }})</button>
+        <button :class="{ active: pictoFilter === 'unlocked' }" @click="pictoFilter = 'unlocked'">Lumina learned ({{ luminaUnlockedCount }})</button>
+      </div>
       <select v-if="tab === 'weapons'" v-model="characterFilter" class="character-select">
         <option value="all">All characters</option>
         <option v-for="name in characterNames" :key="name" :value="name">{{ name }}</option>
@@ -128,6 +141,7 @@ const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStat
 }
 
 .tabs button,
+.status-filters button,
 .search-input,
 .character-select {
   background-color: var(--bg-item);
@@ -137,9 +151,16 @@ const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStat
   padding: var(--spacing-sm) var(--spacing-md);
 }
 
-.tabs button.active {
+.tabs button.active,
+.status-filters button.active {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+}
+
+.status-filters {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 .search-input {
