@@ -21,7 +21,7 @@ const ownedWeapons = computed(() => {
 const selectedWeapon = computed(() => (build.value?.weaponId ? gameData.weapons.find((w) => w.id === build.value!.weaponId) ?? null : null))
 
 const ownedPictos = computed(() =>
-  gameData.pictos.filter((p) => !state.inventory.spoilerProtection || state.inventory.pictoStatus[p.id] === 'owned'),
+  gameData.pictos.filter((p) => !state.inventory.spoilerProtection || ['owned', 'unlocked_lumina'].includes(state.inventory.pictoStatus[p.id] ?? 'undiscovered')),
 )
 const unlockedLuminas = computed(() =>
   gameData.pictos.filter((p) => !state.inventory.spoilerProtection || state.inventory.pictoStatus[p.id] === 'unlocked_lumina'),
@@ -137,16 +137,17 @@ function setLevelBudget() {
 
       <section class="panel-section">
         <h3 class="section-title">4. Active Luminas</h3>
-        <label class="field-row">Available Lumina points
+        <p class="calc-note">Lumina unlocks are shared across the party. The point capacity below belongs only to {{ character.name }}. Mark a Picto as “Lumina unlocked” once in Inventory, then each character can activate it independently if they have enough capacity.</p>
+        <label class="field-row">Lumina capacity for {{ character.name }}
           <input type="number" min="0" v-model.number="build!.luminaPointBudget" />
         </label>
-        <p class="calc-note">Using {{ luminaCost }} / {{ build!.luminaPointBudget }}</p>
+        <p class="calc-note" :class="{ 'warning-text': luminaCost > build!.luminaPointBudget }">Using {{ luminaCost }} / {{ build!.luminaPointBudget }} Lumina points<span v-if="luminaCost > build!.luminaPointBudget"> — over capacity</span></p>
         <div class="checkbox-list">
           <label v-for="p in unlockedLuminas" :key="p.id" class="checkbox-row">
             <input type="checkbox" :checked="build!.activeLuminaIds.includes(p.id)" @change="toggleLumina(p.id)" />
             {{ p.name }} <span class="muted">(cost {{ p.cost }})</span>
           </label>
-          <div v-if="unlockedLuminas.length === 0" class="empty-message">No Luminas marked "unlocked" yet.</div>
+          <div v-if="unlockedLuminas.length === 0" class="empty-message">No shared Luminas unlocked yet. In Inventory → Pictos & Luminas, click a Picto until it is marked “Lumina unlocked”.</div>
         </div>
       </section>
 
