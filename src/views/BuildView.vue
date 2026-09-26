@@ -136,12 +136,16 @@ function setLevelBudget() {
       </section>
 
       <section class="panel-section">
-        <h3 class="section-title">4. Active Luminas</h3>
+        <h3 class="section-title">4. Planned active Luminas</h3>
         <p class="calc-note">Lumina unlocks are shared across the party. The point capacity below belongs only to {{ character.name }}. Mark a Picto as “Lumina unlocked” once in Inventory, then each character can activate it independently if they have enough capacity.</p>
-        <label class="field-row">Lumina capacity for {{ character.name }}
+        <label class="field-row">Current Lumina capacity for {{ character.name }}
           <input type="number" min="0" v-model.number="build!.luminaPointBudget" />
         </label>
-        <p class="calc-note" :class="{ 'warning-text': luminaCost > build!.luminaPointBudget }">Using {{ luminaCost }} / {{ build!.luminaPointBudget }} Lumina points<span v-if="luminaCost > build!.luminaPointBudget"> — over capacity</span></p>
+        <p class="calc-note" :class="{ 'warning-text': luminaCost > build!.luminaPointBudget }">
+          Planned build uses {{ luminaCost }} / {{ build!.luminaPointBudget }} current capacity.
+          <span v-if="luminaCost > build!.luminaPointBudget"> Needs +{{ luminaCost - build!.luminaPointBudget }} Colours of Lumina.</span>
+          <span v-else> Fits current capacity.</span>
+        </p>
         <div class="checkbox-list">
           <label v-for="p in unlockedLuminas" :key="p.id" class="checkbox-row">
             <input type="checkbox" :checked="build!.activeLuminaIds.includes(p.id)" @change="toggleLumina(p.id)" />
