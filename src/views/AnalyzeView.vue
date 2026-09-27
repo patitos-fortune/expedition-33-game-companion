@@ -38,7 +38,8 @@ function acceptLuminaSuggestion() {
 
 <template>
   <div>
-    <h1>Analyze My Build</h1>
+    <h1>Analyze My Build<span v-if="character">: {{ character.name }}</span></h1>
+    <p v-if="character" class="character-context">Analyzing the saved build for <strong>{{ character.name }}</strong>.</p>
 
     <div v-if="!character" class="empty-message">No character selected. Go to Characters and pick one first.</div>
     <div v-else-if="!result" class="empty-message">Nothing to analyze yet.</div>
@@ -132,6 +133,8 @@ function acceptLuminaSuggestion() {
 </template>
 
 <style scoped>
+.character-context { color: var(--text-muted); margin-top: calc(-1 * var(--spacing-sm)); margin-bottom: var(--spacing-lg); }
+
 .analyze-layout {
   display: flex;
   flex-direction: column;
