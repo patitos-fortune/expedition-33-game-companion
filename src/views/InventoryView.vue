@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { loadGameData } from '../gamedata/loadGameData'
-import { state } from '../state/store'
+import { state, getOrCreateBuild } from '../state/store'
 import type { PictoStatus, WeaponStatus } from '../types'
 
 const gameData = loadGameData()
@@ -21,8 +21,9 @@ const pictoStatusOrder: PictoStatus[] = ['undiscovered', 'owned', 'unlocked_lumi
 const weaponStatusLabels: Record<WeaponStatus, string> = {
   undiscovered: 'Not discovered',
   owned: 'Owned',
+  equipped: 'Equipped',
 }
-const weaponStatusOrder: WeaponStatus[] = ['undiscovered', 'owned']
+const weaponStatusOrder: WeaponStatus[] = ['undiscovered', 'owned', 'equipped']
 
 function pictoStatus(id: string): PictoStatus {
   return state.inventory.pictoStatus[id] ?? 'undiscovered'
@@ -41,6 +42,24 @@ function cycleWeaponStatus(id: string) {
   const current = weaponStatus(id)
   const idx = weaponStatusOrder.indexOf(current)
   const next = weaponStatusOrder[(idx + 1) % weaponStatusOrder.length]
+  const weapon = gameData.weapons.find((w) => w.id === id)
+  if (!weapon) return
+
+  if (next === 'equipped') {
+    // A character can only have one equipped weapon. Demote any previous one to owned.
+    for (const other of gameData.weapons.filter((w) => w.character === weapon.character && w.id !== id)) {
+      if (weaponStatus(other.id) === 'equipped') state.inventory.weaponStatus[other.id] = 'owned'
+    }
+    const character = gameData.characters.find((c) => c.name === weapon.character)
+    if (character) {
+      const build = state.builds[character.id] ?? getOrCreateBuild(character.id)
+      build.weaponId = id
+    }
+  } else if (current === 'equipped') {
+    const character = gameData.characters.find((c) => c.name === weapon.character)
+    if (character && state.builds[character.id]?.weaponId === id) state.builds[character.id].weaponId = null
+  }
+
   state.inventory.weaponStatus[id] = next
 }
 
@@ -70,14 +89,14 @@ const filteredWeapons = computed(() => {
 
 const pictoOwnedCount = computed(() => Object.values(state.inventory.pictoStatus).filter((s) => s === 'owned' || s === 'unlocked_lumina').length)
 const luminaUnlockedCount = computed(() => Object.values(state.inventory.pictoStatus).filter((s) => s === 'unlocked_lumina').length)
-const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStatus).filter((s) => s === 'owned').length)
+const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStatus).filter((s) => s === 'owned' || s === 'equipped').length)
 </script>
 
 <template>
   <div>
     <h1>My Inventory</h1>
     <p class="hint">
-      Mark what you actually have. For Pictos, click each row to cycle <strong>Not discovered → Owned → Lumina unlocked</strong>.
+      Mark what you actually have. For Pictos, click each row to cycle <strong>Not discovered → Owned → Lumina unlocked</strong>. For weapons, click to cycle <strong>Not discovered → Owned → Equipped</strong>; marking one Equipped automatically sets that character's equipped weapon.
       “Lumina unlocked” means you still own the Picto, and its passive is now available to every character; each character
       has their own Lumina-point capacity. Recommendations only use what is marked here — turn off spoiler protection in
       Settings to browse the full reference database instead.
@@ -220,6 +239,10 @@ const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStat
 
 .inv-row.owned .inv-row-status {
   color: #4caf50;
+}
+
+.inv-row.equipped .inv-row-status {
+  color: var(--primary-color);
 }
 
 .inv-row.unlocked_lumina .inv-row-status {
