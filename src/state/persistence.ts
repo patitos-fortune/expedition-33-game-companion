@@ -31,6 +31,7 @@ export function defaultBuild(characterId: number): CharacterBuild {
     weaponLevel: 1,
     equippedPictoIds: [],
     activeLuminaIds: [],
+    plannedLuminaIds: [],
     luminaPointBudget: 0,
     strategyProfile: 'balanced',
   }
@@ -81,6 +82,7 @@ function sanitizeBuild(raw: unknown, characterId: number, errors: string[]): Cha
   const weaponLevel = typeof r.weaponLevel === 'number' && Number.isFinite(r.weaponLevel) && r.weaponLevel >= 1 ? r.weaponLevel : 1
   const equippedPictoIds = Array.isArray(r.equippedPictoIds) ? r.equippedPictoIds.filter((x): x is string => typeof x === 'string') : []
   const activeLuminaIds = Array.isArray(r.activeLuminaIds) ? r.activeLuminaIds.filter((x): x is string => typeof x === 'string') : []
+  const plannedLuminaIds = Array.isArray(r.plannedLuminaIds) ? r.plannedLuminaIds.filter((x): x is string => typeof x === 'string') : []
   const luminaPointBudget =
     typeof r.luminaPointBudget === 'number' && Number.isFinite(r.luminaPointBudget) && r.luminaPointBudget >= 0 ? r.luminaPointBudget : 0
   const strategyProfile = VALID_STRATEGY_KEYS.includes(r.strategyProfile as StrategyProfileKey)
@@ -100,6 +102,7 @@ function sanitizeBuild(raw: unknown, characterId: number, errors: string[]): Cha
     weaponLevel,
     equippedPictoIds: equippedPictoIds.slice(0, 3),
     activeLuminaIds,
+    plannedLuminaIds,
     luminaPointBudget,
     strategyProfile,
   }
