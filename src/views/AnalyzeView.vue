@@ -20,6 +20,28 @@ function pictoName(id: string): string {
   return gameData.pictos.find((p) => p.id === id)?.name ?? id
 }
 
+const luminaComparison = computed(() => {
+  if (!build.value || !result.value) return []
+  const current = new Set(build.value.activeLuminaIds)
+  const proposed = new Set(result.value.luminas.suggestedLuminaIds)
+  const ids = [...new Set([...current, ...proposed])]
+  return ids
+    .map((id) => {
+      const picto = gameData.pictos.find((p) => p.id === id)
+      const inCurrent = current.has(id)
+      const inProposed = proposed.has(id)
+      return {
+        id,
+        name: picto?.name ?? id,
+        cost: build.value!.equippedPictoIds.includes(id) ? 0 : (picto?.cost ?? 0),
+        inCurrent,
+        inProposed,
+        change: inCurrent && inProposed ? 'Keep' : inProposed ? 'Add' : 'Remove',
+      }
+    })
+    .sort((a, b) => a.name.localeCompare(b.name))
+})
+
 function acceptAttributeSuggestion() {
   if (!build.value || !result.value) return
   build.value.attributeAllocation = { ...result.value.attribute.suggested }
@@ -106,7 +128,25 @@ function acceptLuminaSuggestion() {
       <section class="panel-section">
         <h2 class="section-title">Luminas <span class="tier-tag heuristic">HEURISTIC</span></h2>
         <p>{{ result.luminas.summary }}</p>
-        <p class="calc-note"><span class="tier-tag calculated">CALCULATED</span> uses {{ result.luminas.totalCost }} / {{ result.luminas.budget }} available Lumina points.{{ result.luminas.isExactSolution ? '' : ' (approximate — budget too large for an exact search)' }}</p>
+        <p class="calc-note"><span class="tier-tag calculated">CALCULATED</span> proposed build uses {{ result.luminas.totalCost }} / {{ result.luminas.budget }} available Lumina points.{{ result.luminas.isExactSolution ? '' : ' (approximate — budget too large for an exact search)' }}</p>
+        <h3>Lumina before / after</h3>
+        <p class="calc-note">This table is the union of Luminas in the current build and the optimizer's proposed build. A 0-point row is supplied free by an equipped Picto.</p>
+        <div class="table-scroll">
+          <table class="compare-table lumina-compare">
+            <thead>
+              <tr><th>Lumina</th><th>Cost</th><th>Current</th><th>Proposed</th><th>Change</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in luminaComparison" :key="row.id">
+                <td>{{ row.name }}</td>
+                <td>{{ row.cost }}</td>
+                <td><span :class="row.inCurrent ? 'yes' : 'no'">{{ row.inCurrent ? '✓ Yes' : '—' }}</span></td>
+                <td><span :class="row.inProposed ? 'yes' : 'no'">{{ row.inProposed ? '✓ Yes' : '—' }}</span></td>
+                <td :class="{ up: row.change === 'Add', down: row.change === 'Remove', keep: row.change === 'Keep' }">{{ row.change }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <ul class="reason-list">
           <li v-for="id in result.luminas.suggestedLuminaIds" :key="id">{{ result.luminas.reasons[id] }}</li>
         </ul>
@@ -204,6 +244,11 @@ function acceptLuminaSuggestion() {
 
 .compare-table td.up { color: #4caf50; font-weight: 700; }
 .compare-table td.down { color: #ff8a80; font-weight: 700; }
+.compare-table td.keep { color: var(--text-muted); font-weight: 700; }
+.table-scroll { overflow-x: auto; }
+.lumina-compare { min-width: 560px; }
+.lumina-compare .yes { color: #4caf50; font-weight: 700; }
+.lumina-compare .no { color: var(--text-muted); }
 
 .reason-list {
   margin: 0;
