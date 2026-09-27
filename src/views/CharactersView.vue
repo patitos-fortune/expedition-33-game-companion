@@ -52,11 +52,11 @@ function selectCharacter(characterId: number) {
 
     <section class="lumina-wallet">
       <label>
-        Shared Colours of Lumina available
+        Unspent Colours of Lumina in inventory
         <input type="number" min="0" step="1" v-model.number="state.inventory.colourOfLuminaAvailable" />
       </label>
       <div class="wallet-summary">
-        Plan needs {{ plannedColourSpend }} / {{ state.inventory.colourOfLuminaAvailable }} Colours
+        Desired builds need {{ plannedColourSpend }} additional Colours / {{ state.inventory.colourOfLuminaAvailable }} unspent
         · <span :class="{ shortfall: colourRemaining < 0 }">{{ colourRemaining >= 0 ? colourRemaining + ' left' : Math.abs(colourRemaining) + ' short' }}</span>
       </div>
       <div v-if="plannedColourSpend > 0" class="allocation-list">
@@ -65,7 +65,14 @@ function selectCharacter(characterId: number) {
           ({{ state.builds[c.id]?.luminaPointBudget ?? 0 }} → {{ plannedLuminaCost(c.id) }})
         </div>
       </div>
-      <p class="hint">Colours of Lumina are the shared currency used to raise individual character Lumina capacity. Learned Luminas themselves are tracked globally in Inventory.</p>
+      <p class="hint"><strong>What goes in this box?</strong> Enter the number shown at the top of the Curator → Upgrade Lumina screen before the “/1” cost (for example, “13/1” means enter 13). This is only your currently unspent stock. Colours already assigned to characters are already reflected in each character's Lumina capacity and should not be added here again.</p>
+      <div class="capacity-summary">
+        <strong>Party planning check</strong>
+        <span>Current character capacities: {{ characters.map(c => c.name + ' ' + (state.builds[c.id]?.luminaPointBudget ?? 0)).join(' · ') }}</span>
+        <span>Extra Colours required by the desired builds: {{ plannedColourSpend }}</span>
+        <span :class="{ shortfall: colourRemaining < 0 }">{{ colourRemaining >= 0 ? colourRemaining + ' unspent Colours would remain' : Math.abs(colourRemaining) + ' more Colours needed' }}</span>
+      </div>
+      <p class="hint">Each Colour permanently adds +1 Lumina Point to the character you assign it to. Existing character capacity is not a shared pool that can be redistributed; this planner therefore compares your desired builds only against the unspent Colours still in inventory.</p>
     </section>
 
     <div class="character-grid">
@@ -127,6 +134,8 @@ function selectCharacter(characterId: number) {
   color: var(--text-light);
   font-size: 0.9rem;
 }
+
+.capacity-summary { display:flex; flex-direction:column; gap:4px; padding:var(--spacing-sm); background:var(--bg-item); border-radius:var(--border-radius-sm); font-size:.9rem; }
 
 .shortfall {
   color: var(--warning-color);
