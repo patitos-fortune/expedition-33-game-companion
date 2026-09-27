@@ -32,13 +32,18 @@ function toggleEquipped(id: string) {
   const idx = build.value.equippedPictoIds.indexOf(id)
   if (idx >= 0) {
     build.value.equippedPictoIds.splice(idx, 1)
+    const luminaIdx = build.value.activeLuminaIds.indexOf(id)
+    if (luminaIdx >= 0) build.value.activeLuminaIds.splice(luminaIdx, 1)
   } else if (build.value.equippedPictoIds.length < 3) {
     build.value.equippedPictoIds.push(id)
+    if (!build.value.activeLuminaIds.includes(id)) build.value.activeLuminaIds.push(id)
   }
 }
 
 function clearEquippedPictos() {
   if (!build.value) return
+  const equippedIds = new Set(build.value.equippedPictoIds)
+  build.value.activeLuminaIds = build.value.activeLuminaIds.filter((id) => !equippedIds.has(id))
   build.value.equippedPictoIds.splice(0)
 }
 
