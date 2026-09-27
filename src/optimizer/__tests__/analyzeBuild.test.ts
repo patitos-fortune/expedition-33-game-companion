@@ -32,6 +32,7 @@ function makeBuild(): CharacterBuild {
     weaponLevel: 20,
     equippedPictoIds: [],
     activeLuminaIds: [],
+    plannedLuminaIds: [],
     luminaPointBudget: 40,
     strategyProfile: 'damage',
   }
