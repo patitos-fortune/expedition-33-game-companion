@@ -37,6 +37,16 @@ function toggleEquipped(id: string) {
   }
 }
 
+function clearEquippedPictos() {
+  if (!build.value) return
+  build.value.equippedPictoIds.splice(0)
+}
+
+function clearActiveLuminas() {
+  if (!build.value) return
+  build.value.activeLuminaIds.splice(0)
+}
+
 function toggleLumina(id: string) {
   if (!build.value) return
   const idx = build.value.activeLuminaIds.indexOf(id)
@@ -125,8 +135,11 @@ function setLevelBudget() {
       </section>
 
       <section class="panel-section">
-        <h3 class="section-title">3. Equipped Pictos ({{ build!.equippedPictoIds.length }}/3)</h3>
-        <div class="checkbox-list">
+        <div class="section-heading-row">
+          <h3 class="section-title">3. Equipped Pictos ({{ build!.equippedPictoIds.length }}/3)</h3>
+          <button type="button" class="clear-button" :disabled="build!.equippedPictoIds.length === 0" @click="clearEquippedPictos">Clear all</button>
+        </div>
+        <div class="checkbox-list picto-grid">
           <label v-for="p in ownedPictos" :key="p.id" class="checkbox-row">
             <input
               type="checkbox"
@@ -141,7 +154,10 @@ function setLevelBudget() {
       </section>
 
       <section class="panel-section">
-        <h3 class="section-title">4. Planned active Luminas</h3>
+        <div class="section-heading-row">
+          <h3 class="section-title">4. Planned active Luminas</h3>
+          <button type="button" class="clear-button" :disabled="build!.activeLuminaIds.length === 0" @click="clearActiveLuminas">Clear all</button>
+        </div>
         <p class="calc-note">Lumina unlocks are shared across the party. The point capacity below belongs only to {{ character.name }}. A passive supplied by one of this character's 3 equipped Pictos costs 0 Lumina points; the same learned passive only costs points when activated as a Lumina.</p>
         <label class="field-row">Current Lumina capacity for {{ character.name }}
           <input type="number" min="0" v-model.number="build!.luminaPointBudget" />
@@ -151,7 +167,7 @@ function setLevelBudget() {
           <span v-if="luminaCost > build!.luminaPointBudget"> Needs +{{ luminaCost - build!.luminaPointBudget }} Colours of Lumina.</span>
           <span v-else> Fits current capacity.</span>
         </p>
-        <div class="checkbox-list">
+        <div class="checkbox-list lumina-grid">
           <label v-for="p in unlockedLuminas" :key="p.id" class="checkbox-row">
             <input type="checkbox" :checked="build!.activeLuminaIds.includes(p.id)" @change="toggleLumina(p.id)" />
             {{ p.name }} <span class="muted" v-if="build!.equippedPictoIds.includes(p.id)">(equipped Picto · 0 Lumina points)</span><span class="muted" v-else>(cost {{ p.cost }})</span>
@@ -243,12 +259,57 @@ select {
 .scaling-chip.C { border-color: var(--text-muted); }
 .scaling-chip.D { border-color: var(--text-muted); opacity: 0.7; }
 
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.section-heading-row .section-title {
+  margin: 0;
+}
+
+.clear-button {
+  background-color: var(--bg-item);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: var(--border-radius-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.clear-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
 .checkbox-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
   max-height: 240px;
   overflow-y: auto;
+}
+
+.lumina-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px var(--spacing-lg);
+  align-content: start;
+}
+
+@media (max-width: 900px) {
+  .lumina-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .lumina-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .checkbox-row {
