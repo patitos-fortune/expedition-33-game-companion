@@ -14,7 +14,7 @@ export const SCHEMA_VERSION = 1
 export const LOCAL_STORAGE_KEY = 'game-companion:state:v1'
 
 const VALID_PICTO_STATUS: PictoStatus[] = ['undiscovered', 'owned', 'unlocked_lumina']
-const VALID_WEAPON_STATUS: WeaponStatus[] = ['undiscovered', 'owned']
+const VALID_WEAPON_STATUS: WeaponStatus[] = ['undiscovered', 'owned', 'equipped']
 const VALID_STRATEGY_KEYS: StrategyProfileKey[] = ['balanced', 'damage', 'defensive', 'break', 'status_burn', 'custom']
 
 export function defaultAttributeAllocation(): Record<AttributeName, number> {
