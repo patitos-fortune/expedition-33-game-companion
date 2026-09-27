@@ -15,7 +15,7 @@ const build = computed(() => (character.value ? getOrCreateBuild(character.value
 
 const ownedWeapons = computed(() => {
   if (!character.value) return []
-  return gameData.weapons.filter((w) => w.character === character.value!.name && (!state.inventory.spoilerProtection || state.inventory.weaponStatus[w.id] === 'owned'))
+  return gameData.weapons.filter((w) => w.character === character.value!.name && (!state.inventory.spoilerProtection || ['owned', 'equipped'].includes(state.inventory.weaponStatus[w.id] ?? 'undiscovered')))
 })
 
 const selectedWeapon = computed(() => (build.value?.weaponId ? gameData.weapons.find((w) => w.id === build.value!.weaponId) ?? null : null))
@@ -97,9 +97,9 @@ function setLevelBudget() {
       </section>
 
       <section class="panel-section">
-        <h3 class="section-title">2. Weapon</h3>
+        <h3 class="section-title">2. Equipped Weapon</h3>
         <div class="field-row">
-          <label>Owned weapon
+          <label>Equipped weapon
             <select v-model="build!.weaponId">
               <option :value="null">-- none selected --</option>
               <option v-for="w in ownedWeapons" :key="w.id" :value="w.id">{{ w.name }} ({{ w.element ?? 'unknown' }})</option>
