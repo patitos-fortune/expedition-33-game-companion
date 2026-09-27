@@ -23,11 +23,11 @@ export function filterUnlockedLuminas(pictos: NormalizedPicto[], inventory: Inve
 
 export function filterOwnedWeapons(weapons: Weapon[], inventory: InventoryState): Weapon[] {
   if (!inventory.spoilerProtection) return weapons
-  return weapons.filter((w) => inventory.weaponStatus[w.id] === 'owned')
+  return weapons.filter((w) => inventory.weaponStatus[w.id] === 'owned' || inventory.weaponStatus[w.id] === 'equipped')
 }
 
 export function isWeaponVisible(weapon: Weapon | undefined, inventory: InventoryState): boolean {
   if (!weapon) return false
   if (!inventory.spoilerProtection) return true
-  return inventory.weaponStatus[weapon.id] === 'owned'
+  return inventory.weaponStatus[weapon.id] === 'owned' || inventory.weaponStatus[weapon.id] === 'equipped'
 }
