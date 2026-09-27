@@ -7,6 +7,12 @@ import { state, getOrCreateBuild } from '../state/store'
 const gameData = loadGameData()
 const router = useRouter()
 const characters = computed(() => gameData.characters)
+const unlockedLuminas = computed(() =>
+  gameData.pictos
+    .filter((p) => state.inventory.pictoStatus[p.id] === 'unlocked_lumina')
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name)),
+)
 
 function pictoName(id: string): string {
   return gameData.pictos.find((p) => p.id === id)?.name ?? id
@@ -24,6 +30,24 @@ function extraNeeded(characterId: number): number {
 }
 const totalNeeded = computed(() => characters.value.reduce((sum, c) => sum + extraNeeded(c.id), 0))
 const remaining = computed(() => state.inventory.colourOfLuminaAvailable - totalNeeded.value)
+function luminaState(characterId: number, pictoId: string): 'off' | 'active' | 'equipped' {
+  const build = state.builds[characterId]
+  if (!build) return 'off'
+  if (build.equippedPictoIds.includes(pictoId)) return 'equipped'
+  if (build.activeLuminaIds.includes(pictoId)) return 'active'
+  return 'off'
+}
+
+function toggleMatrixLumina(characterId: number, pictoId: string) {
+  const build = getOrCreateBuild(characterId)
+  // Equipped Pictos always supply their passive for free; keep that state controlled
+  // from the character sheet rather than silently unequipping a Picto here.
+  if (build.equippedPictoIds.includes(pictoId)) return
+  const idx = build.activeLuminaIds.indexOf(pictoId)
+  if (idx >= 0) build.activeLuminaIds.splice(idx, 1)
+  else build.activeLuminaIds.push(pictoId)
+}
+
 function editCharacter(characterId: number) {
   state.activeCharacterId = characterId
   getOrCreateBuild(characterId)
@@ -39,6 +63,60 @@ function editCharacter(characterId: number) {
       <div><span>Colours available</span><strong>{{ state.inventory.colourOfLuminaAvailable }}</strong></div>
       <div><span>Needed for desired party</span><strong>{{ totalNeeded }}</strong></div>
       <div><span>{{ remaining >= 0 ? 'Remaining after upgrades' : 'Short by' }}</span><strong :class="{ shortfall: remaining < 0 }">{{ Math.abs(remaining) }}</strong></div>
+    </section>
+    <section class="matrix-section">
+      <div class="matrix-heading">
+        <div>
+          <h2>Party Lumina Matrix</h2>
+          <p class="hint">Edit the whole party at once. ✓ = active Lumina consuming points, ◆ = passive supplied free by an equipped Picto. Changes here and on each character sheet use the same build data.</p>
+        </div>
+      </div>
+      <div class="matrix-scroll">
+        <table class="lumina-matrix">
+          <thead>
+            <tr>
+              <th class="lumina-name">Lumina</th>
+              <th class="cost-col">Cost</th>
+              <th v-for="c in characters" :key="c.id">
+                {{ c.name }}
+                <small>{{ paidLuminaCost(c.id) }}/{{ state.builds[c.id]?.luminaPointBudget ?? 0 }}</small>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="p in unlockedLuminas" :key="p.id">
+              <th class="lumina-name">{{ p.name }}</th>
+              <td class="cost-col">{{ p.cost }}</td>
+              <td v-for="c in characters" :key="c.id" class="matrix-cell">
+                <button
+                  type="button"
+                  class="matrix-toggle"
+                  :class="luminaState(c.id, p.id)"
+                  :title="luminaState(c.id, p.id) === 'equipped' ? 'Free passive from equipped Picto. Change the Picto on the character sheet.' : 'Toggle active Lumina for ' + c.name"
+                  @click="toggleMatrixLumina(c.id, p.id)"
+                >
+                  <span v-if="luminaState(c.id, p.id) === 'equipped'">◆</span>
+                  <span v-else-if="luminaState(c.id, p.id) === 'active'">✓</span>
+                  <span v-else>·</span>
+                </button>
+              </td>
+            </tr>
+            <tr v-if="unlockedLuminas.length === 0">
+              <td :colspan="characters.length + 2" class="empty-card">Mark Pictos as Lumina learned in Inventory to populate the matrix.</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th class="lumina-name">Paid points</th>
+              <td></td>
+              <td v-for="c in characters" :key="c.id" :class="{ over: paidLuminaCost(c.id) > (state.builds[c.id]?.luminaPointBudget ?? 0) }">
+                <strong>{{ paidLuminaCost(c.id) }} / {{ state.builds[c.id]?.luminaPointBudget ?? 0 }}</strong>
+                <small v-if="extraNeeded(c.id)">+{{ extraNeeded(c.id) }} needed</small>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </section>
     <div class="party-grid">
       <article v-for="c in characters" :key="c.id" class="party-card">
@@ -72,6 +150,20 @@ function editCharacter(characterId: number) {
 .party-budget div,.numbers div { display:flex; flex-direction:column; gap:2px; }
 .party-budget span,.numbers span { color:var(--text-muted); font-size:.82rem; }
 .party-budget strong { font-size:1.45rem; }
+.matrix-section { background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--border-radius); padding:var(--spacing-lg); margin-bottom:var(--spacing-xl); }
+.matrix-heading h2 { margin-top:0; margin-bottom:var(--spacing-xs); }
+.matrix-scroll { overflow-x:auto; }
+.lumina-matrix { width:100%; border-collapse:collapse; min-width:760px; }
+.lumina-matrix th,.lumina-matrix td { border-bottom:1px solid var(--border-color); padding:8px 10px; text-align:center; }
+.lumina-matrix thead th { position:sticky; top:0; background:var(--bg-panel); z-index:1; }
+.lumina-matrix .lumina-name { text-align:left; min-width:190px; }
+.cost-col { width:55px; color:var(--text-muted); }
+.lumina-matrix thead small,.lumina-matrix tfoot small { display:block; color:var(--text-muted); font-weight:normal; margin-top:2px; }
+.matrix-toggle { width:38px; height:34px; padding:0; border:1px solid var(--border-color); border-radius:var(--border-radius-sm); background:var(--bg-item); color:var(--text-muted); cursor:pointer; font-size:1.05rem; }
+.matrix-toggle.active { background:var(--primary-color); color:white; border-color:var(--primary-color); }
+.matrix-toggle.equipped { color:#6fdc8c; border-color:#6fdc8c; cursor:default; }
+.lumina-matrix tfoot td { padding-top:12px; }
+.lumina-matrix tfoot .over { color:var(--warning-color); }
 .party-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:var(--spacing-lg); }
 .party-card { background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--border-radius); padding:var(--spacing-lg); }
 .card-head { display:flex; align-items:center; justify-content:space-between; gap:var(--spacing-sm); }
