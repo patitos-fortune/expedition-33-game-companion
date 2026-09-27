@@ -110,7 +110,7 @@ export interface Weapon {
 }
 
 export type PictoStatus = 'undiscovered' | 'owned' | 'unlocked_lumina';
-export type WeaponStatus = 'undiscovered' | 'owned';
+export type WeaponStatus = 'undiscovered' | 'owned' | 'equipped';
 
 export type StrategyProfileKey = 'balanced' | 'damage' | 'defensive' | 'break' | 'status_burn' | 'custom';
 
