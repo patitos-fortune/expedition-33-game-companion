@@ -133,6 +133,8 @@ export interface CharacterBuild {
   weaponLevel: number;
   equippedPictoIds: string[];
   activeLuminaIds: string[];
+  /** Desired additions that are not part of the current in-game build yet. */
+  plannedLuminaIds: string[];
   luminaPointBudget: number;
   strategyProfile: StrategyProfileKey;
 }

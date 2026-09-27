@@ -160,7 +160,7 @@ function setLevelBudget() {
 
       <section class="panel-section">
         <div class="section-heading-row">
-          <h3 class="section-title">4. Planned active Luminas</h3>
+          <h3 class="section-title">4. Current active Luminas</h3>
           <button type="button" class="clear-button" :disabled="build!.activeLuminaIds.length === 0" @click="clearActiveLuminas">Clear all</button>
         </div>
         <p class="calc-note">Lumina unlocks are shared across the party. The point capacity below belongs only to {{ character.name }}. A passive supplied by one of this character's 3 equipped Pictos costs 0 Lumina points; the same learned passive only costs points when activated as a Lumina.</p>
@@ -168,7 +168,7 @@ function setLevelBudget() {
           <input type="number" min="0" v-model.number="build!.luminaPointBudget" />
         </label>
         <p class="calc-note" :class="{ 'warning-text': luminaCost > build!.luminaPointBudget }">
-          Planned build uses {{ luminaCost }} / {{ build!.luminaPointBudget }} current capacity.
+          Current build uses {{ luminaCost }} / {{ build!.luminaPointBudget }} current capacity.
           <span v-if="luminaCost > build!.luminaPointBudget"> Needs +{{ luminaCost - build!.luminaPointBudget }} Colours of Lumina.</span>
           <span v-else> Fits current capacity.</span>
         </p>
@@ -181,8 +181,20 @@ function setLevelBudget() {
         </div>
       </section>
 
+      <section class="panel-section wishlist-panel">
+        <div class="section-heading-row">
+          <h3 class="section-title">5. Lumina wishlist</h3>
+          <button type="button" class="clear-button" :disabled="build!.plannedLuminaIds.length === 0" @click="build!.plannedLuminaIds.splice(0)">Clear wishlist</button>
+        </div>
+        <p class="calc-note">Planning only. These are additions you want for {{ character.name }} and do not change the current in-game build. The Party Summary matrix uses these to calculate the target capacity and Colours needed.</p>
+        <p v-if="build!.plannedLuminaIds.length === 0" class="calc-note">No wishlist Luminas yet. Add them from the Party Summary matrix.</p>
+        <div v-else class="wishlist-chips">
+          <span v-for="id in build!.plannedLuminaIds" :key="id" class="wishlist-chip">{{ gameData.pictos.find(p => p.id === id)?.name ?? id }}</span>
+        </div>
+      </section>
+
       <section class="panel-section">
-        <h3 class="section-title">5. Strategy profile</h3>
+        <h3 class="section-title">6. Strategy profile</h3>
         <select v-model="build!.strategyProfile">
           <option v-for="p in profiles" :key="p.key" :value="p.key">{{ p.label }}</option>
         </select>
@@ -328,6 +340,10 @@ select {
   color: var(--text-muted);
   font-size: 0.8rem;
 }
+
+.wishlist-panel { border-color:#6d5a1c; }
+.wishlist-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.wishlist-chip { color:#ffd54f; border:1px solid #6d5a1c; background:#2d2410; border-radius:12px; padding:3px 8px; font-size:.82rem; }
 
 .analyze-cta {
   align-self: flex-start;
