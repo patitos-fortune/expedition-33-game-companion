@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadGameData } from '../gamedata/loadGameData'
 import { state, getOrCreateBuild } from '../state/store'
@@ -7,12 +7,15 @@ import { state, getOrCreateBuild } from '../state/store'
 const gameData = loadGameData()
 const router = useRouter()
 const characters = computed(() => gameData.characters)
-const unlockedLuminas = computed(() =>
-  gameData.pictos
+const matrixSort = ref<'alphabetical' | 'cost-asc' | 'cost-desc'>('alphabetical')
+const unlockedLuminas = computed(() => {
+  const items = gameData.pictos
     .filter((p) => state.inventory.pictoStatus[p.id] === 'unlocked_lumina')
     .slice()
-    .sort((a, b) => a.name.localeCompare(b.name)),
-)
+  if (matrixSort.value === 'cost-asc') return items.sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name))
+  if (matrixSort.value === 'cost-desc') return items.sort((a, b) => b.cost - a.cost || a.name.localeCompare(b.name))
+  return items.sort((a, b) => a.name.localeCompare(b.name))
+})
 
 function pictoName(id: string): string {
   return gameData.pictos.find((p) => p.id === id)?.name ?? id
@@ -70,6 +73,13 @@ function editCharacter(characterId: number) {
           <h2>Party Lumina Matrix</h2>
           <p class="hint">Edit the whole party at once. ✓ = active Lumina consuming points, ◆ = passive supplied free by an equipped Picto. Changes here and on each character sheet use the same build data.</p>
         </div>
+        <label class="sort-control">Sort
+          <select v-model="matrixSort">
+            <option value="alphabetical">Alphabetical</option>
+            <option value="cost-asc">Cost: low → high</option>
+            <option value="cost-desc">Cost: high → low</option>
+          </select>
+        </label>
       </div>
       <div class="matrix-scroll">
         <table class="lumina-matrix">
@@ -151,7 +161,10 @@ function editCharacter(characterId: number) {
 .party-budget span,.numbers span { color:var(--text-muted); font-size:.82rem; }
 .party-budget strong { font-size:1.45rem; }
 .matrix-section { background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--border-radius); padding:var(--spacing-lg); margin-bottom:var(--spacing-xl); }
+.matrix-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:var(--spacing-lg); }
 .matrix-heading h2 { margin-top:0; margin-bottom:var(--spacing-xs); }
+.sort-control { display:flex; align-items:center; gap:8px; color:var(--text-muted); white-space:nowrap; }
+.sort-control select { background:var(--bg-item); color:var(--text-color); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:6px 8px; }
 .matrix-scroll { overflow-x:auto; }
 .lumina-matrix { width:100%; border-collapse:collapse; min-width:760px; }
 .lumina-matrix th,.lumina-matrix td { border-bottom:1px solid var(--border-color); padding:8px 10px; text-align:center; }
