@@ -18,7 +18,7 @@ describe('computeMechanicRelationships (Phase 2.2A task #6)', () => {
 
   it('matches the documented producer/consumer counts against the real corpus', () => {
     const expected: Record<string, { producers: number; consumers: number }> = {
-      burn: { producers: 5, consumers: 7 },
+      burn: { producers: 6, consumers: 7 },
       mark: { producers: 3, consumers: 7 },
       break: { producers: 2, consumers: 8 },
       critical: { producers: 0, consumers: 2 },

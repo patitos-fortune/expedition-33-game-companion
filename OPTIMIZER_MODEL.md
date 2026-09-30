@@ -123,8 +123,10 @@ damage.") can only tag the stat itself, not which side (dealt vs. taken) each cl
 already-Broken target), via a small config table (`MECHANIC_RELATIONSHIP_CONFIG`) rather than hardcoded per-mechanic
 logic — extending it to a new mechanic is a config-table addition, not new code. It reports only producer/consumer
 name lists, never a numeric synergy strength. Currently configured for 8 mechanics with enough corpus representation
-to be meaningful: `ap` (36 producers / 4 consumers), `burn` (5/7), `mark` (3/7), `break` (2/8), `critical` (0/2),
-`shield` (5/0), `gradient` (10/0), `stun` (0/6).
+to be meaningful: `ap` (36 producers / 4 consumers), `burn` (6/7), `mark` (3/7), `break` (2/8), `critical` (0/2),
+`shield` (5/0), `gradient` (10/0), `stun` (0/6). (`burn` producers rose from 5 to 6 as of Phase 2.2B's "chance to
+`<Status>`" classifier correction, which gave Burning Shots its previously-missing `apply_status:burn` tag — see
+below.)
 
 **How Break uses this (the only profile wired up so far):** the **Break** strategy profile — and *only* that
 profile — reads `data/picto_effects.json` (via `gameData.pictoEffectsById`) to add a small additive HEURISTIC bonus
