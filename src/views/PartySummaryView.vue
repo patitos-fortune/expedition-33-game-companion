@@ -3,9 +3,12 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadGameData } from '../gamedata/loadGameData'
 import { state, getOrCreateBuild } from '../state/store'
+import { currentPaidLuminaCost as computeCurrentPaidLuminaCost, extraColourNeeded, plannedPaidLuminaCost } from '../state/colourPlanning'
+import { toPictosById } from '../optimizer/calculated'
 
 const gameData = loadGameData()
 const router = useRouter()
+const pictosById = toPictosById(gameData.pictos)
 const characters = computed(() => gameData.characters)
 const matrixSort = ref<'alphabetical' | 'cost-asc' | 'cost-desc'>('alphabetical')
 const unlockedLuminas = computed(() => {
@@ -23,20 +26,17 @@ function pictoName(id: string): string {
 function currentPaidLuminaCost(characterId: number): number {
   const build = state.builds[characterId]
   if (!build) return 0
-  const equipped = new Set(build.equippedPictoIds)
-  return build.activeLuminaIds.reduce((sum, id) => sum + (equipped.has(id) ? 0 : (gameData.pictos.find((p) => p.id === id)?.cost ?? 0)), 0)
+  return computeCurrentPaidLuminaCost(build, pictosById)
 }
 function paidLuminaCost(characterId: number): number {
   const build = state.builds[characterId]
   if (!build) return 0
-  const targetIds = new Set([...build.activeLuminaIds, ...build.plannedLuminaIds])
-  const equipped = new Set(build.equippedPictoIds)
-  return [...targetIds].reduce((sum, id) => sum + (equipped.has(id) ? 0 : (gameData.pictos.find((p) => p.id === id)?.cost ?? 0)), 0)
+  return plannedPaidLuminaCost(build, pictosById)
 }
 function extraNeeded(characterId: number): number {
   const build = state.builds[characterId]
   if (!build) return 0
-  return Math.max(0, paidLuminaCost(characterId) - build.luminaPointBudget)
+  return extraColourNeeded(build, pictosById)
 }
 const totalNeeded = computed(() => characters.value.reduce((sum, c) => sum + extraNeeded(c.id), 0))
 const remaining = computed(() => state.inventory.colourOfLuminaAvailable - totalNeeded.value)

@@ -3,9 +3,12 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadGameData } from '../gamedata/loadGameData'
 import { state, getOrCreateBuild } from '../state/store'
+import { extraColourNeeded, plannedPaidLuminaCost } from '../state/colourPlanning'
+import { toPictosById } from '../optimizer/calculated'
 
 const gameData = loadGameData()
 const router = useRouter()
+const pictosById = toPictosById(gameData.pictos)
 
 const characterIconUrls = import.meta.glob('../assets/*.avif', { eager: true, import: 'default' }) as Record<string, string>
 
@@ -20,17 +23,13 @@ const characters = computed(() => gameData.characters)
 function plannedLuminaCost(characterId: number): number {
   const build = state.builds[characterId]
   if (!build) return 0
-  const equipped = new Set(build.equippedPictoIds)
-  return build.activeLuminaIds.reduce(
-    (sum, id) => sum + (equipped.has(id) ? 0 : (gameData.pictos.find((p) => p.id === id)?.cost ?? 0)),
-    0,
-  )
+  return plannedPaidLuminaCost(build, pictosById)
 }
 
 function extraCapacityNeeded(characterId: number): number {
   const build = state.builds[characterId]
   if (!build) return 0
-  return Math.max(0, plannedLuminaCost(characterId) - build.luminaPointBudget)
+  return extraColourNeeded(build, pictosById)
 }
 
 const plannedColourSpend = computed(() =>

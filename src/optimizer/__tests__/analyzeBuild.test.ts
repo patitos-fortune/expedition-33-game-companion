@@ -88,6 +88,18 @@ describe('analyzeBuild', () => {
     expect(result.weapon.selected).toBeNull()
   })
 
+  // Regression for "Fix equipped weapons being excluded from analysis":
+  // marking the selected weapon 'equipped' (not just 'owned') must still
+  // include it in the analysis, since attribute suggestions depend on it.
+  it('includes an equipped weapon in the analysis (not just owned)', () => {
+    const inventory = makeInventory()
+    inventory.weaponStatus[firstWeapon.id] = 'equipped'
+    const build = makeBuild()
+    const result = analyzeBuild({ build, gameData, inventory })
+    expect(result.weapon.visible).toBe(true)
+    expect(result.weapon.selected?.id).toBe(firstWeapon.id)
+  })
+
   it('never exceeds the Lumina point budget', () => {
     const inventory = makeInventory()
     const build = makeBuild()

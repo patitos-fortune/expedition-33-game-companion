@@ -131,6 +131,7 @@ function acceptLuminaSuggestion() {
         <p class="calc-note"><span class="tier-tag calculated">CALCULATED</span> proposed build uses {{ result.luminas.totalCost }} / {{ result.luminas.budget }} available Lumina points.{{ result.luminas.isExactSolution ? '' : ' (approximate — budget too large for an exact search)' }}</p>
         <h3>Lumina before / after</h3>
         <p class="calc-note">This table is the union of Luminas in the current build and the optimizer's proposed build. A 0-point row is supplied free by an equipped Picto.</p>
+        <p class="calc-note">"Current" here means this character's actual active Luminas only — it does not include Party Summary wishlist selections. This optimizer's suggestion is a separate recommendation and does not read or replace your Party Lumina Matrix planning.</p>
         <div class="table-scroll">
           <table class="compare-table lumina-compare">
             <thead>
