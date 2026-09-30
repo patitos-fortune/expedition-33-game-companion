@@ -1,7 +1,23 @@
 import { describe, expect, it } from 'vitest'
 import { suggestPictoLoadout } from '../pictoOptimizer'
 import { getStrategyProfile } from '../modelConfig'
-import type { NormalizedPicto } from '../../types'
+import type { NormalizedPicto, PictoEffectRecord } from '../../types'
+
+function makeEffectRecord(pictoId: string, overrides: Partial<PictoEffectRecord>): PictoEffectRecord {
+  return {
+    pictoId,
+    name: pictoId,
+    sourceEffectText: '',
+    mechanics: [],
+    triggers: [],
+    effects: [],
+    targets: [],
+    parameters: {},
+    classification: 'A',
+    taxonomyVersion: 1,
+    ...overrides,
+  }
+}
 
 function makePicto(id: string, attrs: Record<string, number>): NormalizedPicto {
   return {
@@ -89,5 +105,64 @@ describe('suggestPictoLoadout', () => {
       currentEquippedIds: [],
     })
     expect(result.suggestedEquippedIds).not.toContain('broken')
+  })
+
+  describe('Phase 2.2A: Break-only structured-effect scoring', () => {
+    it('produces IDENTICAL scores/order for every non-Break profile whether or not pictoEffectsById is supplied', () => {
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['p2', makeEffectRecord('p2', { effects: ['grant_break_capability'], mechanics: ['break'] })],
+      ])
+      for (const key of ['balanced', 'damage', 'defensive', 'status_burn', 'custom'] as const) {
+        const profile = getStrategyProfile(key)
+        const without = suggestPictoLoadout({ ownedPictos: pictos, profile, currentEquippedIds: [] })
+        const withEffects = suggestPictoLoadout({ ownedPictos: pictos, profile, currentEquippedIds: [], pictoEffectsById })
+        expect(withEffects.suggestedEquippedIds).toEqual(without.suggestedEquippedIds)
+        expect(withEffects.scores).toEqual(without.scores)
+      }
+    })
+
+    it('under the Break profile, a Picto with Break-relevant structured tags scores higher than an identical one without', () => {
+      const plain = makePicto('plain', { 'Critical Rate': 10, Speed: 10 })
+      const breaker = makePicto('breaker', { 'Critical Rate': 10, Speed: 10 })
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['breaker', makeEffectRecord('breaker', { effects: ['grant_break_capability'], mechanics: ['break'], triggers: ['on_base_attack'] })],
+      ])
+      const result = suggestPictoLoadout({
+        ownedPictos: [plain, breaker],
+        profile: getStrategyProfile('break'),
+        currentEquippedIds: [],
+        pictoEffectsById,
+      })
+      expect(result.scores['breaker'].score).toBeGreaterThan(result.scores['plain'].score)
+      expect(result.scores['breaker'].breakReasons).toContain('enables Break on Base Attack')
+      expect(result.scores['plain'].breakReasons).toEqual([])
+    })
+
+    it('the Break bonus is inert without a matching structured record, even under the Break profile', () => {
+      const result = suggestPictoLoadout({
+        ownedPictos: pictos,
+        profile: getStrategyProfile('break'),
+        currentEquippedIds: [],
+        pictoEffectsById: new Map(),
+      })
+      for (const s of Object.values(result.scores)) {
+        expect(s.breakReasons).toEqual([])
+      }
+    })
+
+    it('exposes Break-relevance reasons in the reasons text for a suggested Picto', () => {
+      const breaker = makePicto('breaker', { 'Critical Rate': 30, Speed: 30 })
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['breaker', makeEffectRecord('breaker', { effects: ['grant_break_capability'] })],
+      ])
+      const result = suggestPictoLoadout({
+        ownedPictos: [...pictos, breaker],
+        profile: getStrategyProfile('break'),
+        currentEquippedIds: [],
+        pictoEffectsById,
+      })
+      expect(result.suggestedEquippedIds).toContain('breaker')
+      expect(result.reasons['breaker']).toContain('enables Break')
+    })
   })
 })

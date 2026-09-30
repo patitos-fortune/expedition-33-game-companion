@@ -53,6 +53,106 @@ No synergy between Pictos is modeled (none is reliably documented for this game)
 score is the exact mathematical optimum for this additive model — a real, provable claim about the model, but not a
 claim about actual in-combat value.
 
+**Break profile only:** see "Structured Picto/Lumina effect taxonomy" below — under the Break strategy profile, and
+only that profile, each Picto's score also gets a small additive bonus from structured effect tags, with the specific
+reasons exposed in `reasons`. Every other profile scores Pictos exactly as described above, unchanged.
+
+## Structured Picto/Lumina effect taxonomy (Phase 2.2A)
+
+In addition to the `type` category and attribute-bonus table above, every Picto's raw effect text
+(`src/assets/pictos_list.json` → `effect`) is also parsed into a small structured taxonomy of **mechanics**,
+**triggers**, **effects** (verbs, e.g. `apply_status:burn`, `grant_break_capability`), **targets/conditions**, and any
+literal numeric **parameters** the text states. This is a second, complementary lens on the same source text — it
+does not replace the `type` category or the attribute-bonus table used elsewhere in this document, and by itself it
+changes no recommendation (see "How Break uses this" below).
+
+**Pipeline (dev-time only, not part of the shipped app):**
+
+```
+src/assets/pictos_list.json → src/optimizer/effectClassifier.ts (deterministic rule-based classifier)
+                             → scripts/generate-picto-effects.ts (run manually: tsx scripts/generate-picto-effects.ts)
+                             → data/picto_effects.json (checked-in, human-reviewable)
+```
+
+The shipped app only ever reads the checked-in `data/picto_effects.json` (via `src/optimizer/effectModel.ts`) — it
+never re-classifies anything at runtime, and `effectClassifier.ts` is not imported by any view, store, or route.
+Classification is **rule-based only** (regex/keyword matching over the literal source text, plus a short table of
+manual overrides for cases no general rule can safely resolve) — there is no LLM, NLP model, or network call
+anywhere in this pipeline, and the same input text always produces the same output (verified by
+`src/optimizer/__tests__/effectClassifier.test.ts`'s determinism tests).
+
+**Classification confidence (A/B/C/D), current coverage over the full 233-Picto corpus:**
+
+| Tier | Meaning | Count | % |
+|---|---|---|---|
+| A | Fully structured — at least one mechanic/trigger/target tag *and* at least one effect tag | 153 | 65.7% |
+| B | Partially structured — only a tag *or* only an effect, not both | 73 | 31.3% |
+| C | Genuinely ambiguous even with the complete taxonomy — a manual override with a documented reason | 6 | 2.6% |
+| D | No taxonomy concept matches at all | 1 | 0.4% |
+
+Taxonomy version: `1` (`TAXONOMY_VERSION` in `effectClassifier.ts`, stamped onto every record and onto the file
+itself as `_taxonomyVersion`). C and D are treated as acceptable, honest outcomes, not failures — ambiguity is
+preserved rather than forced into a confident tag. The six manual-override (C) cases and the one D case are
+individually documented, with a `notes` field explaining the specific reason, in both `effectClassifier.ts`
+(`MANUAL_OVERRIDES`) and `data/picto_effects.json`:
+
+- **Feint** — references an undocumented mechanic ("barbapapa stacks") with no other appearance in the corpus; left
+  entirely untagged rather than guessed at.
+- **Trigger Happy** / **Clea's Life** — the numeric effect itself is clear and kept (`gain_ap` / `heal_pct`
+  respectively), but each has a trigger condition (a cross-action shot count; a cross-turn "no damage taken" check)
+  that the trigger vocabulary has no counting/cross-turn-state concept for, so no trigger tag is recorded for either.
+- **Painted Power** — the source text is mostly walkthrough/lore prose with the actual mechanic (damage cap removal)
+  embedded in it; a source data-quality issue, not something a taxonomy rule should try to parse around.
+- **Roulette** — a genuine random-branching effect ("50% chance to deal either 50% or 200%"), tagged
+  `random_branch` deliberately instead of averaged into one number, since averaging would fabricate a value the
+  source text never states.
+- **Great Energy Tint** / **Great Healing Tint** — "now affect the whole Expedition" is a scope change the TARGET
+  vocabulary can't fully express without assuming what "whole Expedition" means; left as C rather than assumed.
+- **Pro Retreat** (D) — "Allows Flee to be instantaneous" references no mechanic, trigger, target, or effect concept
+  in the current taxonomy at all.
+
+Two smaller, non-override classifier limitations are also worth knowing about (both covered by golden tests):
+stat-phrase effects can fail to tag when a qualifying clause interrupts the phrase (e.g. "Deal 50% more damage **if
+Health is below 10%**" on *At Death's Door* correctly tags the `health` mechanic and `below_health_pct` target, but
+records no `increase_stat_pct` effect, since the interrupting clause breaks the stat-name capture); and a tradeoff
+that repeats the same stat word on both sides of "but" (e.g. *Glass Cannon*: "Deal 25% more damage, but take 25% more
+damage.") can only tag the stat itself, not which side (dealt vs. taken) each clause refers to.
+
+**Relationship extraction:** `src/optimizer/effectRelationships.ts` finds, per mechanic, which Pictos *produce* it
+(e.g. grant Break capability) and which *consume it / react to it* (e.g. trigger on Break, or deal more damage to an
+already-Broken target), via a small config table (`MECHANIC_RELATIONSHIP_CONFIG`) rather than hardcoded per-mechanic
+logic — extending it to a new mechanic is a config-table addition, not new code. It reports only producer/consumer
+name lists, never a numeric synergy strength. Currently configured for 8 mechanics with enough corpus representation
+to be meaningful: `ap` (36 producers / 4 consumers), `burn` (5/7), `mark` (3/7), `break` (2/8), `critical` (0/2),
+`shield` (5/0), `gradient` (10/0), `stun` (0/6).
+
+**How Break uses this (the only profile wired up so far):** the **Break** strategy profile — and *only* that
+profile — reads `data/picto_effects.json` (via `gameData.pictoEffectsById`) to add a small additive HEURISTIC bonus
+per Picto/Lumina, plus auditable reasons, in `src/optimizer/breakEffectModel.ts`. The bonus is `signalCount ×
+BREAK_EFFECT_PICTO_BONUS_PER_SIGNAL` (Pictos, default 8) or `× BREAK_EFFECT_LUMINA_BONUS_PER_SIGNAL` (Luminas,
+default 40) — both editable in `data/optimizer_reference.json` → `breakEffectModel`. `signalCount` is the number of
+distinct, independently-checked Break-relevant signals a Picto's structured tags match, each with its own
+human-readable reason string:
+
+- `grant_break_capability` present → **"enables Break on Base Attack"** (if the record also has the
+  `on_base_attack` trigger) or **"enables Break"** otherwise
+- an `increase_stat_pct:*` effect whose stat name contains "break" → **"increases Break damage"**
+- the `on_break` trigger present → **"triggers after Breaking an enemy"**
+- the `stunned_enemy` target or the `stun` mechanic present → **"benefits from a Stunned target (Stun commonly
+  follows a Break)"**
+- otherwise, if the `break` mechanic is present at all → **"references the Break mechanic"** (a fallback used only
+  when none of the more specific signals above matched)
+
+These reasons are surfaced directly in the Picto loadout's and Lumina combination's `reasons` output, appended after
+the existing profile-fit sentence (e.g. `... Also: enables Break on Base Attack.`), so a Break recommendation is
+always traceable to the exact source-text-derived tag that produced it — explanation is preferred over an opaque
+composite score. **No damage, DPS, or "how good in combat" claim is made anywhere in this bonus** — it is a
+relevance signal (how many independent ways a Picto's own text references Break), not a measured strength. Every
+other strategy profile (Damage, Defensive, Status/Burn, Balanced, Custom) computes its score exactly as it did before
+Phase 2.2A — this bonus is gated on `profile.key === 'break'` in both `pictoOptimizer.ts` and `luminaOptimizer.ts`,
+and is never applied outside that one profile (verified by regression tests asserting identical scores/output with
+and without the structured-effect data present, for every non-Break profile).
+
 ## Lumina combination
 
 This is modeled as a genuine constrained optimization — a 0/1 knapsack (maximize total heuristic value subject to
@@ -64,6 +164,10 @@ Support" averaged across categories) weighted by the strategy profile. **This de
 attribute-bonus table** (Health/Defense/Critical Rate/Speed) for Luminas: whether unlocking a Picto as a Lumina also
 grants that attribute table, or only its unique effect, is not verified by any source checked (see Unknowns). Scoring
 only by the documented `type` field avoids silently mixing up two mechanics that may not both apply.
+
+**Break profile only:** see "Structured Picto/Lumina effect taxonomy" above — under the Break strategy profile, and
+only that profile, each Lumina's value also gets the same structured-effect bonus described there. Every other
+profile scores Luminas exactly as described above, unchanged.
 
 ## Skills
 
@@ -78,7 +182,9 @@ Six profiles (Balanced, Damage, Defensive, Break, Status/Burn, Custom), each jus
 Lumina-type weights in `data/optimizer_reference.json` — edit that file directly to retune any profile, or to define
 your own under `custom`, without touching code. All of these are our own heuristic design choices for a general
 sense of role priority; the "Break" profile in particular is flagged as more speculative than the others, since
-Phase 1B research did not find a dedicated, sourced breakdown of the Break mechanic's attribute scaling.
+Phase 1B research did not find a dedicated, sourced breakdown of the Break mechanic's attribute scaling. As of Phase
+2.2A, the Break profile also layers a small structured-effect bonus on top of these weights (see "Structured
+Picto/Lumina effect taxonomy" above) — the other five profiles are unaffected and still use only the weights below.
 
 ## Known unknowns (never modeled, never fabricated)
 
@@ -94,6 +200,9 @@ Phase 1B research did not find a dedicated, sourced breakdown of the Break mecha
 - Whether individual characters have unique base-stat growth curves, or all six share one formula.
 - Whether an unlocked Lumina also grants its Picto's attribute-bonus table (see Lumina section above).
 - Skill mechanical effects (see Skills section above).
+- Structured Picto/Lumina effect tags (`data/picto_effects.json`, see "Structured Picto/Lumina effect taxonomy"
+  above) describe which mechanics/triggers/effects a Picto's text references — never combat strength, damage, or
+  DPS. The Break-profile bonus that consumes them is a HEURISTIC relevance signal, not a measured contribution.
 
 ## Known weaknesses / caveats
 
@@ -107,6 +216,15 @@ Phase 1B research did not find a dedicated, sourced breakdown of the Break mecha
 - The floor-guardrail ratio (5%), scaling-grade weights (S=5…D=1), and Picto-stat reference scale are all our own
   chosen constants, not verified game values. They're centralized in `data/optimizer_reference.json` specifically so
   they're easy to find, question, and retune.
+- `data/picto_effects.json` was generated once (see its `_provenance` field for the exact generator/source/date) by
+  running `tsx scripts/generate-picto-effects.ts` against the corpus described above. If `pictos_list.json` is ever
+  edited upstream, the generator must be re-run manually — `src/optimizer/effectModel.ts`'s `validatePictoEffects()`
+  detects this drift (record-count mismatch, stale source text, missing record) and surfaces it as a load warning,
+  but does not re-generate the file automatically. The classifier has two known, documented limitations beyond the
+  six manual-override cases: a qualifying clause between a percentage and its stat name (e.g. "if Health is below
+  X%") can prevent that clause from producing an `increase_stat_pct`/`decrease_stat_pct` tag even though its
+  mechanic/target tags still land correctly; and a tradeoff that repeats the same stat word on both sides of a "but"
+  clause (dealt vs. taken) can only tag the stat itself, not which side each half of the sentence refers to.
 
 ## Future improvements (not done in v0.1, on purpose)
 

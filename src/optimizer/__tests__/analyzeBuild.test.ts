@@ -124,4 +124,54 @@ describe('analyzeBuild', () => {
     // weapon should be visible even though weaponStatus has no entry for it
     expect(result.weapon.visible).toBe(true)
   })
+
+  // Phase 2.2A: confirms gameData.pictoEffectsById is actually wired end-to-end
+  // through analyzeBuild() into both optimizers, not just implemented in isolation.
+  it('threads structured effect data through to Picto/Lumina reasons under the Break profile', () => {
+    const inventory = makeInventory()
+    const build = { ...makeBuild(), strategyProfile: 'break' as const }
+
+    // Inject a synthetic Break-relevant record for one owned and one unlocked
+    // Picto so the test doesn't depend on which real corpus entries happen to
+    // land in the fixed slice(0,10)/slice(10,15) sample.
+    const injectedEffects = new Map(gameData.pictoEffectsById)
+    injectedEffects.set(ownedPictos[0].id, {
+      pictoId: ownedPictos[0].id,
+      name: ownedPictos[0].name,
+      sourceEffectText: ownedPictos[0].effect,
+      mechanics: ['break'],
+      triggers: ['on_base_attack'],
+      effects: ['grant_break_capability'],
+      targets: [],
+      parameters: {},
+      classification: 'A',
+      taxonomyVersion: 1,
+    })
+    injectedEffects.set(unlockedLuminas[0].id, {
+      pictoId: unlockedLuminas[0].id,
+      name: unlockedLuminas[0].name,
+      sourceEffectText: unlockedLuminas[0].effect,
+      mechanics: ['break'],
+      triggers: ['on_base_attack'],
+      effects: ['grant_break_capability'],
+      targets: [],
+      parameters: {},
+      classification: 'A',
+      taxonomyVersion: 1,
+    })
+    const gameDataWithInjectedEffects = { ...gameData, pictoEffectsById: injectedEffects }
+
+    const result = analyzeBuild({ build, gameData: gameDataWithInjectedEffects, inventory })
+    expect(result.pictos.scores[ownedPictos[0].id].breakReasons).toContain('enables Break on Base Attack')
+    expect(result.luminas.reasons[unlockedLuminas[0].id]).toContain('enables Break on Base Attack')
+  })
+
+  it('leaves non-Break profiles unaffected by the presence of pictoEffectsById on gameData', () => {
+    const inventory = makeInventory()
+    const build = makeBuild() // 'damage' profile
+    const result = analyzeBuild({ build, gameData, inventory })
+    for (const s of Object.values(result.pictos.scores)) {
+      expect(s.breakReasons).toEqual([])
+    }
+  })
 })

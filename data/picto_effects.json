@@ -1,0 +1,4761 @@
+{
+  "_schemaVersion": 1,
+  "_taxonomyVersion": 1,
+  "_provenance": {
+    "generatedBy": "scripts/generate-picto-effects.ts (deterministic rule-based classifier, src/optimizer/effectClassifier.ts) — no LLM/API/NLP call",
+    "sourceFile": "src/assets/pictos_list.json",
+    "generatedAt": "2026-09-30"
+  },
+  "_knownUnknowns": [
+    "Classification is a structural read of the effect text (which mechanics/triggers/effects/targets it references), not a measure of combat strength — see OPTIMIZER_MODEL.md.",
+    "C-classified records (Feint, Trigger Happy, Clea's Life, Painted Power, Great Energy/Healing Tint) are deliberately left partially or fully untagged rather than guessed at; see each record's `notes` field.",
+    "Numeric `parameters` are copied verbatim from the source text only — never derived, averaged, or estimated (e.g. Roulette's 50/50 chance is tagged random_branch, not averaged into one number).",
+    "Skill effects (characters.json) are out of scope for this taxonomy, unchanged from Phase 1/2.1 (still insufficient_model)."
+  ],
+  "pictos": [
+    {
+      "pictoId": "picto-0",
+      "name": "Accelerating Shots",
+      "sourceEffectText": "20% chance to gain Rush on Free Aim shot.",
+      "mechanics": [
+        "free_aim"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "chance_trigger"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-1",
+      "name": "Accelerating Heal",
+      "sourceEffectText": "Healing an ally also applies Rush for 1 turn.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "ally"
+      ],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-2",
+      "name": "Accelerating Last Stand",
+      "sourceEffectText": "Gain Rush if fighting alone.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [
+        "while_solo"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-3",
+      "name": "Accelerating Tint",
+      "sourceEffectText": "Healing Tints also apply Rush.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:rush"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-4",
+      "name": "Aegis Revival",
+      "sourceEffectText": "+1 Shield on being revived.",
+      "mechanics": [
+        "revive",
+        "shield"
+      ],
+      "triggers": [
+        "on_revive"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_shield_flat"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "Shield"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-5",
+      "name": "Anti-Blight",
+      "sourceEffectText": "Immune to Blight.",
+      "mechanics": [
+        "blight"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "grant_immunity:blight"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-6",
+      "name": "Anti-Burn",
+      "sourceEffectText": "Immune to Burn.",
+      "mechanics": [
+        "burn"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "grant_immunity:burn"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-7",
+      "name": "Anti-Freeze",
+      "sourceEffectText": "Immune to Freeze.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "grant_immunity:freeze"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-8",
+      "name": "Anti-Charm",
+      "sourceEffectText": "Immune to Charm.",
+      "mechanics": [
+        "charm"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "grant_immunity:charm"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-9",
+      "name": "At Death's Door",
+      "sourceEffectText": "Deal 50% more damage if Health is below 10%.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50,
+          10
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-10",
+      "name": "Anti-Stun",
+      "sourceEffectText": "Immune to Stun.",
+      "mechanics": [
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "grant_immunity:stun"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-11",
+      "name": "Attack Lifesteal",
+      "sourceEffectText": "Recover 15% Health on Base Attack.",
+      "mechanics": [
+        "base_attack",
+        "health"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-12",
+      "name": "Augmented Attack",
+      "sourceEffectText": "50% increased Base Attack damage.",
+      "mechanics": [
+        "base_attack"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:base_attack"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-13",
+      "name": "Augmented Aim",
+      "sourceEffectText": "50% increased Free Aim damage.",
+      "mechanics": [
+        "free_aim"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:free_aim"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-14",
+      "name": "Augmented Counter I",
+      "sourceEffectText": "25% increased Counterattack damage.",
+      "mechanics": [
+        "counterattack"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:counterattack"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-15",
+      "name": "Augmented Counter III",
+      "sourceEffectText": "75% increased Counterattack damage.",
+      "mechanics": [
+        "counterattack"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:counterattack"
+      ],
+      "parameters": {
+        "percentages": [
+          75
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-16",
+      "name": "Augmented First Strike",
+      "sourceEffectText": "50% increased damage on the first hit. Once per battle.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ],
+        "onceLimiter": "battle"
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-17",
+      "name": "Augmented Counter II",
+      "sourceEffectText": "50% increased Counterattack damage.",
+      "mechanics": [
+        "counterattack"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:counterattack"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-18",
+      "name": "Auto Powerful",
+      "sourceEffectText": "Apply Powerful for 3 turns on battle start.",
+      "mechanics": [
+        "powerful"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful"
+      ],
+      "parameters": {
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-19",
+      "name": "Auto 1 HP",
+      "sourceEffectText": "Start battle with 1 Health.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-20",
+      "name": "Auto Death",
+      "sourceEffectText": "Kill self on battle start.",
+      "mechanics": [],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [
+        "self"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-21",
+      "name": "Auto Shell",
+      "sourceEffectText": "Apply Shell for 3 turns on battle start.",
+      "mechanics": [
+        "shell"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:shell"
+      ],
+      "parameters": {
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-22",
+      "name": "Auto Regen",
+      "sourceEffectText": "Apply Regen for 3 turns on battle start.",
+      "mechanics": [
+        "regen"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:regen"
+      ],
+      "parameters": {
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-23",
+      "name": "Auto Rush",
+      "sourceEffectText": "Apply Rush for 3 turns on battle start.",
+      "mechanics": [],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:rush"
+      ],
+      "parameters": {
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-24",
+      "name": "Base Shield",
+      "sourceEffectText": "+1 Shield if not affected by any Shield on turn start.",
+      "mechanics": [
+        "shield"
+      ],
+      "triggers": [
+        "on_turn_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_shield_flat"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "Shield"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-25",
+      "name": "Beneficial Contamination",
+      "sourceEffectText": "+2 AP on applying a Status Effect. Once per turn.",
+      "mechanics": [
+        "ap",
+        "status_effect"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "AP"
+          }
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-26",
+      "name": "Better Healing Tint",
+      "sourceEffectText": "Healing Tints have double the Healing effect.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [
+        "multiply_stat:the_healing_effect"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "x"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-27",
+      "name": "Bloody Bullet",
+      "sourceEffectText": "+1 AP on Weak Point hit.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_weak_point_hit"
+      ],
+      "targets": [
+        "weak_point"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-28",
+      "name": "Break Specialist",
+      "sourceEffectText": "Break damage is increased by 50%, but base damage is reduced by 20%.",
+      "mechanics": [
+        "break"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50,
+          20
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-29",
+      "name": "Breaker",
+      "sourceEffectText": "25% increased Break damage.",
+      "mechanics": [
+        "break"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-30",
+      "name": "Breaking Burn",
+      "sourceEffectText": "25% increased Break damage on Burning enemies.",
+      "mechanics": [
+        "break",
+        "burn"
+      ],
+      "triggers": [],
+      "targets": [
+        "burning_enemy"
+      ],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-31",
+      "name": "Breaking Counter",
+      "sourceEffectText": "50% increased Break damage on Counterattack.",
+      "mechanics": [
+        "break",
+        "counterattack"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-32",
+      "name": "Breaking Attack",
+      "sourceEffectText": "Base Attack can Break.",
+      "mechanics": [
+        "base_attack",
+        "break"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "grant_break_capability"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-33",
+      "name": "Breaking Death",
+      "sourceEffectText": "Fully charge enemy’s Break Bar on death.",
+      "mechanics": [
+        "break",
+        "death"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-34",
+      "name": "Breaking Slow",
+      "sourceEffectText": "25% increased Break damage against Slowed enemies.",
+      "mechanics": [
+        "break",
+        "slow"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-35",
+      "name": "Breaking Shots",
+      "sourceEffectText": "50% increased Break damage with Free Aim shots.",
+      "mechanics": [
+        "break",
+        "free_aim"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-36",
+      "name": "Burning Break",
+      "sourceEffectText": "Apply 3 Burn stacks on Breaking a target.",
+      "mechanics": [
+        "break",
+        "burn"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:burn"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-37",
+      "name": "Burn Affinity",
+      "sourceEffectText": "25% increased damage on Burning targets.",
+      "mechanics": [
+        "burn"
+      ],
+      "triggers": [],
+      "targets": [
+        "burning_enemy"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-38",
+      "name": "Burning Death",
+      "sourceEffectText": "Apply 3 Burn to all enemies on Death.",
+      "mechanics": [
+        "burn",
+        "death"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [
+        "all_enemies"
+      ],
+      "effects": [
+        "apply_status:burn"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-39",
+      "name": "Burning Mark",
+      "sourceEffectText": "Apply Burn on hitting a Marked enemy.",
+      "mechanics": [
+        "burn",
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [
+        "apply_status:burn"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-40",
+      "name": "Charging Alteration",
+      "sourceEffectText": "+10% of a Gradient Charge on applying a Buff. Once per turn.",
+      "mechanics": [
+        "gradient"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-41",
+      "name": "Burning Shots",
+      "sourceEffectText": "20% chance to Burn on Free Aim shot.",
+      "mechanics": [
+        "burn",
+        "free_aim"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "chance_trigger"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-42",
+      "name": "Charging Attack",
+      "sourceEffectText": "+15% of a Gradient Charge on Base Attack.",
+      "mechanics": [
+        "base_attack",
+        "gradient"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-43",
+      "name": "Charging Burn",
+      "sourceEffectText": "+20% of a Gradient Charge on applying Burn. Once per turn.",
+      "mechanics": [
+        "burn",
+        "gradient"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:burn",
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-44",
+      "name": "Charging Counter",
+      "sourceEffectText": "+10% of a Gradient Charge on Counterattack.",
+      "mechanics": [
+        "counterattack",
+        "gradient"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-45",
+      "name": "Charging Recovery",
+      "sourceEffectText": "50% increased Gradient Generation with Healing Skills.",
+      "mechanics": [
+        "gradient",
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:gradient_generation"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-46",
+      "name": "Charging Mark",
+      "sourceEffectText": "+20% of a Gradient Charge on hitting a Marked target. Once per turn.",
+      "mechanics": [
+        "gradient",
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-47",
+      "name": "Charging Critical",
+      "sourceEffectText": "+20% of a Gradient Charge on Critical Hit. Once per turn.",
+      "mechanics": [
+        "critical",
+        "gradient"
+      ],
+      "triggers": [
+        "on_critical_hit"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-48",
+      "name": "Charging Stun",
+      "sourceEffectText": "+5% of a Gradient Charge on hitting a Stunned enemy.",
+      "mechanics": [
+        "gradient",
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [
+        "stunned_enemy"
+      ],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          5
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-49",
+      "name": "Charging Tint",
+      "sourceEffectText": "+5% of a Gradient Charge on using an item.",
+      "mechanics": [
+        "gradient",
+        "item"
+      ],
+      "triggers": [
+        "on_item_use"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          5
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-50",
+      "name": "Charging Weakness",
+      "sourceEffectText": "+15% of a Gradient Charge on hitting a Weakness. Once per turn.",
+      "mechanics": [
+        "gradient",
+        "weakness"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-51",
+      "name": "Clea's Life",
+      "sourceEffectText": "On turn start, if no damage taken since last turn, recover 100% Health.“",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          100
+        ]
+      },
+      "classification": "C",
+      "taxonomyVersion": 1,
+      "notes": "The \"recover 100% Health\" effect itself is clear (kept as heal_pct), but its condition (\"if no damage taken since last turn\") requires cross-turn state tracking the taxonomy has no trigger/target concept for, so no trigger is recorded."
+    },
+    {
+      "pictoId": "picto-52",
+      "name": "Charybde To Scylla",
+      "sourceEffectText": "Apply Mark on Stun removed.",
+      "mechanics": [
+        "mark",
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:mark"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-53",
+      "name": "Cheater",
+      "sourceEffectText": "Always play twice in a row.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "modify_turn_order"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-54",
+      "name": "Cleansing Tint",
+      "sourceEffectText": "Healing Tints also remove all Status Effects from the target.",
+      "mechanics": [
+        "health",
+        "status_effect"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-55",
+      "name": "Combo Attack II",
+      "sourceEffectText": "Base Attack has 1 extra hit.",
+      "mechanics": [
+        "base_attack"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "add_extra_hit"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-56",
+      "name": "Combo Attack I",
+      "sourceEffectText": "Base Attack has 1 extra hit.",
+      "mechanics": [
+        "base_attack"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "add_extra_hit"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-57",
+      "name": "Combo Attack III",
+      "sourceEffectText": "Base Attack has 1 extra hit.",
+      "mechanics": [
+        "base_attack"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "add_extra_hit"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-58",
+      "name": "Confident",
+      "sourceEffectText": "Take 50% less damage, but can’t be Healed.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:damage_taken"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-59",
+      "name": "Confident Fighter",
+      "sourceEffectText": "30% increased damage, but can’t be Healed.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-60",
+      "name": "Critical Burn",
+      "sourceEffectText": "25% increased Critical Chance on Burning enemies.",
+      "mechanics": [
+        "burn",
+        "critical"
+      ],
+      "triggers": [],
+      "targets": [
+        "burning_enemy"
+      ],
+      "effects": [
+        "increase_stat_pct:critical_chance"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-61",
+      "name": "Critical Break",
+      "sourceEffectText": "25% increased Break damage on Critical hits.",
+      "mechanics": [
+        "break",
+        "critical"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-62",
+      "name": "Critical Moment",
+      "sourceEffectText": "50% increased Critical Chance if Health is below 30%.",
+      "mechanics": [
+        "critical",
+        "health"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50,
+          30
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-63",
+      "name": "Critical Stun",
+      "sourceEffectText": "100% Critical Chance on hitting a Stunned target.",
+      "mechanics": [
+        "critical",
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [
+        "stunned_enemy"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          100
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-64",
+      "name": "Critical Stun (2)",
+      "sourceEffectText": "100% Critical Chance on hitting a Stunned target.",
+      "mechanics": [
+        "critical",
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [
+        "stunned_enemy"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          100
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-65",
+      "name": "Critical Vulnerability",
+      "sourceEffectText": "25% increased Critical Chance on Defenceless enemies.",
+      "mechanics": [
+        "critical",
+        "defenceless"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:critical_chance"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-66",
+      "name": "Cursed Power",
+      "sourceEffectText": "30% increased damage while Cursed.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [
+        "while_status_active"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-67",
+      "name": "Dead Energy I",
+      "sourceEffectText": "+3 AP on killing an enemy.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_kill"
+      ],
+      "targets": [
+        "enemy"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 3,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-68",
+      "name": "Critical Weakness",
+      "sourceEffectText": "25% increased Critical Chance on Weakness.",
+      "mechanics": [
+        "critical",
+        "weakness"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:critical_chance"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-69",
+      "name": "Dead Energy II",
+      "sourceEffectText": "+3 AP on killing an enemy.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_kill"
+      ],
+      "targets": [
+        "enemy"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 3,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-70",
+      "name": "Death Bomb",
+      "sourceEffectText": "On Death, deal damage to all enemies.",
+      "mechanics": [
+        "death"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [
+        "all_enemies"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-71",
+      "name": "Defensive Mode",
+      "sourceEffectText": "On receiving damage, consume 1 AP to take 30% less damage, if possible.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:damage_taken",
+        "spend_ap"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-72",
+      "name": "Dodger",
+      "sourceEffectText": "Gain 1 AP on Perfect Dodge. Once per turn.",
+      "mechanics": [
+        "ap",
+        "dodge"
+      ],
+      "triggers": [
+        "on_dodge"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-73",
+      "name": "Dodge Specialist",
+      "sourceEffectText": "25% reduced Dodge window, but 50% chance to gain 1 AP on successful Dodge.",
+      "mechanics": [
+        "ap",
+        "dodge"
+      ],
+      "triggers": [
+        "on_dodge"
+      ],
+      "targets": [],
+      "effects": [
+        "chance_trigger",
+        "decrease_stat_pct:dodge_window",
+        "gain_ap"
+      ],
+      "parameters": {
+        "percentages": [
+          25,
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-74",
+      "name": "Dodge Helper",
+      "sourceEffectText": "25% increased Dodge window.",
+      "mechanics": [
+        "dodge"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:dodge_window"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-75",
+      "name": "Double Burn",
+      "sourceEffectText": "On applying a Burn stack, apply a second one.",
+      "mechanics": [
+        "burn"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-76",
+      "name": "Draining Cleanse",
+      "sourceEffectText": "Consume 1 AP to prevent Status Effects application, if possible.",
+      "mechanics": [
+        "ap",
+        "status_effect"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "spend_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-77",
+      "name": "Double Mark",
+      "sourceEffectText": "Mark requires 1 more hit to be removed.",
+      "mechanics": [
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-78",
+      "name": "Empowering Attack",
+      "sourceEffectText": "Gain Powerful for 1 turn on Base Attack.",
+      "mechanics": [
+        "base_attack",
+        "powerful"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-79",
+      "name": "Effective Support",
+      "sourceEffectText": "+2 AP on using an item.",
+      "mechanics": [
+        "ap",
+        "item"
+      ],
+      "triggers": [
+        "on_item_use"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-80",
+      "name": "Effective Heal",
+      "sourceEffectText": "Double all Heals received.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "x"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-81",
+      "name": "Empowering Break",
+      "sourceEffectText": "Gain Powerful on Breaking a target.",
+      "mechanics": [
+        "break",
+        "powerful"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-82",
+      "name": "Empowering Dodge",
+      "sourceEffectText": "5% increased damage for each consecutive successful Dodge. Can stack up to 10 times.",
+      "mechanics": [
+        "dodge"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage_for_each_consecutive_successful_dodge"
+      ],
+      "parameters": {
+        "percentages": [
+          5
+        ],
+        "stackCap": 10
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-83",
+      "name": "Empowering Last Stand",
+      "sourceEffectText": "Gain Powerful if fighting alone.",
+      "mechanics": [
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [
+        "while_solo"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-84",
+      "name": "Energetic Healer",
+      "sourceEffectText": "+2 AP on Healing an ally. Once per turn.",
+      "mechanics": [
+        "ap",
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "ally"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "AP"
+          }
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-85",
+      "name": "Empowering Tint",
+      "sourceEffectText": "Healing Tints also apply Powerful.",
+      "mechanics": [
+        "health",
+        "powerful"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-86",
+      "name": "Empowering Parry",
+      "sourceEffectText": "Each successful Parry increases damage by 5% until end of the following turn. Taking any damage removes this buff.",
+      "mechanics": [
+        "parry"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          5
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-87",
+      "name": "Energising Attack I",
+      "sourceEffectText": "+1 AP on Base Attack.",
+      "mechanics": [
+        "ap",
+        "base_attack"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-88",
+      "name": "Energising Break",
+      "sourceEffectText": "+3 AP on Breaking a target.",
+      "mechanics": [
+        "ap",
+        "break"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 3,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-89",
+      "name": "Energising Attack II",
+      "sourceEffectText": "+1 AP on Base Attack.",
+      "mechanics": [
+        "ap",
+        "base_attack"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-90",
+      "name": "Energising Burn",
+      "sourceEffectText": "+1 AP on applying Burn. Once per turn.",
+      "mechanics": [
+        "ap",
+        "burn"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:burn",
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-91",
+      "name": "Energising Cleanse",
+      "sourceEffectText": "Dispel the first negative Status Effect received and gain 2 AP.",
+      "mechanics": [
+        "ap",
+        "status_effect"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-92",
+      "name": "Energising Death",
+      "sourceEffectText": "On death, +4 AP to allies.",
+      "mechanics": [
+        "ap",
+        "death"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 4,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-93",
+      "name": "Energising Heal",
+      "sourceEffectText": "On Healing an ally, also give 2 AP.",
+      "mechanics": [
+        "ap",
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "ally"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-94",
+      "name": "Energising Gradient",
+      "sourceEffectText": "+1 AP per Gradient Charge consumed.",
+      "mechanics": [
+        "ap",
+        "gradient"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-95",
+      "name": "Energising Jump",
+      "sourceEffectText": "+1 AP on Jump Counterattack.",
+      "mechanics": [
+        "ap",
+        "counterattack"
+      ],
+      "triggers": [
+        "on_jump_counterattack"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-96",
+      "name": "Energising Parry",
+      "sourceEffectText": "+1 AP on successful Parry.",
+      "mechanics": [
+        "ap",
+        "parry"
+      ],
+      "triggers": [
+        "on_parry"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-97",
+      "name": "Energising Pain",
+      "sourceEffectText": "No longer gain AP on Parry. +1 AP on getting hit.",
+      "mechanics": [
+        "ap",
+        "parry"
+      ],
+      "triggers": [
+        "on_parry"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-98",
+      "name": "Energising Powerful",
+      "sourceEffectText": "Give 2 AP on applying Powerful.",
+      "mechanics": [
+        "ap",
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful",
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-99",
+      "name": "Energising Rush",
+      "sourceEffectText": "Give 2 AP on applying Rush.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:rush",
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-100",
+      "name": "Energising Revive",
+      "sourceEffectText": "+3 AP to all allies when revived.",
+      "mechanics": [
+        "ap",
+        "revive"
+      ],
+      "triggers": [
+        "on_revive"
+      ],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 3,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-101",
+      "name": "Energising Shell",
+      "sourceEffectText": "Give 2 AP on applying Shell.",
+      "mechanics": [
+        "ap",
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:shell",
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-102",
+      "name": "Energising Shots",
+      "sourceEffectText": "20% chance to gain 1 AP on Free Aim shot.",
+      "mechanics": [
+        "ap",
+        "free_aim"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "chance_trigger",
+        "gain_ap"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-103",
+      "name": "Energising Start II",
+      "sourceEffectText": "+1 AP on battle start.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-104",
+      "name": "Energising Start I",
+      "sourceEffectText": "+1 AP on battle start.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-105",
+      "name": "Energising Stun",
+      "sourceEffectText": "+1 AP on hitting a Stunned target with a Skill.",
+      "mechanics": [
+        "ap",
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [
+        "stunned_enemy"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-106",
+      "name": "Energising Start IV",
+      "sourceEffectText": "+1 AP on battle start.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-107",
+      "name": "Energising Start III",
+      "sourceEffectText": "+1 AP on battle start.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-108",
+      "name": "Enfeebling Attack",
+      "sourceEffectText": "Base Attack applies Powerless for 1 turn.",
+      "mechanics": [
+        "base_attack",
+        "powerless"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-109",
+      "name": "Energising Turn",
+      "sourceEffectText": "+1 AP on turn start.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [
+        "on_turn_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-110",
+      "name": "Energy Master",
+      "sourceEffectText": "Every AP gain is increased by 1.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-111",
+      "name": "Evasive Healer",
+      "sourceEffectText": "Heals provided are doubled until any damage is taken.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-112",
+      "name": "Exhausting Power",
+      "sourceEffectText": "50% increased damage if Exhausted.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage_if_exhausted"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-113",
+      "name": "Enfeebling Mark",
+      "sourceEffectText": "Marked targets deal 30% less damage.",
+      "mechanics": [
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [
+        "decrease_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-114",
+      "name": "Faster Than Strong",
+      "sourceEffectText": "Always play twice in a row, but deal 50% less damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:damage",
+        "modify_turn_order"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-115",
+      "name": "Exposing Attack",
+      "sourceEffectText": "Base Attack applies Defenceless for 1 turn.",
+      "mechanics": [
+        "base_attack",
+        "defenceless"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-116",
+      "name": "Exposing Break",
+      "sourceEffectText": "Apply Defenceless on Break.",
+      "mechanics": [
+        "break",
+        "defenceless"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:defenceless"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-117",
+      "name": "First Offensive",
+      "sourceEffectText": "First hit dealt and taken deals 50% more damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-118",
+      "name": "Free Aim Inverted Shot",
+      "sourceEffectText": "Free Aim shots can apply Inverted.",
+      "mechanics": [
+        "free_aim",
+        "inverted"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:inverted"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-119",
+      "name": "First Strike",
+      "sourceEffectText": "Play first.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "modify_turn_order"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-120",
+      "name": "Frozen Affinity",
+      "sourceEffectText": "25% increased damage on Frozen targets.",
+      "mechanics": [
+        "freeze"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-121",
+      "name": "Full Strength",
+      "sourceEffectText": "25% increased damage on full Health.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [
+        "at_full_health"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-122",
+      "name": "Fueling Break",
+      "sourceEffectText": "Breaking a target doubles its Burn amount.",
+      "mechanics": [
+        "break",
+        "burn"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "multiply_stat:its_burn_amount"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "x"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-123",
+      "name": "Gradient Break",
+      "sourceEffectText": "+50% of a Gradient Charge on Breaking a target.",
+      "mechanics": [
+        "break",
+        "gradient"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_gradient_charge_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-124",
+      "name": "Glass Cannon",
+      "sourceEffectText": "Deal 25% more damage, but take 25% more damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          25,
+          25
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-125",
+      "name": "Gradient Breaker",
+      "sourceEffectText": "50% increased Break damage with Gradient Attacks.",
+      "mechanics": [
+        "break",
+        "gradient"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-126",
+      "name": "Gradient Fighter",
+      "sourceEffectText": "25% increased damage with Gradient Attacks.",
+      "mechanics": [
+        "gradient"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-127",
+      "name": "Great Energy Tint",
+      "sourceEffectText": "Energy Tints now affect the whole Expedition.",
+      "mechanics": [
+        "tint"
+      ],
+      "triggers": [],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "C",
+      "taxonomyVersion": 1,
+      "notes": "\"now affect the whole Expedition\" describes a scope change (single-target to party-wide) the TARGET vocabulary cannot fully express without assuming \"whole Expedition\" means every roster character, not just the active party — left as C rather than assumed."
+    },
+    {
+      "pictoId": "picto-128",
+      "name": "Gradient Recovery",
+      "sourceEffectText": "Recover 10% Health on using a Gradient Charge.",
+      "mechanics": [
+        "gradient",
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-129",
+      "name": "Great Healing Tint",
+      "sourceEffectText": "Healing Tints now affect the whole Expedition.",
+      "mechanics": [
+        "health",
+        "tint"
+      ],
+      "triggers": [],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "C",
+      "taxonomyVersion": 1,
+      "notes": "Same \"whole Expedition\" scope ambiguity as Great Energy Tint."
+    },
+    {
+      "pictoId": "picto-130",
+      "name": "Greater Defenceless",
+      "sourceEffectText": "+15% to Defenceless damage amplification.",
+      "mechanics": [
+        "defenceless"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:defenceless_damage_amplification"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-131",
+      "name": "Greater Powerful",
+      "sourceEffectText": "+15% to Powerful damage increase.",
+      "mechanics": [
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:powerful_damage_increase"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-132",
+      "name": "Greater Rush",
+      "sourceEffectText": "+25% to Rush Speed increase.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:rush_speed_increase"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-133",
+      "name": "Greater Powerless",
+      "sourceEffectText": "+15% to Powerless damage reduction.",
+      "mechanics": [
+        "powerless"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:powerless_damage_reduction"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-134",
+      "name": "Greater Shell",
+      "sourceEffectText": "+10% to Shell damage reduction.",
+      "mechanics": [
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:shell_damage_reduction"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-135",
+      "name": "Greater Slow",
+      "sourceEffectText": "+15% to Slow Speed reduction.",
+      "mechanics": [
+        "slow"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:slow_speed_reduction"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-136",
+      "name": "Healing Boon",
+      "sourceEffectText": "Heal 15% HP on applying a buff.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-137",
+      "name": "Healing Counter",
+      "sourceEffectText": "Recover 25% Health on Counterattack.",
+      "mechanics": [
+        "counterattack",
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-138",
+      "name": "Healing Death",
+      "sourceEffectText": "On death, the rest of the Expedition recover all Health.",
+      "mechanics": [
+        "death",
+        "health"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-139",
+      "name": "Healing Fire",
+      "sourceEffectText": "Recover 25% Health when attacking a Burning target. Once per turn.",
+      "mechanics": [
+        "burn",
+        "health"
+      ],
+      "triggers": [],
+      "targets": [
+        "burning_enemy"
+      ],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-140",
+      "name": "Healing Mark",
+      "sourceEffectText": "Recover 25% Health on hitting a Marked enemy. Once per turn.",
+      "mechanics": [
+        "health",
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-141",
+      "name": "Healing Share",
+      "sourceEffectText": "Receive 15% of all Heals affecting other characters.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-142",
+      "name": "Healing Parry",
+      "sourceEffectText": "Recover 3% Health on Parry.",
+      "mechanics": [
+        "health",
+        "parry"
+      ],
+      "triggers": [
+        "on_parry"
+      ],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          3
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-143",
+      "name": "Healing Stun",
+      "sourceEffectText": "Recover 5% Health on hitting a Stunned target.",
+      "mechanics": [
+        "health",
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [
+        "stunned_enemy"
+      ],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          5
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-144",
+      "name": "Healing Tint Energy",
+      "sourceEffectText": "Healing Tints also give 1 AP.",
+      "mechanics": [
+        "ap",
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-145",
+      "name": "Immaculate",
+      "sourceEffectText": "30% increased damage until a hit is received.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage_until_a_hit_is_received"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-146",
+      "name": "In Medias Res",
+      "sourceEffectText": "+3 Shields on Battle Start, but max Health is halved.",
+      "mechanics": [
+        "health",
+        "shield"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_shield_flat"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 3,
+            "unit": "Shield"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-147",
+      "name": "Inverted Affinity",
+      "sourceEffectText": "Apply Inverted on self for 3 turns on battle start. 50% increased damage while Inverted.",
+      "mechanics": [
+        "inverted"
+      ],
+      "triggers": [
+        "on_battle_start"
+      ],
+      "targets": [
+        "self",
+        "while_status_active"
+      ],
+      "effects": [
+        "apply_status:inverted",
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ],
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-148",
+      "name": "Last Stand Critical",
+      "sourceEffectText": "100% Critical Chance while fighting alone.",
+      "mechanics": [
+        "critical"
+      ],
+      "triggers": [],
+      "targets": [
+        "while_solo"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          100
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-149",
+      "name": "Longer Burn",
+      "sourceEffectText": "Burn duration is increased by 2.",
+      "mechanics": [
+        "burn"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "extend_status_duration:burn"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-150",
+      "name": "Longer Powerful",
+      "sourceEffectText": "On applying Powerful, its duration is increased by 2.",
+      "mechanics": [
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful",
+        "extend_status_duration:powerful"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-151",
+      "name": "Longer Shell",
+      "sourceEffectText": "On applying Shell, its duration is increased by 2.",
+      "mechanics": [
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:shell",
+        "extend_status_duration:shell"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-152",
+      "name": "Longer Rush",
+      "sourceEffectText": "On applying Rush, its duration is increased by 2.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:rush",
+        "extend_status_duration:rush"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-153",
+      "name": "Marking Break",
+      "sourceEffectText": "25% increased Critical Chance on Burning enemies.",
+      "mechanics": [
+        "burn",
+        "critical"
+      ],
+      "triggers": [],
+      "targets": [
+        "burning_enemy"
+      ],
+      "effects": [
+        "increase_stat_pct:critical_chance"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-154",
+      "name": "Painted Power",
+      "sourceEffectText": "Damage can exceed 9,999. The only item in the game that allows you to break through the damage cap. The only way to obtain it is to defeat the boss at the end of Act 2. Check the Interactive Map Location below for full details of how to find it and break the damage cap.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "C",
+      "taxonomyVersion": 1,
+      "notes": "Source effect text is mostly walkthrough/lore prose (\"...defeat the boss at the end of Act 2...\") with the actual mechanic (damage cap removal) embedded in it; this is a source data-quality issue, not something a taxonomy rule should parse around."
+    },
+    {
+      "pictoId": "picto-155",
+      "name": "Marking Shots",
+      "sourceEffectText": "20% chance to apply Mark on Free Aim shot.",
+      "mechanics": [
+        "free_aim",
+        "mark"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:mark",
+        "chance_trigger"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-156",
+      "name": "Passive Defense",
+      "sourceEffectText": "Reduce damage taken by 50%, but can’t Parry or Dodge.",
+      "mechanics": [
+        "dodge",
+        "parry"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-157",
+      "name": "Parry Specialist",
+      "sourceEffectText": "25% reduced Parry window but double Counterattack damage.",
+      "mechanics": [
+        "counterattack",
+        "parry"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "decrease_stat_pct:parry_window",
+        "multiply_stat:counterattack_damage"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ],
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "x"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-158",
+      "name": "Painter",
+      "sourceEffectText": "Convert all Physical damage to Void damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "convert_damage_type"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-159",
+      "name": "Piercing Shot",
+      "sourceEffectText": "25% increased Free Aim damage. Free Aim shots ignore Shields.",
+      "mechanics": [
+        "free_aim",
+        "shield"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:free_aim"
+      ],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-160",
+      "name": "Perilous Parry",
+      "sourceEffectText": "+1 AP on Parry, but damage received is doubled.",
+      "mechanics": [
+        "ap",
+        "parry"
+      ],
+      "triggers": [
+        "on_parry"
+      ],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-161",
+      "name": "Physical Fighter",
+      "sourceEffectText": "Convert all Skill damage to Physical damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "convert_damage_type"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-162",
+      "name": "Powerful Mark",
+      "sourceEffectText": "Gain Powerful on hitting a Marked enemy.",
+      "mechanics": [
+        "mark",
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-163",
+      "name": "Powerful Heal",
+      "sourceEffectText": "Healing an ally also applies Powerful for 1 turn.",
+      "mechanics": [
+        "health",
+        "powerful"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "ally"
+      ],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-164",
+      "name": "Powered Attack",
+      "sourceEffectText": "On every damage dealt, try to consume 1 AP. If successful, increase damage by 20%.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "spend_ap"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-165",
+      "name": "Powerful On Shell",
+      "sourceEffectText": "Apply Powerful on applying Shell.",
+      "mechanics": [
+        "powerful",
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful",
+        "apply_status:shell"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-166",
+      "name": "Powerful Revive",
+      "sourceEffectText": "Apply Powerful for 3 turns when revived.",
+      "mechanics": [
+        "powerful",
+        "revive"
+      ],
+      "triggers": [
+        "on_revive"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful"
+      ],
+      "parameters": {
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-167",
+      "name": "Powerful Shield",
+      "sourceEffectText": "10% increased damage per Shield Point on self.",
+      "mechanics": [
+        "shield"
+      ],
+      "triggers": [],
+      "targets": [
+        "self"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-168",
+      "name": "Powerful Shots",
+      "sourceEffectText": "20% chance to gain Powerful on Free Aim shot.",
+      "mechanics": [
+        "free_aim",
+        "powerful"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "chance_trigger"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-169",
+      "name": "Protecting Attack",
+      "sourceEffectText": "Gain Shell for 1 turn on Base Attack.",
+      "mechanics": [
+        "base_attack",
+        "shell"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-170",
+      "name": "Pro Retreat",
+      "sourceEffectText": "Allows Flee to be instantaneous.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "D",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-171",
+      "name": "Protecting Death",
+      "sourceEffectText": "On death, allies gain Shell.",
+      "mechanics": [
+        "death",
+        "shell"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-172",
+      "name": "Protecting Heal",
+      "sourceEffectText": "Healing an ally also applies Shell for 1 turn.",
+      "mechanics": [
+        "health",
+        "shell"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "ally"
+      ],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-173",
+      "name": "Protecting Last Stand",
+      "sourceEffectText": "Gain Shell if fighting alone.",
+      "mechanics": [
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [
+        "while_solo"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-174",
+      "name": "Quick Break",
+      "sourceEffectText": "Play again on Breaking a target.",
+      "mechanics": [
+        "break"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "modify_turn_order"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-175",
+      "name": "Protecting Tint",
+      "sourceEffectText": "Healing Tints also apply Shell.",
+      "mechanics": [
+        "health",
+        "shell"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:shell"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-176",
+      "name": "Protecting Shots",
+      "sourceEffectText": "20% chance to gain Shell on Free Aim shot.",
+      "mechanics": [
+        "free_aim",
+        "shell"
+      ],
+      "triggers": [
+        "on_free_aim_shot"
+      ],
+      "targets": [],
+      "effects": [
+        "chance_trigger"
+      ],
+      "parameters": {
+        "percentages": [
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-177",
+      "name": "Random Defense",
+      "sourceEffectText": "Damage taken is randomly multiplied by a value between 50% and 200%.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "random_branch"
+      ],
+      "parameters": {
+        "percentages": [
+          50,
+          200
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-178",
+      "name": "Recovery",
+      "sourceEffectText": "Recovers 10% Health on turn start.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [
+        "on_turn_start"
+      ],
+      "targets": [],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-179",
+      "name": "Rejuvenating Revive",
+      "sourceEffectText": "Apply Regen for 3 turns when revived.",
+      "mechanics": [
+        "regen",
+        "revive"
+      ],
+      "triggers": [
+        "on_revive"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:regen"
+      ],
+      "parameters": {
+        "turns": 3
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-180",
+      "name": "Revive Paradox",
+      "sourceEffectText": "Play immediately when revived.",
+      "mechanics": [
+        "revive"
+      ],
+      "triggers": [
+        "on_revive"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-181",
+      "name": "Rewarding Mark",
+      "sourceEffectText": "+2 AP on dealing damage to a Marked target. Once per turn.",
+      "mechanics": [
+        "ap",
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "AP"
+          }
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-182",
+      "name": "Revive Tint Energy",
+      "sourceEffectText": "Revive Tints also give 3 AP.",
+      "mechanics": [
+        "ap",
+        "revive"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-183",
+      "name": "Roulette",
+      "sourceEffectText": "Every hit has a 50% chance to deal either 50% or 200% of its damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "random_branch"
+      ],
+      "parameters": {
+        "percentages": [
+          50,
+          50,
+          200
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1,
+      "notes": "Genuine random-branching effect (\"50% chance to deal either 50% or 200% of its damage\"); tagged random_branch deliberately instead of averaged into a single number, since averaging would fabricate a value the source text does not state."
+    },
+    {
+      "pictoId": "picto-184",
+      "name": "Rush On Powerful",
+      "sourceEffectText": "Apply Rush on applying Powerful.",
+      "mechanics": [
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:powerful",
+        "apply_status:rush"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-185",
+      "name": "Second Chance",
+      "sourceEffectText": "Revive with 100% Health. Once per battle.",
+      "mechanics": [
+        "health",
+        "revive"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          100
+        ],
+        "onceLimiter": "battle"
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-186",
+      "name": "Shared Care",
+      "sourceEffectText": "When Healing an ally, also Heal self for 50% of that value.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "ally",
+        "self"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-187",
+      "name": "Shell On Rush",
+      "sourceEffectText": "Apply Shell on applying Rush.",
+      "mechanics": [
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:rush",
+        "apply_status:shell"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-188",
+      "name": "Shield Affinity",
+      "sourceEffectText": "30% increased damage while having Shields, but receiving any damage always removes all Shields.",
+      "mechanics": [
+        "shield"
+      ],
+      "triggers": [],
+      "targets": [
+        "while_status_active"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-189",
+      "name": "Shield Breaker",
+      "sourceEffectText": "All hits break 1 more Shield.",
+      "mechanics": [
+        "break",
+        "shield"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-190",
+      "name": "Shielding Death",
+      "sourceEffectText": "On death, allies gain 3 Shield points.",
+      "mechanics": [
+        "death",
+        "shield"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-191",
+      "name": "Shielding Tint",
+      "sourceEffectText": "Healing Tints also add 2 Shields.",
+      "mechanics": [
+        "health",
+        "shield"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-192",
+      "name": "Shortcut",
+      "sourceEffectText": "Immediately play when falling below 30% Health. Once per battle.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          30
+        ],
+        "onceLimiter": "battle"
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-193",
+      "name": "Sniper",
+      "sourceEffectText": "First Free Aim shot each turn deals 200% increased damage and can Break.",
+      "mechanics": [
+        "break",
+        "free_aim"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "grant_break_capability",
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          200
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-194",
+      "name": "Slowing Break",
+      "sourceEffectText": "Apply Slow on Break.",
+      "mechanics": [
+        "break",
+        "slow"
+      ],
+      "triggers": [
+        "on_break"
+      ],
+      "targets": [],
+      "effects": [
+        "apply_status:slow"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-195",
+      "name": "Solidifying",
+      "sourceEffectText": "+2 Shields when the character’s Health falls below 50%. Once per battle.",
+      "mechanics": [
+        "health",
+        "shield"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [
+        "gain_shield_flat"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ],
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "Shield"
+          }
+        ],
+        "onceLimiter": "battle"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-196",
+      "name": "Solo Fighter",
+      "sourceEffectText": "Deal 50% more damage if fighting alone.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [
+        "while_solo"
+      ],
+      "effects": [
+        "increase_stat_pct:damage_if_fighting_alone"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-197",
+      "name": "Solidifying Meditation",
+      "sourceEffectText": "+1 Shield when passing turn.",
+      "mechanics": [
+        "shield"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_shield_flat"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "Shield"
+          }
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-198",
+      "name": "SOS Rush",
+      "sourceEffectText": "Apply Rush when falling below 50% Health.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [
+        "apply_status:rush"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-199",
+      "name": "SOS Power",
+      "sourceEffectText": "Apply Powerful when falling below 50% Health.",
+      "mechanics": [
+        "health",
+        "powerful"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [
+        "apply_status:powerful"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-200",
+      "name": "SOS Shell",
+      "sourceEffectText": "Apply Shell when falling below 50% Health.",
+      "mechanics": [
+        "health",
+        "shell"
+      ],
+      "triggers": [],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [
+        "apply_status:shell"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-201",
+      "name": "Soul Eater",
+      "sourceEffectText": "Deal 30% more damage, but lose 20% Health per turn.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          30,
+          20
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-202",
+      "name": "Staggering Attack",
+      "sourceEffectText": "50% increased Break damage on Base Attack.",
+      "mechanics": [
+        "base_attack",
+        "break"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:break"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-203",
+      "name": "Stay Marked",
+      "sourceEffectText": "50% chance to apply Mark when attacking a Marked target.",
+      "mechanics": [
+        "mark"
+      ],
+      "triggers": [],
+      "targets": [
+        "marked_enemy"
+      ],
+      "effects": [
+        "apply_status:mark",
+        "chance_trigger"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-204",
+      "name": "Stun Boost",
+      "sourceEffectText": "30% increased damage on Stunned targets.",
+      "mechanics": [
+        "stun"
+      ],
+      "triggers": [],
+      "targets": [
+        "stunned_enemy"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          30
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-205",
+      "name": "Survivor",
+      "sourceEffectText": "Survive fatal damage with 1 Health. Once per battle.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "onceLimiter": "battle"
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-206",
+      "name": "Successive Parry",
+      "sourceEffectText": "Can’t Dodge. +5% increased damage per Parry until damage taken.",
+      "mechanics": [
+        "dodge",
+        "parry"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          5
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-207",
+      "name": "Teamwork",
+      "sourceEffectText": "10% increased damage while all allies are alive.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-208",
+      "name": "Tainted",
+      "sourceEffectText": "15% increased damage for each Status Effect on self.",
+      "mechanics": [
+        "status_effect"
+      ],
+      "triggers": [],
+      "targets": [
+        "self"
+      ],
+      "effects": [
+        "increase_stat_pct:damage_for_each_status_effect"
+      ],
+      "parameters": {
+        "percentages": [
+          15
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-209",
+      "name": "Sweet Kill",
+      "sourceEffectText": "Recover 50% Health on killing an enemy.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [
+        "on_kill"
+      ],
+      "targets": [
+        "enemy"
+      ],
+      "effects": [
+        "heal_pct"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-210",
+      "name": "The One",
+      "sourceEffectText": "Max Health is reduced to 1.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-211",
+      "name": "The Best Defense",
+      "sourceEffectText": "Deal 50% more damage, but can’t Parry or Dodge.",
+      "mechanics": [
+        "dodge",
+        "parry"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-212",
+      "name": "Time Tint",
+      "sourceEffectText": "Energy Tints also apply Rush.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "apply_status:rush"
+      ],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-213",
+      "name": "Warming Up",
+      "sourceEffectText": "5% increased damage per turn. Can stack up to 5 times.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          5
+        ],
+        "stackCap": 5
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-214",
+      "name": "Versatile",
+      "sourceEffectText": "After a Free Aim hit, Base Attack damage is increased by 50% for 1 turn.",
+      "mechanics": [
+        "base_attack",
+        "free_aim"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50
+        ],
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-215",
+      "name": "Weakness Gain",
+      "sourceEffectText": "+1 AP on hitting an enemy’s Weakness. Once per turn.",
+      "mechanics": [
+        "ap",
+        "weakness"
+      ],
+      "triggers": [],
+      "targets": [
+        "enemy"
+      ],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 1,
+            "unit": "AP"
+          }
+        ],
+        "onceLimiter": "turn"
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-216",
+      "name": "AP Discount",
+      "sourceEffectText": "Skills cost 1 less AP.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "ap_discount"
+      ],
+      "parameters": {},
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-217",
+      "name": "Alternating Critical",
+      "sourceEffectText": "On critical hit, next non‑critical hit deals increased damage.",
+      "mechanics": [
+        "critical"
+      ],
+      "triggers": [
+        "on_critical_hit"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-218",
+      "name": "Consuming Attack",
+      "sourceEffectText": "Base attack consumes Burns to deal more damage.",
+      "mechanics": [
+        "base_attack"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-219",
+      "name": "Damage Share",
+      "sourceEffectText": "50% damage taken is redirected to allies (if possible).",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-220",
+      "name": "Double Third",
+      "sourceEffectText": "Every third hit of a skill deals double damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "multiply_stat:damage"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "x"
+          }
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-221",
+      "name": "Empowered Healer",
+      "sourceEffectText": "Using a healing skill gives 50% more damage for 1 turn.",
+      "mechanics": [
+        "health"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50
+        ],
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-222",
+      "name": "Empowering Jumps",
+      "sourceEffectText": "Counters deal more damage for each successful Jump Counter this turn.",
+      "mechanics": [
+        "counterattack"
+      ],
+      "triggers": [
+        "on_jump_counterattack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-223",
+      "name": "Feint",
+      "sourceEffectText": "Start each turn with barbapapa stacks; every 5th skill hit deals 600% damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          600
+        ]
+      },
+      "classification": "C",
+      "taxonomyVersion": 1,
+      "notes": "References an undocumented game-specific mechanic (\"barbapapa stacks\") with no definition elsewhere in the corpus; the \"every 5th skill hit deals 600% damage\" clause is left untagged rather than guessed at."
+    },
+    {
+      "pictoId": "picto-224",
+      "name": "Frenzy",
+      "sourceEffectText": "Each successive skill hit deals 10% more damage.",
+      "mechanics": [],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          10
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-225",
+      "name": "Gradient Overcharge",
+      "sourceEffectText": "Consume 3 Gradient Charges at turn start to deal 200% more damage.",
+      "mechanics": [
+        "gradient"
+      ],
+      "triggers": [
+        "on_turn_start"
+      ],
+      "targets": [],
+      "effects": [
+        "increase_stat_pct:damage"
+      ],
+      "parameters": {
+        "percentages": [
+          200
+        ]
+      },
+      "classification": "A",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-226",
+      "name": "Gradient Parry",
+      "sourceEffectText": "Gain extra Gradient Charge on a successful Parry.",
+      "mechanics": [
+        "gradient",
+        "parry"
+      ],
+      "triggers": [
+        "on_parry"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-227",
+      "name": "Longer Break",
+      "sourceEffectText": "Break effects last 1 more turn, but can’t be broken consecutively.",
+      "mechanics": [
+        "break"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-228",
+      "name": "SOS Healing Tint",
+      "sourceEffectText": "Automatically consumes a Healing Tint when below 50% health.",
+      "mechanics": [
+        "health",
+        "tint"
+      ],
+      "triggers": [
+        "on_heal_action"
+      ],
+      "targets": [
+        "below_health_pct"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          50
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-229",
+      "name": "Slowing Attack",
+      "sourceEffectText": "Base attack applies Slow for 1 turn.",
+      "mechanics": [
+        "base_attack",
+        "slow"
+      ],
+      "triggers": [
+        "on_base_attack"
+      ],
+      "targets": [],
+      "effects": [],
+      "parameters": {
+        "turns": 1
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-230",
+      "name": "Trigger Happy",
+      "sourceEffectText": "After shooting 10 times in one turn, gain +2 AP once and bonus shot damage this turn.",
+      "mechanics": [
+        "ap"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [
+        "gain_ap"
+      ],
+      "parameters": {
+        "flatValues": [
+          {
+            "value": 2,
+            "unit": "AP"
+          }
+        ]
+      },
+      "classification": "C",
+      "taxonomyVersion": 1,
+      "notes": "The \"+2 AP\" itself is clear (kept as gain_ap), but the trigger condition is a cross-action shot-count threshold (\"After shooting 10 times in one turn\"), a pattern the trigger vocabulary has no counting-condition concept for; tagging it on_free_aim_shot would misrepresent a per-shot trigger as a threshold trigger, so no trigger is recorded."
+    },
+    {
+      "pictoId": "picto-231",
+      "name": "Clea’s Death",
+      "sourceEffectText": "Upon death, allies gain +25% damage until they die.",
+      "mechanics": [
+        "death"
+      ],
+      "triggers": [
+        "on_death"
+      ],
+      "targets": [
+        "all_allies"
+      ],
+      "effects": [],
+      "parameters": {
+        "percentages": [
+          25
+        ]
+      },
+      "classification": "B",
+      "taxonomyVersion": 1
+    },
+    {
+      "pictoId": "picto-232",
+      "name": "First Life",
+      "sourceEffectText": "Increased damage until death once; reduced damage after death.",
+      "mechanics": [
+        "death"
+      ],
+      "triggers": [],
+      "targets": [],
+      "effects": [],
+      "parameters": {},
+      "classification": "B",
+      "taxonomyVersion": 1
+    }
+  ]
+}

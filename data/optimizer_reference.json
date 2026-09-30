@@ -82,6 +82,13 @@
     "Weapon passive effects and unlock levels are missing for almost all weapons in data/weapons.json (left as empty arrays) — not populated for v0.1.",
     "Skill mechanical effects are flavor text only (src/assets/characters.json), not structured numeric data — skills are intentionally outside the optimizer for v0.1.",
     "Attribute soft-caps / breakpoints (see data/attribute_progression.json knownUnknowns).",
-    "Whether unlocking a Picto as a Lumina also grants its attribute bonus table (which otherwise only applies when a Picto is equipped in one of the 3 Picto slots) is unverified. The Lumina optimizer therefore scores Luminas only by their 'type' category (Offensive/Defensive/Support) and strategy fit, never by the attribute-bonus table, to avoid conflating two mechanics that may not both apply."
-  ]
+    "Whether unlocking a Picto as a Lumina also grants its attribute bonus table (which otherwise only applies when a Picto is equipped in one of the 3 Picto slots) is unverified. The Lumina optimizer therefore scores Luminas only by their 'type' category (Offensive/Defensive/Support) and strategy fit, never by the attribute-bonus table, to avoid conflating two mechanics that may not both apply.",
+    "Structured Picto/Lumina effect tags (data/picto_effects.json, Phase 2.2A) describe which mechanics/triggers/effects a Picto's text references — not combat strength. The Break-profile bonus below is a HEURISTIC relevance signal, not a measured damage contribution; see OPTIMIZER_MODEL.md."
+  ],
+
+  "breakEffectModel": {
+    "_documentation": "Phase 2.2A: an additive HEURISTIC bonus applied ONLY when strategyProfile is 'break', using structured effect tags from data/picto_effects.json (see src/optimizer/breakEffectModel.ts) instead of relying solely on the Offensive/Defensive/Support category and generic stat weights. Every other strategy profile is unaffected — this bonus is never applied outside the Break profile. Both constants are our own scoring convention (not a verified game value), chosen to be a meaningful nudge without overriding the existing stat-based/category-based score entirely.",
+    "pictoBonusPerSignal": 8,
+    "luminaBonusPerSignal": 40
+  }
 }

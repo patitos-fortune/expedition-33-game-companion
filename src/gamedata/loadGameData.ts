@@ -15,10 +15,12 @@ import rawPictos from '../assets/pictos_list.json'
 import weaponsData from '../../data/weapons.json'
 import attributeProgressionData from '../../data/attribute_progression.json'
 import optimizerReferenceData from '../../data/optimizer_reference.json'
+import { pictoEffectsById, validatePictoEffects } from '../optimizer/effectModel'
 import type {
   AttributeName,
   NormalizedCharacter,
   NormalizedPicto,
+  PictoEffectRecord,
   RawCharacter,
   RawPictoItem,
   Weapon,
@@ -124,6 +126,8 @@ export interface GameData {
   weapons: Weapon[]
   attributeProgression: typeof attributeProgressionData
   optimizerReference: typeof optimizerReferenceData
+  /** Structured Picto/Lumina effect classification (Phase 2.2A), keyed by NormalizedPicto.id. See OPTIMIZER_MODEL.md. */
+  pictoEffectsById: Map<string, PictoEffectRecord>
   /** Any data-quality issues discovered while loading, for surfacing in Settings rather than failing silently. */
   loadWarnings: string[]
 }
@@ -166,12 +170,15 @@ export function loadGameData(): GameData {
     return true
   })
 
+  loadWarnings.push(...validatePictoEffects(pictos))
+
   cached = {
     characters,
     pictos,
     weapons,
     attributeProgression: attributeProgressionData,
     optimizerReference: optimizerReferenceData,
+    pictoEffectsById: pictoEffectsById(),
     loadWarnings,
   }
   return cached

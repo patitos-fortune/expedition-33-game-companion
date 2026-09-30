@@ -62,6 +62,7 @@ export function analyzeBuild(params: {
     ownedPictos,
     profile,
     currentEquippedIds,
+    pictoEffectsById: gameData.pictoEffectsById,
   })
 
   const unlockedLuminas = filterUnlockedLuminas(gameData.pictos, inventory)
@@ -73,6 +74,7 @@ export function analyzeBuild(params: {
     budget: build.luminaPointBudget,
     currentLuminaIds,
     freePictoIds: currentEquippedIds,
+    pictoEffectsById: gameData.pictoEffectsById,
   })
 
   const skills = {
