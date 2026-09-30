@@ -138,10 +138,15 @@ human-readable reason string:
   `on_base_attack` trigger) or **"enables Break"** otherwise
 - an `increase_stat_pct:*` effect whose stat name contains "break" → **"increases Break damage"**
 - the `on_break` trigger present → **"triggers after Breaking an enemy"**
-- the `stunned_enemy` target or the `stun` mechanic present → **"benefits from a Stunned target (Stun commonly
-  follows a Break)"**
 - otherwise, if the `break` mechanic is present at all → **"references the Break mechanic"** (a fallback used only
   when none of the more specific signals above matched)
+
+A record's `stun` mechanic tag or `stunned_enemy` target tag is **not** a Break-scoring signal — an earlier version of
+this bonus treated "mentions Stun" as implying Break relevance ("Stun commonly follows a Break"), which was too
+speculative for this phase's source-grounding bar and let purely defensive effects (e.g. "Anti-Stun" — "Immune to
+Stun.") pick up a Break bonus with no textual connection to Break at all. Stun tagging itself is unaffected — it's
+still fully present in the generic taxonomy and in `effectRelationships.ts`'s generic relationship extraction; it is
+only excluded from this one Break-specific signal list.
 
 These reasons are surfaced directly in the Picto loadout's and Lumina combination's `reasons` output, appended after
 the existing profile-fit sentence (e.g. `... Also: enables Break on Base Attack.`), so a Break recommendation is

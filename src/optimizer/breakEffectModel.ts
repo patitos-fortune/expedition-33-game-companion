@@ -33,9 +33,6 @@ export function breakRelevance(record: PictoEffectRecord | undefined): BreakRele
   if (record.triggers.includes('on_break')) {
     reasons.push('triggers after Breaking an enemy')
   }
-  if (record.targets.includes('stunned_enemy') || record.mechanics.includes('stun')) {
-    reasons.push('benefits from a Stunned target (Stun commonly follows a Break)')
-  }
   if (record.mechanics.includes('break') && reasons.length === 0) {
     // References Break in some other, not-yet-more-specifically-tagged way
     // (e.g. classification B, like "Break Specialist" or "Longer Break").

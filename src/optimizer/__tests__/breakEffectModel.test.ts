@@ -49,13 +49,25 @@ describe('breakRelevance', () => {
     expect(breakRelevance(r).reasons).toContain('triggers after Breaking an enemy')
   })
 
-  it('flags benefiting from a Stunned target, via either the target tag or the stun mechanic', () => {
-    expect(breakRelevance(record({ targets: ['stunned_enemy'] })).reasons).toContain(
-      'benefits from a Stunned target (Stun commonly follows a Break)',
-    )
-    expect(breakRelevance(record({ mechanics: ['stun'] })).reasons).toContain(
-      'benefits from a Stunned target (Stun commonly follows a Break)',
-    )
+  // Correction (post-2.2A): a structured record merely mentioning Stun (the
+  // 'stun' mechanic tag or the 'stunned_enemy' target tag) does NOT by
+  // itself establish Break relevance — that inference ("Stun commonly
+  // follows a Break") was too speculative for this phase's source-grounding
+  // bar, and it let purely defensive/anti-Stun effects pick up a Break
+  // bonus they have no textual connection to. Stun is still fully present
+  // in the generic taxonomy and generic relationship extraction — it is
+  // only removed as a Break-scoring signal here.
+  it('does NOT treat the stun mechanic tag or the stunned_enemy target tag as Break-relevant on their own', () => {
+    expect(breakRelevance(record({ mechanics: ['stun'] }))).toEqual({ signalCount: 0, reasons: [] })
+    expect(breakRelevance(record({ targets: ['stunned_enemy'] }))).toEqual({ signalCount: 0, reasons: [] })
+  })
+
+  it('an Anti-Stun-style defensive record (stun mechanic, no genuine Break tags) scores zero Break bonus', () => {
+    const antiStun = record({ mechanics: ['stun'], effects: ['grant_immunity:stun'] })
+    const relevance = breakRelevance(antiStun)
+    expect(relevance).toEqual({ signalCount: 0, reasons: [] })
+    expect(breakPictoBonus(antiStun)).toBe(0)
+    expect(breakLuminaBonus(antiStun)).toBe(0)
   })
 
   it('falls back to a generic Break-mechanic reference only when no more specific signal matched', () => {
@@ -115,5 +127,19 @@ describe('breakRelevance against the real corpus', () => {
     const relevance = breakRelevance(record)
     expect(relevance.reasons).toContain('enables Break')
     expect(relevance.reasons).not.toContain('enables Break on Base Attack')
+  })
+
+  // Regression for the post-2.2A Stun-signal correction: "Anti-Stun" ("Immune
+  // to Stun.") is a purely defensive effect with no textual connection to
+  // Break at all — it must never receive a structured Break bonus, and must
+  // never be promoted into a Break Picto/Lumina recommendation on that basis.
+  it('Anti-Stun: a defensive Stun-immunity effect receives zero structured Break bonus', () => {
+    const record = pictoEffectsById().get('picto-10') // Anti-Stun
+    expect(record?.name).toBe('Anti-Stun')
+    expect(record?.mechanics).toContain('stun')
+    const relevance = breakRelevance(record)
+    expect(relevance).toEqual({ signalCount: 0, reasons: [] })
+    expect(breakPictoBonus(record)).toBe(0)
+    expect(breakLuminaBonus(record)).toBe(0)
   })
 })
