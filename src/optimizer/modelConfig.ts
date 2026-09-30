@@ -64,6 +64,10 @@ export const GENERIC_WEAPON_SCALING_THRESHOLD_LEVELS = ref.genericWeaponScalingT
 export const BREAK_EFFECT_PICTO_BONUS_PER_SIGNAL = ref.breakEffectModel.pictoBonusPerSignal
 export const BREAK_EFFECT_LUMINA_BONUS_PER_SIGNAL = ref.breakEffectModel.luminaBonusPerSignal
 
+/** Phase 2.2B: Burn/Mark-profile-only ('status_burn') structured-effect bonus constants. See data/optimizer_reference.json → statusBurnEffectModel. */
+export const BURN_MARK_EFFECT_PICTO_BONUS_PER_SIGNAL = ref.statusBurnEffectModel.pictoBonusPerSignal
+export const BURN_MARK_EFFECT_LUMINA_BONUS_PER_SIGNAL = ref.statusBurnEffectModel.luminaBonusPerSignal
+
 export const OPTIMIZER_KNOWN_UNKNOWNS: string[] = ref.knownUnknowns
 
 /** Splits a possibly-combined Picto "type" (e.g. "Defensive / Support") into its component categories. */

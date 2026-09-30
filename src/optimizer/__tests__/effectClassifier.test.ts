@@ -168,6 +168,72 @@ describe('classifyEffect: golden examples', () => {
   })
 })
 
+// Phase 2.2B classifier fix: "N% chance to <Status>" / "N% chance to gain
+// <Status>" is a probabilistic status grant phrased without the word
+// "apply(ing)" — previously only chance_trigger was captured, silently
+// dropping the actual status being granted. The rule is generic across every
+// known status word (STATUS_WORDS in effectClassifier.ts), not hardcoded to
+// any one Picto's name or text.
+describe('classifyEffect: "chance to <Status>" status-grant fix', () => {
+  it('Burning Shots: bare-verb phrasing ("chance to Burn") now emits apply_status:burn alongside chance_trigger', () => {
+    const r = classifyEffect('Burning Shots', '20% chance to Burn on Free Aim shot.')
+    expect(r.effects).toEqual(expect.arrayContaining(['apply_status:burn', 'chance_trigger']))
+    expect(r.mechanics).toEqual(expect.arrayContaining(['burn', 'free_aim']))
+    expect(r.triggers).toContain('on_free_aim_shot')
+    expect(r.parameters.percentages).toEqual([20])
+    expect(r.classification).toBe('A')
+  })
+
+  it('Accelerating Shots: "gain" phrasing ("chance to gain Rush") now emits apply_status:rush', () => {
+    const r = classifyEffect('Accelerating Shots', '20% chance to gain Rush on Free Aim shot.')
+    expect(r.effects).toEqual(expect.arrayContaining(['apply_status:rush', 'chance_trigger']))
+  })
+
+  it('Powerful Shots: "chance to gain Powerful" now emits apply_status:powerful', () => {
+    const r = classifyEffect('Powerful Shots', '20% chance to gain Powerful on Free Aim shot.')
+    expect(r.effects).toEqual(expect.arrayContaining(['apply_status:powerful', 'chance_trigger']))
+  })
+
+  it('Protecting Shots: "chance to gain Shell" now emits apply_status:shell', () => {
+    const r = classifyEffect('Protecting Shots', '20% chance to gain Shell on Free Aim shot.')
+    expect(r.effects).toEqual(expect.arrayContaining(['apply_status:shell', 'chance_trigger']))
+  })
+
+  it('does not regress the pre-existing "chance to apply <Status>" phrasing (Marking Shots, Stay Marked)', () => {
+    const marking = classifyEffect('Marking Shots', '20% chance to apply Mark on Free Aim shot.')
+    expect(marking.effects).toEqual(expect.arrayContaining(['apply_status:mark', 'chance_trigger']))
+    const stayMarked = classifyEffect('Stay Marked', '50% chance to apply Mark when attacking a Marked target.')
+    expect(stayMarked.effects).toEqual(expect.arrayContaining(['apply_status:mark', 'chance_trigger']))
+  })
+
+  it('does not infer a status grant when the source text names no status word (Dodge Specialist, Energising Shots — both "chance to gain AP")', () => {
+    const dodge = classifyEffect('Dodge Specialist', "25% reduced Dodge window, but 50% chance to gain 1 AP on successful Dodge.")
+    expect(dodge.effects.some((e) => e.startsWith('apply_status:'))).toBe(false)
+    const energising = classifyEffect('Energising Shots', '20% chance to gain 1 AP on Free Aim shot.')
+    expect(energising.effects.some((e) => e.startsWith('apply_status:'))).toBe(false)
+  })
+
+  it('does not misfire on unrelated "chance to <verb>" phrasing (Roulette’s manual override is untouched)', () => {
+    const r = classifyEffect('Roulette', 'Every hit has a 50% chance to deal either 50% or 200% of its damage.')
+    expect(r.effects.some((e) => e.startsWith('apply_status:'))).toBe(false)
+    expect(r.effects).toContain('random_branch')
+    expect(r.classification).toBe('B')
+  })
+
+  it('the four directly-affected records all remain classification A (the fix adds a tag, never changes a tier)', () => {
+    // The corpus-wide A/B/C/D tally staying at 153/73/6/1 is asserted
+    // separately against the generated file in effectModel.test.ts.
+    for (const [name, text] of [
+      ['Burning Shots', '20% chance to Burn on Free Aim shot.'],
+      ['Accelerating Shots', '20% chance to gain Rush on Free Aim shot.'],
+      ['Powerful Shots', '20% chance to gain Powerful on Free Aim shot.'],
+      ['Protecting Shots', '20% chance to gain Shell on Free Aim shot.'],
+    ] as const) {
+      expect(classifyEffect(name, text).classification).toBe('A')
+    }
+  })
+})
+
 describe('classifyEffect: named ambiguous/hard cases (manual overrides)', () => {
   it('Feint: undocumented mechanic left untagged, classification C', () => {
     const r = classifyEffect('Feint', 'Start each turn with barbapapa stacks; every 5th skill hit deals 600% damage.')

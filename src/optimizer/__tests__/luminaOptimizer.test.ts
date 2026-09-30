@@ -191,4 +191,113 @@ describe('suggestLuminaCombination', () => {
       expect(result.totalValue).toBe(baseline.totalValue)
     })
   })
+
+  describe('Phase 2.2B: Burn/Mark-only structured-effect scoring', () => {
+    it('produces IDENTICAL suggestions for every non-status_burn profile (including Break) whether or not pictoEffectsById is supplied', () => {
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['l3', makeEffectRecord('l3', { effects: ['apply_status:burn'], mechanics: ['burn'] })],
+      ])
+      for (const key of ['balanced', 'damage', 'defensive', 'break', 'custom'] as const) {
+        const profile = getStrategyProfile(key)
+        const without = suggestLuminaCombination({ unlockedLuminas: luminas, profile, budget: 30, currentLuminaIds: [] })
+        const withEffects = suggestLuminaCombination({
+          unlockedLuminas: luminas,
+          profile,
+          budget: 30,
+          currentLuminaIds: [],
+          pictoEffectsById,
+        })
+        expect(withEffects.suggestedLuminaIds).toEqual(without.suggestedLuminaIds)
+        expect(withEffects.totalValue).toBe(without.totalValue)
+      }
+    })
+
+    it('under the status_burn profile, a Lumina with Burn/Mark-relevant structured tags is preferred within a tight budget', () => {
+      const plain = makeLumina('plain', 10, 'Offensive')
+      const burner = makeLumina('burner', 10, 'Offensive')
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['burner', makeEffectRecord('burner', { effects: ['apply_status:burn'], targets: ['marked_enemy'] })],
+      ])
+      const result = suggestLuminaCombination({
+        unlockedLuminas: [plain, burner],
+        profile: getStrategyProfile('status_burn'),
+        budget: 10,
+        currentLuminaIds: [],
+        pictoEffectsById,
+      })
+      expect(result.suggestedLuminaIds).toEqual(['burner'])
+      expect(result.reasons['burner']).toContain('applies Burn when hitting a Marked enemy')
+    })
+
+    it('the Burn/Mark bonus is inert without a matching structured record, even under the status_burn profile', () => {
+      const result = suggestLuminaCombination({
+        unlockedLuminas: luminas,
+        profile: getStrategyProfile('status_burn'),
+        budget: 30,
+        currentLuminaIds: [],
+        pictoEffectsById: new Map(),
+      })
+      const baseline = suggestLuminaCombination({
+        unlockedLuminas: luminas,
+        profile: getStrategyProfile('status_burn'),
+        budget: 30,
+        currentLuminaIds: [],
+      })
+      expect(result.suggestedLuminaIds).toEqual(baseline.suggestedLuminaIds)
+      expect(result.totalValue).toBe(baseline.totalValue)
+    })
+
+    it('the Burn/Mark bonus is NOT applied under the Break profile, even for a Burn/Mark-tagged Lumina', () => {
+      const burner = makeLumina('burner', 10, 'Offensive')
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['burner', makeEffectRecord('burner', { effects: ['apply_status:burn'], mechanics: ['burn'] })],
+      ])
+      const withEffects = suggestLuminaCombination({
+        unlockedLuminas: [burner],
+        profile: getStrategyProfile('break'),
+        budget: 10,
+        currentLuminaIds: [],
+        pictoEffectsById,
+      })
+      const baseline = suggestLuminaCombination({
+        unlockedLuminas: [burner],
+        profile: getStrategyProfile('break'),
+        budget: 10,
+        currentLuminaIds: [],
+      })
+      expect(withEffects.totalValue).toBe(baseline.totalValue)
+      expect(withEffects.reasons['burner']).not.toContain('applies Burn')
+    })
+
+    it('never exceeds the Lumina point budget under the status_burn profile with structured effects present', () => {
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['l3', makeEffectRecord('l3', { effects: ['apply_status:burn'] })],
+      ])
+      const result = suggestLuminaCombination({
+        unlockedLuminas: luminas,
+        profile: getStrategyProfile('status_burn'),
+        budget: 30,
+        currentLuminaIds: [],
+        pictoEffectsById,
+      })
+      expect(result.totalCost).toBeLessThanOrEqual(30)
+    })
+
+    it('preserves equipped-Picto zero-cost behavior under the status_burn profile', () => {
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['l1', makeEffectRecord('l1', { effects: ['apply_status:mark'] })],
+      ])
+      const result = suggestLuminaCombination({
+        unlockedLuminas: luminas,
+        profile: getStrategyProfile('status_burn'),
+        budget: 8,
+        currentLuminaIds: ['l1', 'l4'],
+        freePictoIds: ['l1'],
+        pictoEffectsById,
+      })
+      expect(result.suggestedLuminaIds).toContain('l1')
+      expect(result.suggestedLuminaIds).toContain('l4')
+      expect(result.totalCost).toBe(8)
+    })
+  })
 })

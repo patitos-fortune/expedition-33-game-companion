@@ -55,8 +55,8 @@
       "luminaTypeWeights": { "Offensive": 1.2, "Defensive": 0.8, "Support": 1.0 }
     },
     "status_burn": {
-      "label": "Status / Burn",
-      "description": "Favors Luck (crit rate, and per one source possibly status-effect chance) for status/damage-over-time-oriented builds, with Support-leaning Luminas.",
+      "label": "Burn / Mark",
+      "description": "Favors Luck (crit rate, and per one source possibly status-effect chance) for Burn/Mark-oriented builds, with Support-leaning Luminas. As of Phase 2.2B, Pictos/Luminas that structurally apply Burn, apply Mark, or benefit from a Burning/Marked target get a small heuristic relevance bonus and an explained reason; other named statuses (Stun, Shell, Powerful, Regen, Slow, etc.) are intentionally not modeled by this profile.",
       "attributeWeights": { "Vitality": 0.9, "Might": 1.0, "Agility": 1.0, "Defense": 0.8, "Luck": 1.3 },
       "pictoStatWeights": { "Health": 0.9, "Defense": 0.8, "Critical Rate": 1.3, "Speed": 1.0 },
       "luminaTypeWeights": { "Offensive": 1.1, "Defensive": 0.7, "Support": 1.2 }
@@ -88,6 +88,12 @@
 
   "breakEffectModel": {
     "_documentation": "Phase 2.2A: an additive HEURISTIC bonus applied ONLY when strategyProfile is 'break', using structured effect tags from data/picto_effects.json (see src/optimizer/breakEffectModel.ts) instead of relying solely on the Offensive/Defensive/Support category and generic stat weights. Every other strategy profile is unaffected — this bonus is never applied outside the Break profile. Both constants are our own scoring convention (not a verified game value), chosen to be a meaningful nudge without overriding the existing stat-based/category-based score entirely.",
+    "pictoBonusPerSignal": 8,
+    "luminaBonusPerSignal": 40
+  },
+
+  "statusBurnEffectModel": {
+    "_documentation": "Phase 2.2B: an additive HEURISTIC bonus applied ONLY when strategyProfile is 'status_burn' (labeled \"Burn / Mark\" in the UI), using structured Burn/Mark-only effect tags from data/picto_effects.json (see src/optimizer/statusBurnEffectModel.ts) instead of relying solely on the Offensive/Defensive/Support category and generic stat weights. Deliberately scoped to Burn and Mark only — a record merely mentioning the generic status_effect mechanic, or any other named status (Stun, Shell, Powerful, Regen, Slow, Defenceless, Powerless, Charm, Blight, Freeze, Inverted), earns zero bonus here (see the post-2.2A Stun correction for why). Every other strategy profile is unaffected. Item-local only — does not consider whether a producer/consumer counterpart is present elsewhere in the current build (see OPTIMIZER_MODEL.md). Both constants are our own scoring convention (not a verified game value), matching the Break bonus's magnitude for consistency.",
     "pictoBonusPerSignal": 8,
     "luminaBonusPerSignal": 40
   }

@@ -25,6 +25,7 @@
       ],
       "targets": [],
       "effects": [
+        "apply_status:rush",
         "chance_trigger"
       ],
       "parameters": {
@@ -840,6 +841,7 @@
       ],
       "targets": [],
       "effects": [
+        "apply_status:burn",
         "chance_trigger"
       ],
       "parameters": {
@@ -3485,6 +3487,7 @@
       ],
       "targets": [],
       "effects": [
+        "apply_status:powerful",
         "chance_trigger"
       ],
       "parameters": {
@@ -3632,6 +3635,7 @@
       ],
       "targets": [],
       "effects": [
+        "apply_status:shell",
         "chance_trigger"
       ],
       "parameters": {

@@ -153,10 +153,61 @@ the existing profile-fit sentence (e.g. `... Also: enables Break on Base Attack.
 always traceable to the exact source-text-derived tag that produced it — explanation is preferred over an opaque
 composite score. **No damage, DPS, or "how good in combat" claim is made anywhere in this bonus** — it is a
 relevance signal (how many independent ways a Picto's own text references Break), not a measured strength. Every
-other strategy profile (Damage, Defensive, Status/Burn, Balanced, Custom) computes its score exactly as it did before
+other strategy profile (Damage, Defensive, Burn / Mark, Balanced, Custom) computes its score exactly as it did before
 Phase 2.2A — this bonus is gated on `profile.key === 'break'` in both `pictoOptimizer.ts` and `luminaOptimizer.ts`,
 and is never applied outside that one profile (verified by regression tests asserting identical scores/output with
 and without the structured-effect data present, for every non-Break profile).
+
+**How Burn / Mark uses this (Phase 2.2B):** the **Burn / Mark** strategy profile (internal key `status_burn`,
+unchanged from earlier phases — only its user-facing label and description changed) — and *only* that profile —
+also reads `data/picto_effects.json` for a small additive HEURISTIC bonus plus auditable reasons, in
+`src/optimizer/statusBurnEffectModel.ts`. The bonus is `signalCount × BURN_MARK_EFFECT_PICTO_BONUS_PER_SIGNAL`
+(Pictos, default 8) or `× BURN_MARK_EFFECT_LUMINA_BONUS_PER_SIGNAL` (Luminas, default 40) — both editable in
+`data/optimizer_reference.json` → `statusBurnEffectModel`, and entirely independent of the Break constants above
+(changing one never affects the other).
+
+This model is **deliberately scoped to Burn and Mark only** — the corpus inventory behind this phase found 85 of 233
+records touch *some* status concept, but only 24 (14 Burn-specific, 9 Mark-specific, 1 Burn↔Mark bridge) are
+textually about Burn or Mark specifically; the rest either react to *any* status generically (the `status_effect`
+mechanic tag) or to an unrelated named status (Stun, Shell, Powerful, Regen, Slow, Defenceless, Powerless, Charm,
+Blight, Freeze, Inverted). None of those 61 other records receive any bonus here, on the same reasoning as the
+Stun/Break correction above: "mentions a status" is not the same claim as "helps the Burn/Mark strategy." Recognized
+signals, each with its own reason string:
+
+- `apply_status:burn` present → **"applies Burn"** (Burn producer)
+- the `burning_enemy` target present → **"benefits from Burning enemies"** (Burn consumer/payoff)
+- `extend_status_duration:burn` present → **"extends Burn duration"** (Burn consumer/payoff)
+- `multiply_stat:its_burn_amount` present → **"amplifies existing Burn"** (Burn consumer/payoff)
+- `apply_status:mark` present → **"applies Mark"** (Mark producer)
+- the `marked_enemy` target present → **"benefits from Marked enemies"** (Mark consumer/payoff)
+- a record that is **both** a Burn producer and a Mark consumer (i.e. it converts a Marked enemy into a Burning one)
+  gets **one** factual bridge reason, **"applies Burn when hitting a Marked enemy"**, which supersedes the two
+  separate generic reasons above for that record rather than stating all three redundantly. The single Picto in the
+  corpus matching this today is "Burning Mark" ("Apply Burn on hitting a Marked enemy.").
+
+**Item-local only, in this phase.** Relevance is computed purely from one record's own tags — it does **not**
+consider whether a matching producer or consumer is present anywhere else in the current build (e.g. a Burn-consumer
+Picto gets the same "benefits from Burning enemies" reason and bonus whether or not anything else in the build
+actually applies Burn). A build-aware version that recognizes producer/consumer *realization* across the current
+build was assessed and deliberately deferred to a possible future phase — see "Future improvements" below.
+
+**Classifier correction that preceded this integration:** `src/optimizer/effectClassifier.ts`'s rule for "N% chance
+to `<Status>`" phrasing (e.g. "20% chance to Burn on Free Aim shot.") previously only captured the `chance_trigger`
+effect tag, silently dropping the status actually being granted. This was fixed with a rule generic across every
+known status word (not hardcoded to any one Picto), covering both the bare-verb form ("chance to Burn") and the
+"gain" form ("chance to gain Powerful"), while leaving unrelated "chance to gain N AP" phrasing untouched. This
+corrected four records (Burning Shots → `apply_status:burn`, Accelerating Shots → `apply_status:rush`, Powerful
+Shots → `apply_status:powerful`, Protecting Shots → `apply_status:shell`); all four were already classification A
+and remain A — the fix adds a tag, it never changes a classification tier. `data/picto_effects.json` was
+regenerated after this fix; the corpus-wide classification tally (A:153/B:73/C:6/D:1) is unchanged.
+
+**Known, explicitly out-of-scope classifier gaps (not fixed in this phase):** "Double Burn" ("On applying a Burn
+stack, apply a second one.") and "Double Mark" ("Mark requires 1 more hit to be removed.") are genuinely Burn/Mark-
+relevant by mechanic tag but classify B with no effect tag — the classifier has no rule for "apply a second one" or
+"requires N more hits," and inventing one narrowly for these two records risked overfitting rather than a clean
+generic rule. "Powerful Mark" ("Gain Powerful on hitting a Marked enemy.") similarly classifies B with no effect tag.
+All three are therefore invisible to the signals above and receive zero Burn/Mark bonus — a conservative, honest gap
+rather than a silent miss, and consistent with this phase's brief not to force-fix every B-classified record.
 
 ## Lumina combination
 
@@ -174,6 +225,11 @@ only by the documented `type` field avoids silently mixing up two mechanics that
 only that profile, each Lumina's value also gets the same structured-effect bonus described there. Every other
 profile scores Luminas exactly as described above, unchanged.
 
+**Burn / Mark profile only:** see "How Burn / Mark uses this (Phase 2.2B)" above — under the Burn / Mark strategy
+profile (internal key `status_burn`), and only that profile, each Lumina's value also gets the same Burn/Mark
+structured-effect bonus described there, including the Mark→Burn bridge wording. Every other profile, Break included,
+scores Luminas exactly as described above, unchanged.
+
 ## Skills
 
 Intentionally outside the optimizer for v0.1. `characters.json` only stores skill effects as flavor text
@@ -183,13 +239,15 @@ always reports skills as `insufficient_model` rather than guessing.
 
 ## Strategy profiles
 
-Six profiles (Balanced, Damage, Defensive, Break, Status/Burn, Custom), each just a named set of attribute/stat/
+Six profiles (Balanced, Damage, Defensive, Break, Burn / Mark, Custom), each just a named set of attribute/stat/
 Lumina-type weights in `data/optimizer_reference.json` — edit that file directly to retune any profile, or to define
 your own under `custom`, without touching code. All of these are our own heuristic design choices for a general
-sense of role priority; the "Break" profile in particular is flagged as more speculative than the others, since
-Phase 1B research did not find a dedicated, sourced breakdown of the Break mechanic's attribute scaling. As of Phase
-2.2A, the Break profile also layers a small structured-effect bonus on top of these weights (see "Structured
-Picto/Lumina effect taxonomy" above) — the other five profiles are unaffected and still use only the weights below.
+sense of role priority; the "Break" and "Burn / Mark" profiles in particular are flagged as more speculative than the
+others, since Phase 1B research did not find a dedicated, sourced breakdown of either mechanic's attribute scaling.
+As of Phase 2.2A, the Break profile also layers a small structured-effect bonus on top of these weights (see
+"Structured Picto/Lumina effect taxonomy" above); as of Phase 2.2B, the Burn / Mark profile (internal key
+`status_burn`) layers an equivalent Burn/Mark-only structured-effect bonus (see "How Burn / Mark uses this
+(Phase 2.2B)" above) — the other four profiles are unaffected and still use only the weights below.
 
 ## Known unknowns (never modeled, never fabricated)
 
@@ -207,7 +265,8 @@ Picto/Lumina effect taxonomy" above) — the other five profiles are unaffected 
 - Skill mechanical effects (see Skills section above).
 - Structured Picto/Lumina effect tags (`data/picto_effects.json`, see "Structured Picto/Lumina effect taxonomy"
   above) describe which mechanics/triggers/effects a Picto's text references — never combat strength, damage, or
-  DPS. The Break-profile bonus that consumes them is a HEURISTIC relevance signal, not a measured contribution.
+  DPS. The Break-profile bonus and the Burn/Mark-profile bonus that each consume them are HEURISTIC relevance
+  signals, not a measured contribution.
 
 ## Known weaknesses / caveats
 
@@ -216,7 +275,7 @@ Picto/Lumina effect taxonomy" above) — the other five profiles are unaffected 
   as uncertain in that file's `notes` field pending a manual check. Every weapon entry in the table shows only S/A
   grades (no B/C/D observed) — this may be accurate or may reflect a gap in what that source page displayed; it was
   not independently confirmed either way.
-- The "Break" and "Status/Burn" strategy profiles are more speculative than "Damage"/"Defensive"/"Balanced" — treat
+- The "Break" and "Burn / Mark" strategy profiles are more speculative than "Damage"/"Defensive"/"Balanced" — treat
   their suggestions as a rougher starting point.
 - The floor-guardrail ratio (5%), scaling-grade weights (S=5…D=1), and Picto-stat reference scale are all our own
   chosen constants, not verified game values. They're centralized in `data/optimizer_reference.json` specifically so
@@ -241,3 +300,8 @@ Picto/Lumina effect taxonomy" above) — the other five profiles are unaffected 
   the HEURISTIC tier to CALCULATED — but only then, and only for the specific mechanic that's been verified.
 - Optional per-Picto level selection in the Build screen (currently the optimizer uses each Picto's highest known
   level automatically).
+- Build-aware (producer/consumer) scoring for the Burn / Mark profile: whether the *currently equipped/planned* set
+  already contains a Mark producer, a Burn producer, etc., and adjusting recommendations accordingly, rather than
+  scoring each Picto/Lumina in isolation as Phase 2.2B does. Deliberately deferred to a possible Phase 2.2C so it can
+  be designed and reviewed on its own, without changing Party Matrix, active/planned semantics, persistence, weapon
+  modeling, or attribute allocation as a side effect.

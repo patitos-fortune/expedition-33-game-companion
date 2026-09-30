@@ -15,6 +15,7 @@
 import type { NormalizedPicto, PictoEffectRecord, StrategyProfile } from '../types'
 import { luminaTypeWeightFor } from './modelConfig'
 import { breakLuminaBonus, breakRelevance } from './breakEffectModel'
+import { statusBurnLuminaBonus, statusBurnRelevance } from './statusBurnEffectModel'
 
 export interface LuminaCombinationSuggestion {
   suggestedLuminaIds: string[]
@@ -41,6 +42,12 @@ function valueOf(picto: NormalizedPicto, profile: StrategyProfile, pictoEffectsB
   // Every other profile's value is computed identically to Phase 2.1.
   if (profile.key === 'break' && pictoEffectsById) {
     value += breakLuminaBonus(pictoEffectsById.get(picto.id))
+  }
+  // Phase 2.2B: ONLY the 'status_burn' profile ("Burn / Mark") consults
+  // structured Burn/Mark effect tags. Every other profile — Break included —
+  // is unaffected.
+  if (profile.key === 'status_burn' && pictoEffectsById) {
+    value += statusBurnLuminaBonus(pictoEffectsById.get(picto.id))
   }
   return value
 }
@@ -104,7 +111,7 @@ export function suggestLuminaCombination(params: {
   currentLuminaIds: string[]
   /** Passives supplied by equipped Pictos consume no Lumina-point capacity. */
   freePictoIds?: string[]
-  /** Phase 2.2A: structured effect data, consulted only when profile.key === 'break'. */
+  /** Structured effect data, consulted only when profile.key === 'break' (Phase 2.2A) or 'status_burn' (Phase 2.2B). */
   pictoEffectsById?: Map<string, PictoEffectRecord>
 }): LuminaCombinationSuggestion {
   const { unlockedLuminas, profile, currentLuminaIds, pictoEffectsById } = params
@@ -142,10 +149,13 @@ export function suggestLuminaCombination(params: {
   for (const id of chosenIds) {
     const p = pictoById.get(id)
     if (p) {
-      // Phase 2.2A: ONLY the 'break' profile appends structured-effect reasons.
+      // Phase 2.2A/2.2B: ONLY the matching profile appends structured-effect
+      // reasons; at most one of these is ever non-empty for a given profile.
       const breakReasons = profile.key === 'break' ? breakRelevance(pictoEffectsById?.get(id)).reasons : []
-      const breakSuffix = breakReasons.length > 0 ? ` Also: ${breakReasons.join('; ')}.` : ''
-      reasons[id] = `"${p.name}" (${p.type}, ${freePictoIds.has(id) ? '0 Lumina points because its Picto is equipped' : `cost ${p.cost}`}) matches the ${profile.label} profile's Lumina-type priorities.${breakSuffix}`
+      const statusBurnReasons = profile.key === 'status_burn' ? statusBurnRelevance(pictoEffectsById?.get(id)).reasons : []
+      const extraReasons = [...breakReasons, ...statusBurnReasons]
+      const extraSuffix = extraReasons.length > 0 ? ` Also: ${extraReasons.join('; ')}.` : ''
+      reasons[id] = `"${p.name}" (${p.type}, ${freePictoIds.has(id) ? '0 Lumina points because its Picto is equipped' : `cost ${p.cost}`}) matches the ${profile.label} profile's Lumina-type priorities.${extraSuffix}`
     }
   }
   for (const id of removals) {

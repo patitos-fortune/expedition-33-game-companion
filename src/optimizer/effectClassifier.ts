@@ -233,6 +233,17 @@ function applyEffectRules(e: string, out: RuleOutput) {
     if (re.test(e)) out.effects.add(`apply_status:${slug(status)}`)
   }
 
+  // "N% chance to <Status>" / "N% chance to gain <Status>" phrasing (distinct
+  // from the "apply(ing) <Status>" wording above — a probabilistic grant
+  // phrased as a bare verb or as "gain", e.g. "20% chance to Burn on Free Aim
+  // shot." or "20% chance to gain Powerful on Free Aim shot."). Generic across
+  // every known status word, not hardcoded to any one Picto; chance_trigger
+  // (added below) is preserved alongside this tag, never replaced by it.
+  for (const status of STATUS_WORDS) {
+    const re = new RegExp(`chance to (?:gain\\s+)?${status}\\b`)
+    if (re.test(e)) out.effects.add(`apply_status:${slug(status)}`)
+  }
+
   if (/[Rr]ecover(s)? \d+% Health|Heal \d+%|Double(s)? all Heals|Heals? (provided )?(are|is) doubled/.test(e)) out.effects.add('heal_pct')
   if (/\+\d+ Shields?\b/.test(e)) out.effects.add('gain_shield_flat')
   if (/of a Gradient Charge/i.test(e)) out.effects.add('gain_gradient_charge_pct')

@@ -165,4 +165,94 @@ describe('suggestPictoLoadout', () => {
       expect(result.reasons['breaker']).toContain('enables Break')
     })
   })
+
+  describe('Phase 2.2B: Burn/Mark-only structured-effect scoring', () => {
+    it('produces IDENTICAL scores/order for every non-status_burn profile (including Break) whether or not pictoEffectsById is supplied', () => {
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['p2', makeEffectRecord('p2', { effects: ['apply_status:burn'], mechanics: ['burn'] })],
+      ])
+      for (const key of ['balanced', 'damage', 'defensive', 'break', 'custom'] as const) {
+        const profile = getStrategyProfile(key)
+        const without = suggestPictoLoadout({ ownedPictos: pictos, profile, currentEquippedIds: [] })
+        const withEffects = suggestPictoLoadout({ ownedPictos: pictos, profile, currentEquippedIds: [], pictoEffectsById })
+        expect(withEffects.suggestedEquippedIds).toEqual(without.suggestedEquippedIds)
+        expect(withEffects.scores).toEqual(without.scores)
+      }
+    })
+
+    it('under the status_burn profile, a Picto with Burn/Mark-relevant structured tags scores higher than an identical one without', () => {
+      const plain = makePicto('plain', { 'Critical Rate': 10, Speed: 10 })
+      const burner = makePicto('burner', { 'Critical Rate': 10, Speed: 10 })
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['burner', makeEffectRecord('burner', { effects: ['apply_status:burn'], mechanics: ['burn'] })],
+      ])
+      const result = suggestPictoLoadout({
+        ownedPictos: [plain, burner],
+        profile: getStrategyProfile('status_burn'),
+        currentEquippedIds: [],
+        pictoEffectsById,
+      })
+      expect(result.scores['burner'].score).toBeGreaterThan(result.scores['plain'].score)
+      expect(result.scores['burner'].statusBurnReasons).toContain('applies Burn')
+      expect(result.scores['plain'].statusBurnReasons).toEqual([])
+      // Cross-check: this profile never populates breakReasons, even when relevant.
+      expect(result.scores['burner'].breakReasons).toEqual([])
+    })
+
+    it('the Burn/Mark bonus is inert without a matching structured record, even under the status_burn profile', () => {
+      const result = suggestPictoLoadout({
+        ownedPictos: pictos,
+        profile: getStrategyProfile('status_burn'),
+        currentEquippedIds: [],
+        pictoEffectsById: new Map(),
+      })
+      for (const s of Object.values(result.scores)) {
+        expect(s.statusBurnReasons).toEqual([])
+      }
+    })
+
+    it('the Burn/Mark bonus is NOT applied under the Break profile, even for a Burn/Mark-tagged Picto', () => {
+      const burner = makePicto('burner', { 'Critical Rate': 10, Speed: 10 })
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['burner', makeEffectRecord('burner', { effects: ['apply_status:burn'], mechanics: ['burn'] })],
+      ])
+      const result = suggestPictoLoadout({
+        ownedPictos: [burner],
+        profile: getStrategyProfile('break'),
+        currentEquippedIds: [],
+        pictoEffectsById,
+      })
+      expect(result.scores['burner'].statusBurnReasons).toEqual([])
+      expect(result.scores['burner'].breakReasons).toEqual([])
+    })
+
+    it('a mentions-a-status-but-unrelated Picto (e.g. Stun-tagged) does NOT receive Burn/Mark relevance', () => {
+      const stunner = makePicto('stunner', { 'Critical Rate': 10, Speed: 10 })
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['stunner', makeEffectRecord('stunner', { effects: ['apply_status:stun'], mechanics: ['stun'] })],
+      ])
+      const result = suggestPictoLoadout({
+        ownedPictos: [stunner],
+        profile: getStrategyProfile('status_burn'),
+        currentEquippedIds: [],
+        pictoEffectsById,
+      })
+      expect(result.scores['stunner'].statusBurnReasons).toEqual([])
+    })
+
+    it('exposes Burn/Mark-relevance reasons in the reasons text for a suggested Picto', () => {
+      const burner = makePicto('burner', { 'Critical Rate': 30, Speed: 30 })
+      const pictoEffectsById = new Map<string, PictoEffectRecord>([
+        ['burner', makeEffectRecord('burner', { effects: ['apply_status:burn'] })],
+      ])
+      const result = suggestPictoLoadout({
+        ownedPictos: [...pictos, burner],
+        profile: getStrategyProfile('status_burn'),
+        currentEquippedIds: [],
+        pictoEffectsById,
+      })
+      expect(result.suggestedEquippedIds).toContain('burner')
+      expect(result.reasons['burner']).toContain('applies Burn')
+    })
+  })
 })

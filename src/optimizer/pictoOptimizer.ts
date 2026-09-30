@@ -11,6 +11,7 @@
 import type { NormalizedPicto, PictoEffectRecord, StrategyProfile } from '../types'
 import { pictoStatReferenceScale } from './modelConfig'
 import { breakPictoBonus, breakRelevance } from './breakEffectModel'
+import { statusBurnPictoBonus, statusBurnRelevance } from './statusBurnEffectModel'
 
 export interface PictoScoreEntry {
   pictoId: string
@@ -23,6 +24,13 @@ export interface PictoScoreEntry {
    * Empty for every other profile — this never affects their scoring.
    */
   breakReasons: string[]
+  /**
+   * Phase 2.2B: structured Burn/Mark-effect reasons, populated only when the
+   * active profile is 'status_burn' ("Burn / Mark") and a structured effect
+   * record exists. Empty for every other profile — this never affects
+   * their scoring.
+   */
+  statusBurnReasons: string[]
 }
 
 export interface PictoLoadoutSuggestion {
@@ -53,7 +61,7 @@ function scorePicto(
     // Data-quality gap in the source file (a Picto with no recorded attribute
     // levels at all — this does happen upstream, see loadGameData warnings).
     // Score it lowest rather than crashing or fabricating a value.
-    return { pictoId: picto.id, score: -Infinity, levelUsed: '(no data)', topStats: [], breakReasons: [] }
+    return { pictoId: picto.id, score: -Infinity, levelUsed: '(no data)', topStats: [], breakReasons: [], statusBurnReasons: [] }
   }
   let score = 0
   const contributions: Array<{ stat: string; contribution: number }> = []
@@ -78,12 +86,23 @@ function scorePicto(
     score += breakPictoBonus(pictoEffectsById.get(picto.id))
   }
 
+  // Phase 2.2B: ONLY the 'status_burn' profile ("Burn / Mark") consults
+  // structured Burn/Mark effect tags. Every other profile's score — Break
+  // included — is unaffected.
+  let statusBurnReasons: string[] = []
+  if (profile.key === 'status_burn' && pictoEffectsById) {
+    const relevance = statusBurnRelevance(pictoEffectsById.get(picto.id))
+    statusBurnReasons = relevance.reasons
+    score += statusBurnPictoBonus(pictoEffectsById.get(picto.id))
+  }
+
   return {
     pictoId: picto.id,
     score,
     levelUsed: levelData.level,
     topStats: contributions.slice(0, 2).map((c) => c.stat),
     breakReasons,
+    statusBurnReasons,
   }
 }
 
@@ -93,7 +112,7 @@ export function suggestPictoLoadout(params: {
   currentEquippedIds: string[]
   levelByPictoId?: Record<string, string>
   slotCount?: number
-  /** Phase 2.2A: structured effect data, consulted only when profile.key === 'break'. */
+  /** Structured effect data, consulted only when profile.key === 'break' (Phase 2.2A) or 'status_burn' (Phase 2.2B). */
   pictoEffectsById?: Map<string, PictoEffectRecord>
 }): PictoLoadoutSuggestion {
   const { ownedPictos, profile, currentEquippedIds, levelByPictoId, slotCount = 3, pictoEffectsById } = params
@@ -117,8 +136,12 @@ export function suggestPictoLoadout(params: {
     const picto = pictoById.get(s.pictoId)
     const name = picto?.name ?? s.pictoId
     if (suggestedSet.has(s.pictoId)) {
-      const breakSuffix = s.breakReasons.length > 0 ? ` Also: ${s.breakReasons.join('; ')}.` : ''
-      reasons[s.pictoId] = `"${name}" scores highest under the ${profile.label} profile, driven mainly by ${s.topStats.join(' and ')} at level ${s.levelUsed}.${breakSuffix}`
+      // At most one of these is ever non-empty for a given profile (breakReasons
+      // only under 'break', statusBurnReasons only under 'status_burn'), but the
+      // suffix logic is written generically rather than assuming that.
+      const extraReasons = [...s.breakReasons, ...s.statusBurnReasons]
+      const extraSuffix = extraReasons.length > 0 ? ` Also: ${extraReasons.join('; ')}.` : ''
+      reasons[s.pictoId] = `"${name}" scores highest under the ${profile.label} profile, driven mainly by ${s.topStats.join(' and ')} at level ${s.levelUsed}.${extraSuffix}`
     } else if (currentSet.has(s.pictoId)) {
       reasons[s.pictoId] = `"${name}" scores lower than ${slotCount} other owned Pictos under the ${profile.label} profile, so a swap is suggested.`
     }

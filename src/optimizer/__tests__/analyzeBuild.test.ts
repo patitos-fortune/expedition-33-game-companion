@@ -174,4 +174,71 @@ describe('analyzeBuild', () => {
       expect(s.breakReasons).toEqual([])
     }
   })
+
+  // Phase 2.2B: same end-to-end wiring confirmation as Phase 2.2A's Break
+  // test above, but for the status_burn ("Burn / Mark") profile.
+  it('threads structured effect data through to Picto/Lumina reasons under the status_burn profile', () => {
+    const inventory = makeInventory()
+    const build = { ...makeBuild(), strategyProfile: 'status_burn' as const }
+
+    const injectedEffects = new Map(gameData.pictoEffectsById)
+    injectedEffects.set(ownedPictos[0].id, {
+      pictoId: ownedPictos[0].id,
+      name: ownedPictos[0].name,
+      sourceEffectText: ownedPictos[0].effect,
+      mechanics: ['burn'],
+      triggers: [],
+      effects: ['apply_status:burn'],
+      targets: [],
+      parameters: {},
+      classification: 'A',
+      taxonomyVersion: 1,
+    })
+    injectedEffects.set(unlockedLuminas[0].id, {
+      pictoId: unlockedLuminas[0].id,
+      name: unlockedLuminas[0].name,
+      sourceEffectText: unlockedLuminas[0].effect,
+      mechanics: ['burn', 'mark'],
+      triggers: [],
+      effects: ['apply_status:burn'],
+      targets: ['marked_enemy'],
+      parameters: {},
+      classification: 'A',
+      taxonomyVersion: 1,
+    })
+    const gameDataWithInjectedEffects = { ...gameData, pictoEffectsById: injectedEffects }
+
+    const result = analyzeBuild({ build, gameData: gameDataWithInjectedEffects, inventory })
+    expect(result.pictos.scores[ownedPictos[0].id].statusBurnReasons).toContain('applies Burn')
+    expect(result.luminas.reasons[unlockedLuminas[0].id]).toContain('applies Burn when hitting a Marked enemy')
+    // Break must stay untouched by this profile's data.
+    expect(result.pictos.scores[ownedPictos[0].id].breakReasons).toEqual([])
+  })
+
+  it('leaves non-status_burn profiles (including Break) unaffected by the presence of pictoEffectsById on gameData', () => {
+    const inventory = makeInventory()
+    for (const strategyProfile of ['damage', 'break', 'defensive', 'balanced', 'custom'] as const) {
+      const build = { ...makeBuild(), strategyProfile }
+      const result = analyzeBuild({ build, gameData, inventory })
+      for (const s of Object.values(result.pictos.scores)) {
+        expect(s.statusBurnReasons).toEqual([])
+      }
+    }
+  })
+
+  // active/planned Lumina semantics: analyzeBuild only ever consumes
+  // build.activeLuminaIds (via currentLuminaIds), never plannedLuminaIds —
+  // this must remain true regardless of strategyProfile, so the Burn/Mark
+  // integration doesn't leak planned/wishlist items into the analysis.
+  it('ignores plannedLuminaIds under the status_burn profile, exactly as it does for every other profile', () => {
+    const inventory = makeInventory()
+    const build = {
+      ...makeBuild(),
+      strategyProfile: 'status_burn' as const,
+      activeLuminaIds: [],
+      plannedLuminaIds: [unlockedLuminas[0].id, unlockedLuminas[1].id],
+    }
+    const result = analyzeBuild({ build, gameData, inventory })
+    expect(result.luminas.currentLuminaIds).toEqual([])
+  })
 })
