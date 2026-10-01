@@ -49,14 +49,13 @@ function handleReset() {
     <h1>Settings</h1>
 
     <section class="panel-section">
-      <h2 class="section-title">Spoiler protection</h2>
+      <h2 class="section-title">Recommendation filter</h2>
       <label class="toggle-row">
         <input type="checkbox" v-model="state.inventory.spoilerProtection" />
         Only recommend Pictos, Luminas, and weapons I've marked as owned/discovered
       </label>
       <p class="calc-note">
-        Turning this off lets you browse the complete reference database (all Pictos and weapons) as a deliberate,
-        separate action — recommendations will then be able to suggest content you haven't marked as owned.
+        This companion is not spoiler-free: the inventory/reference catalogue contains the full item catalogue and can reveal content you have not encountered. This filter only controls whether recommendations may suggest items you have not marked as owned/discovered; it does not hide the catalogue.
       </p>
     </section>
 
