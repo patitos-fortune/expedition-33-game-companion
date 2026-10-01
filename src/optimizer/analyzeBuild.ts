@@ -17,6 +17,8 @@ import type { PictoLoadoutSuggestion } from './pictoOptimizer'
 import { suggestLuminaCombination } from './luminaOptimizer'
 import type { LuminaCombinationSuggestion } from './luminaOptimizer'
 import { filterOwnedPictos, filterUnlockedLuminas, isWeaponVisible } from './spoilerFilter'
+import { computeBuildContext } from './buildContext'
+import type { BuildContextResult } from './buildContext'
 
 export interface FixMyBuildSummary {
   attribute: string
@@ -34,6 +36,13 @@ export interface AnalysisResult {
   skills: { status: 'insufficient_model'; message: string }
   knownUnknowns: string[]
   fixMyBuildSummary: FixMyBuildSummary
+  /**
+   * Phase 2.2C: contextual Burn/Mark relationship explanations only — computed
+   * strictly AFTER pictos/luminas above, read-only with respect to them. Never
+   * affects any score, selection, or ranking above. See buildContext.ts /
+   * OPTIMIZER_MODEL.md.
+   */
+  buildContext: BuildContextResult
 }
 
 export function analyzeBuild(params: {
@@ -83,6 +92,20 @@ export function analyzeBuild(params: {
       'Skills are described only as flavor text in the source data (no structured numeric effects), so no skill recommendation is made in v0.1. See OPTIMIZER_MODEL.md.',
   }
 
+  // Phase 2.2C: computed strictly AFTER both optimizers above have finished,
+  // read-only — never passed back into suggestPictoLoadout/suggestLuminaCombination.
+  // Uses only the already spoiler-filtered current/recommended ID lists; never
+  // build.plannedLuminaIds (Party Matrix wishlist) or inventory.colourOfLuminaAvailable.
+  const nameById = new Map(gameData.pictos.map((p) => [p.id, p.name]))
+  const buildContext = computeBuildContext({
+    currentPictoIds: currentEquippedIds,
+    currentLuminaIds,
+    recommendedPictoIds: pictos.suggestedEquippedIds,
+    recommendedLuminaIds: luminas.suggestedLuminaIds,
+    pictoEffectsById: gameData.pictoEffectsById,
+    nameById,
+  })
+
   const fixMyBuildSummary: FixMyBuildSummary = {
     attribute: Object.values(attribute.delta).some((d) => d !== 0)
       ? 'Suggested change available'
@@ -107,5 +130,6 @@ export function analyzeBuild(params: {
     skills,
     knownUnknowns: OPTIMIZER_KNOWN_UNKNOWNS,
     fixMyBuildSummary,
+    buildContext,
   }
 }

@@ -243,6 +243,69 @@ separate modeling-design question (it isn't a Burn/Mark producer or consumer sig
 for 4 records risks the same overfitting this phase otherwise avoids) — documented here as a known taxonomy
 limitation, intentionally not implemented.
 
+## Contextual Burn/Mark relationship explanations (Phase 2.2C)
+
+**Explanation-only — zero scoring effect.** Everything above this section (Picto scores, Lumina scores, Break
+bonuses, Burn/Mark item-local bonuses, the scoring constants, Picto top-3 selection, the Lumina knapsack, the
+attribute optimizer) is computed exactly as before Phase 2.2C and is never read, never modified, and never fed by
+anything in this section. `src/optimizer/buildContext.ts` is a small pure function, `computeBuildContext()`, called
+from `analyzeBuild.ts` strictly *after* both `suggestPictoLoadout()` and `suggestLuminaCombination()` have already
+returned their final results; its own return value (`AnalysisResult.buildContext`) is additive-only and is never
+passed back into either optimizer. `pictoOptimizer.ts` and `luminaOptimizer.ts` are unchanged by this phase.
+
+**Two explicitly separate contexts.**
+
+- **Current build context** — effects actually active in the persisted build: `build.equippedPictoIds` (filtered to
+  owned, as `currentEquippedIds` already is elsewhere) and `build.activeLuminaIds` (filtered to unlocked, as
+  `currentLuminaIds` already is elsewhere). An equipped Picto's own effect record counts as active at zero Lumina
+  cost, and may act as either a producer or a consumer, symmetrically, exactly according to its own structured tags —
+  there is no separate "Picto producer" vs. "Lumina consumer" distinction, only "currently active." This context
+  **never** includes: owned-but-unequipped Pictos, unlocked-but-inactive Luminas, `build.plannedLuminaIds` (the Party
+  Matrix wishlist), or `inventory.colourOfLuminaAvailable` (Colour-of-Lumina planning). This is a structural guarantee,
+  not a filter: `computeBuildContext()`'s parameter list has no field for either plannedLuminaIds or
+  colourOfLuminaAvailable at all, so there is nothing for `analyzeBuild.ts` to wire up incorrectly. (Separately,
+  `build.plannedLuminaIds` and `inventory.colourOfLuminaAvailable` were confirmed, by reading the code, to already be
+  consumed only by `src/state/colourPlanning.ts` — a distinct pure cost calculator used by the Party Matrix / Character
+  views — and never by `analyzeBuild.ts` or either optimizer, independent of this phase.)
+
+- **Recommended build context** — computed only after both optimizers finish: `pictos.suggestedEquippedIds` ∪
+  `luminas.suggestedLuminaIds`. Purely descriptive. It may note that the recommended set happens to contain both a
+  producer and a consumer, but it never implies "item A was recommended because item B was recommended" — the wording
+  always describes the post-hoc structural fact only (see "Recommended together" below).
+
+**Producer/consumer definitions — identical to, and reused directly from, `effectRelationships.ts`'s
+`MECHANIC_RELATIONSHIP_CONFIG`** (no new vocabulary, no duplicated magic strings). A **producer** is a record whose
+structured `effects` include the mechanic's `producerEffects` entry (e.g. `apply_status:burn`, `apply_status:mark`).
+A **consumer** is a record whose structured `targets`/`triggers`/`effects` include one of the mechanic's
+`consumerTargets`/`consumerTriggers`/`consumerEffects` entries (e.g. the `burning_enemy` target). A record merely
+tagged `mechanics: ['burn']` or `['mark']` — with no structured producer/consumer evidence — is **not** a producer or
+a consumer for this purpose; this intentionally preserves the pre-existing, separately legitimate distinction between
+the 3 structured Mark producers and the 9 Mark-only mechanic-tagged records (both counts are correct, for different
+questions). The Mark→Burn bridge (a single record that is both a Mark consumer and a Burn producer, e.g. "Burning
+Mark") is detected the same way and reported once, never as a duplicate of the generic Mark-consumer case.
+
+**Observation kinds, each a plain structural/factual statement, never a numeric synergy claim:**
+
+- `currently_supported` — a current consumer has a current producer counterpart ("Supported by Burning Shots, which
+  applies Burn.").
+- `currently_unsupported` — a current-or-recommended consumer depends on Burn/Mark, but the *current* build has no
+  detected producer ("Benefits from Burning enemies, but no active effect in the current build applies Burn.").
+- `recommended_together` — after optimization, the combined (current ∪ recommended) set contains a producer/consumer
+  pair beyond the one already reported as `currently_supported` ("Recommended together: Burning Shots applies Burn,
+  supporting Healing Fire.") — never phrased as one causing the other's selection.
+- `bridge_active` / `bridge_recommended` — the Mark→Burn bridge item is active now, or only recommended, respectively;
+  reported once per bridge item, never alongside a separate generic Mark-consumer claim about the same item.
+
+**Known limitations.** No numeric synergy strength, percentage, or combat-magnitude claim is computed or implied
+anywhere in this feature — only the three pre-existing tiers (intrinsic item-local relevance, computed above;
+contextual compatibility, computed here; and actual in-combat synergy magnitude) remain exactly as distinct as before,
+and the third tier remains **unknown** and unmeasured. A `recommended_together` or `currently_supported` observation
+is a statement that two structured tags are compatible, never a statement about how much damage or value results from
+pairing them. Identity matching uses stable Picto/Lumina IDs throughout (`gameData.pictoEffectsById`'s
+`picto-<index>` keys), not names — `buildContext.ts` does its own small local ID-based producer/consumer lookup
+rather than reusing `effectRelationships.ts`'s `computeMechanicRelationships()` (which returns names), so no
+name-based matching was introduced by this phase.
+
 ## Lumina combination
 
 This is modeled as a genuine constrained optimization — a 0/1 knapsack (maximize total heuristic value subject to
@@ -334,8 +397,12 @@ As of Phase 2.2A, the Break profile also layers a small structured-effect bonus 
   the HEURISTIC tier to CALCULATED — but only then, and only for the specific mechanic that's been verified.
 - Optional per-Picto level selection in the Build screen (currently the optimizer uses each Picto's highest known
   level automatically).
-- Build-aware (producer/consumer) scoring for the Burn / Mark profile: whether the *currently equipped/planned* set
-  already contains a Mark producer, a Burn producer, etc., and adjusting recommendations accordingly, rather than
-  scoring each Picto/Lumina in isolation as Phase 2.2B does. Deliberately deferred to a possible Phase 2.2C so it can
-  be designed and reviewed on its own, without changing Party Matrix, active/planned semantics, persistence, weapon
-  modeling, or attribute allocation as a side effect.
+- Build-aware (producer/consumer) **scoring** for the Burn / Mark profile: whether the *currently equipped* set
+  already contains a Mark producer, a Burn producer, etc., and actually adjusting Picto/Lumina scores or selection
+  accordingly, rather than scoring each Picto/Lumina in isolation as Phase 2.2B does. This is explicitly **not** what
+  Phase 2.2C implements — see "Contextual Burn/Mark relationship explanations (Phase 2.2C)" above, which is
+  explanation-only and never changes a score or a selection. A possible future Phase 2.2D could revisit
+  current-build-aware *scoring* specifically, but only once real in-combat synergy magnitude (not just structural
+  compatibility) is verified — see that section's "Known limitations." Pairwise/joint Picto+Lumina optimization was
+  separately assessed and rejected for the same reason: structural compatibility between two items is not evidence of
+  how much it's worth weighting that compatibility in a score.

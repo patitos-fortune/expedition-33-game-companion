@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { analyzeBuild } from '../analyzeBuild'
 import { filterOwnedPictos } from '../spoilerFilter'
 import { loadGameData } from '../../gamedata/loadGameData'
+import { suggestPictoLoadout } from '../pictoOptimizer'
+import { suggestLuminaCombination } from '../luminaOptimizer'
+import { getStrategyProfile } from '../modelConfig'
 import type { CharacterBuild, InventoryState } from '../../types'
 
 const gameData = loadGameData()
@@ -240,5 +243,175 @@ describe('analyzeBuild', () => {
     }
     const result = analyzeBuild({ build, gameData, inventory })
     expect(result.luminas.currentLuminaIds).toEqual([])
+  })
+
+  // Phase 2.2C: contextual Burn/Mark relationship explanations, wired in
+  // strictly after both optimizers finish. Explanation-only — see
+  // buildContext.test.ts for the unit-level behavior; these tests cover the
+  // end-to-end wiring through analyzeBuild() and the "zero effect on
+  // scoring/selection" guarantee specifically.
+  describe('Phase 2.2C: contextual build-context explanations', () => {
+    function withInjectedEffects(overrides: Record<string, Partial<import('../../types').PictoEffectRecord>>) {
+      const injected = new Map(gameData.pictoEffectsById)
+      for (const [id, partial] of Object.entries(overrides)) {
+        injected.set(id, {
+          pictoId: id,
+          name: gameData.pictos.find((p) => p.id === id)?.name ?? id,
+          sourceEffectText: '',
+          mechanics: [],
+          triggers: [],
+          effects: [],
+          targets: [],
+          parameters: {},
+          classification: 'A',
+          taxonomyVersion: 1,
+          ...partial,
+        })
+      }
+      return { ...gameData, pictoEffectsById: injected }
+    }
+
+    it('produces a currently_supported observation when an equipped Picto producer and an active Lumina consumer are both present', () => {
+      const inventory = makeInventory()
+      const build = {
+        ...makeBuild(),
+        equippedPictoIds: [ownedPictos[0].id],
+        activeLuminaIds: [unlockedLuminas[0].id],
+      }
+      const gd = withInjectedEffects({
+        [ownedPictos[0].id]: { effects: ['apply_status:burn'], mechanics: ['burn'] },
+        [unlockedLuminas[0].id]: { targets: ['burning_enemy'], mechanics: ['burn'] },
+      })
+      const result = analyzeBuild({ build, gameData: gd, inventory })
+      expect(result.buildContext.observations).toEqual([
+        expect.objectContaining({
+          mechanic: 'burn',
+          kind: 'currently_supported',
+          subject: { id: unlockedLuminas[0].id, name: unlockedLuminas[0].name },
+          counterpart: { id: ownedPictos[0].id, name: ownedPictos[0].name },
+        }),
+      ])
+    })
+
+    it('produces a singular bridge observation for a Mark->Burn bridge item, not a duplicate mark-consumer claim', () => {
+      const inventory = makeInventory()
+      const build = { ...makeBuild(), equippedPictoIds: [ownedPictos[0].id] }
+      const gd = withInjectedEffects({
+        [ownedPictos[0].id]: { effects: ['apply_status:burn'], targets: ['marked_enemy'], mechanics: ['burn', 'mark'] },
+      })
+      const result = analyzeBuild({ build, gameData: gd, inventory })
+      expect(result.buildContext.observations).toEqual([
+        expect.objectContaining({ kind: 'bridge_active', subject: { id: ownedPictos[0].id, name: ownedPictos[0].name } }),
+      ])
+    })
+
+    it('never leaks plannedLuminaIds into the build context, even when they are structurally Burn/Mark-relevant', () => {
+      const inventory = makeInventory()
+      // unlockedLuminas[1] (not [0]) is used deliberately: under the 'damage'
+      // profile, unlockedLuminas[0] happens to score in the Picto optimizer's
+      // top-3 by raw attributes alone, regardless of current equip or Lumina
+      // budget, which would make it a genuine independent recommendation and
+      // confound this test. unlockedLuminas[1] is not in that top-3.
+      // luminaPointBudget: 0 so the Lumina optimizer recommends nothing, ruling
+      // out the wishlist Lumina coincidentally also being a genuine
+      // recommendation (which would pass this test for the wrong reason).
+      const build = {
+        ...makeBuild(),
+        equippedPictoIds: [ownedPictos[0].id],
+        activeLuminaIds: [],
+        plannedLuminaIds: [unlockedLuminas[1].id],
+        luminaPointBudget: 0,
+      }
+      const gd = withInjectedEffects({
+        [ownedPictos[0].id]: { effects: ['apply_status:burn'], mechanics: ['burn'] },
+        [unlockedLuminas[1].id]: { targets: ['burning_enemy'], mechanics: ['burn'] },
+      })
+      const result = analyzeBuild({ build, gameData: gd, inventory })
+      expect(result.luminas.suggestedLuminaIds).not.toContain(unlockedLuminas[1].id)
+      expect(result.pictos.suggestedEquippedIds).not.toContain(unlockedLuminas[1].id)
+      // The wishlist Lumina is a real Burn consumer, but it was never activated
+      // or recommended, so it must produce no observation at all.
+      expect(result.buildContext.observations).toEqual([])
+    })
+
+    it('does not leak inventory.colourOfLuminaAvailable into the build context (no such field is consumed)', () => {
+      const inventory = { ...makeInventory(), colourOfLuminaAvailable: 999 }
+      const build = makeBuild()
+      // Simply asserting this runs identically regardless of the value —
+      // computeBuildContext's signature has no parameter for it at all.
+      const resultA = analyzeBuild({ build, gameData, inventory })
+      const resultB = analyzeBuild({ build, gameData, inventory: { ...inventory, colourOfLuminaAvailable: 0 } })
+      expect(resultA.buildContext).toEqual(resultB.buildContext)
+    })
+
+    it('leaves Picto/Lumina scores and suggestions byte-for-byte identical to calling the optimizers directly (zero scoring effect)', () => {
+      const inventory = makeInventory()
+      const build = { ...makeBuild(), strategyProfile: 'status_burn' as const }
+      const result = analyzeBuild({ build, gameData, inventory })
+
+      const ownedVisible = gameData.pictos.filter((p) => {
+        const status = inventory.pictoStatus[p.id]
+        return status === 'owned' || status === 'unlocked_lumina'
+      })
+      const currentEquippedIds = build.equippedPictoIds.filter((id) => ownedVisible.some((p) => p.id === id))
+      const directPictos = suggestPictoLoadout({
+        ownedPictos: ownedVisible,
+        profile: getStrategyProfile(build.strategyProfile),
+        currentEquippedIds,
+        pictoEffectsById: gameData.pictoEffectsById,
+      })
+      expect(result.pictos).toEqual(directPictos)
+
+      const unlockedVisible = gameData.pictos.filter((p) => inventory.pictoStatus[p.id] === 'unlocked_lumina')
+      const currentLuminaIds = build.activeLuminaIds.filter((id) => unlockedVisible.some((p) => p.id === id))
+      const directLuminas = suggestLuminaCombination({
+        unlockedLuminas: unlockedVisible,
+        profile: getStrategyProfile(build.strategyProfile),
+        budget: build.luminaPointBudget,
+        currentLuminaIds,
+        freePictoIds: currentEquippedIds,
+        pictoEffectsById: gameData.pictoEffectsById,
+      })
+      expect(result.luminas).toEqual(directLuminas)
+    })
+
+    it('produces identical pictos/luminas output (ids and scores) for an input with and without a rich buildContext result', () => {
+      const inventory = makeInventory()
+      // unlockedLuminas[1]/[3] (not [0]) are used deliberately: under the
+      // 'damage' profile, unlockedLuminas[0] happens to score in the Picto
+      // optimizer's top-3 by raw attributes alone, regardless of current
+      // equip or Lumina budget, which would make "sparse" pick up a stray
+      // buildContext observation unrelated to this scenario and confound the
+      // "sparse has none" assertion. unlockedLuminas[1]/[3] are not in that
+      // top-3 (confirmed directly against suggestPictoLoadout output).
+      // luminaPointBudget: 0 keeps "sparse" genuinely free of any recommended
+      // Lumina, so its buildContext is empty for the right reason.
+      const buildSparse = { ...makeBuild(), equippedPictoIds: [], activeLuminaIds: [], luminaPointBudget: 0 }
+      const buildRich = {
+        ...makeBuild(),
+        equippedPictoIds: [ownedPictos[0].id],
+        activeLuminaIds: [unlockedLuminas[1].id, unlockedLuminas[3].id],
+      }
+      const gd = withInjectedEffects({
+        [ownedPictos[0].id]: { effects: ['apply_status:burn'], mechanics: ['burn'] },
+        [unlockedLuminas[1].id]: { targets: ['burning_enemy'], mechanics: ['burn'] },
+        [unlockedLuminas[3].id]: { effects: ['apply_status:mark'], mechanics: ['mark'] },
+      })
+      const sparse = analyzeBuild({ build: buildSparse, gameData: gd, inventory })
+      const rich = analyzeBuild({ build: buildRich, gameData: gd, inventory })
+      // Different buildContext results (sparse has none, rich has observations)...
+      expect(rich.buildContext.observations.length).toBeGreaterThan(0)
+      expect(sparse.buildContext.observations).toEqual([])
+      // ...but each build's OWN pictos/luminas scores are unaffected by whether
+      // buildContext produced any observations — scores depend only on
+      // profile/attributes/structured tags, never on buildContext's output.
+      const sparseDirect = suggestPictoLoadout({
+        ownedPictos: gameData.pictos.filter((p) => inventory.pictoStatus[p.id] === 'owned' || inventory.pictoStatus[p.id] === 'unlocked_lumina'),
+        profile: getStrategyProfile(buildSparse.strategyProfile),
+        currentEquippedIds: [],
+        pictoEffectsById: gd.pictoEffectsById,
+      })
+      expect(sparse.pictos).toEqual(sparseDirect)
+    })
   })
 })
