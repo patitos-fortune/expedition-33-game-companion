@@ -4,7 +4,7 @@
   "_provenance": {
     "generatedBy": "scripts/generate-picto-effects.ts (deterministic rule-based classifier, src/optimizer/effectClassifier.ts) — no LLM/API/NLP call",
     "sourceFile": "src/assets/pictos_list.json",
-    "generatedAt": "2026-09-30"
+    "generatedAt": "2026-10-01"
   },
   "_knownUnknowns": [
     "Classification is a structural read of the effect text (which mechanics/triggers/effects/targets it references), not a measure of combat strength — see OPTIMIZER_MODEL.md.",
@@ -18,7 +18,8 @@
       "name": "Accelerating Shots",
       "sourceEffectText": "20% chance to gain Rush on Free Aim shot.",
       "mechanics": [
-        "free_aim"
+        "free_aim",
+        "rush"
       ],
       "triggers": [
         "on_free_aim_shot"
@@ -41,7 +42,8 @@
       "name": "Accelerating Heal",
       "sourceEffectText": "Healing an ally also applies Rush for 1 turn.",
       "mechanics": [
-        "health"
+        "health",
+        "rush"
       ],
       "triggers": [
         "on_heal_action"
@@ -60,7 +62,9 @@
       "pictoId": "picto-2",
       "name": "Accelerating Last Stand",
       "sourceEffectText": "Gain Rush if fighting alone.",
-      "mechanics": [],
+      "mechanics": [
+        "rush"
+      ],
       "triggers": [],
       "targets": [
         "while_solo"
@@ -75,7 +79,8 @@
       "name": "Accelerating Tint",
       "sourceEffectText": "Healing Tints also apply Rush.",
       "mechanics": [
-        "health"
+        "health",
+        "rush"
       ],
       "triggers": [
         "on_heal_action"
@@ -150,14 +155,16 @@
       "pictoId": "picto-7",
       "name": "Anti-Freeze",
       "sourceEffectText": "Immune to Freeze.",
-      "mechanics": [],
+      "mechanics": [
+        "freeze"
+      ],
       "triggers": [],
       "targets": [],
       "effects": [
         "grant_immunity:freeze"
       ],
       "parameters": {},
-      "classification": "B",
+      "classification": "A",
       "taxonomyVersion": 1
     },
     {
@@ -449,7 +456,9 @@
       "pictoId": "picto-23",
       "name": "Auto Rush",
       "sourceEffectText": "Apply Rush for 3 turns on battle start.",
-      "mechanics": [],
+      "mechanics": [
+        "rush"
+      ],
       "triggers": [
         "on_battle_start"
       ],
@@ -2073,7 +2082,8 @@
       "name": "Energising Rush",
       "sourceEffectText": "Give 2 AP on applying Rush.",
       "mechanics": [
-        "ap"
+        "ap",
+        "rush"
       ],
       "triggers": [],
       "targets": [],
@@ -2754,7 +2764,9 @@
       "pictoId": "picto-132",
       "name": "Greater Rush",
       "sourceEffectText": "+25% to Rush Speed increase.",
-      "mechanics": [],
+      "mechanics": [
+        "rush"
+      ],
       "triggers": [],
       "targets": [],
       "effects": [
@@ -2765,7 +2777,7 @@
           25
         ]
       },
-      "classification": "B",
+      "classification": "A",
       "taxonomyVersion": 1
     },
     {
@@ -3162,7 +3174,9 @@
       "pictoId": "picto-152",
       "name": "Longer Rush",
       "sourceEffectText": "On applying Rush, its duration is increased by 2.",
-      "mechanics": [],
+      "mechanics": [
+        "rush"
+      ],
       "triggers": [],
       "targets": [],
       "effects": [
@@ -3170,7 +3184,7 @@
         "extend_status_duration:rush"
       ],
       "parameters": {},
-      "classification": "B",
+      "classification": "A",
       "taxonomyVersion": 1
     },
     {
@@ -3794,7 +3808,8 @@
       "name": "Rush On Powerful",
       "sourceEffectText": "Apply Rush on applying Powerful.",
       "mechanics": [
-        "powerful"
+        "powerful",
+        "rush"
       ],
       "triggers": [],
       "targets": [],
@@ -3854,6 +3869,7 @@
       "name": "Shell On Rush",
       "sourceEffectText": "Apply Shell on applying Rush.",
       "mechanics": [
+        "rush",
         "shell"
       ],
       "triggers": [],
@@ -4079,7 +4095,8 @@
       "name": "SOS Rush",
       "sourceEffectText": "Apply Rush when falling below 50% Health.",
       "mechanics": [
-        "health"
+        "health",
+        "rush"
       ],
       "triggers": [],
       "targets": [
@@ -4373,14 +4390,16 @@
       "pictoId": "picto-212",
       "name": "Time Tint",
       "sourceEffectText": "Energy Tints also apply Rush.",
-      "mechanics": [],
+      "mechanics": [
+        "rush"
+      ],
       "triggers": [],
       "targets": [],
       "effects": [
         "apply_status:rush"
       ],
       "parameters": {},
-      "classification": "B",
+      "classification": "A",
       "taxonomyVersion": 1
     },
     {

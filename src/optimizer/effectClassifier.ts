@@ -26,7 +26,7 @@ export const TAXONOMY_VERSION = 1
 
 export const KNOWN_MECHANICS = [
   'ap', 'health', 'gradient', 'break', 'critical', 'shield', 'shell',
-  'burn', 'mark', 'stun', 'slow', 'freeze', 'charm', 'blight', 'regen',
+  'burn', 'mark', 'rush', 'stun', 'slow', 'freeze', 'charm', 'blight', 'regen',
   'powerful', 'powerless', 'defenceless', 'inverted', 'weakness', 'status_effect',
   'base_attack', 'free_aim', 'counterattack', 'parry', 'dodge', 'death', 'revive',
   'item', 'tint',
@@ -163,9 +163,10 @@ function applyMechanicRules(e: string, out: RuleOutput) {
   if (/\bShell\b/i.test(e)) out.mechanics.add('shell')
   if (/\bBurn(ing)?\b/i.test(e)) out.mechanics.add('burn')
   if (/\bMark(ed)?\b/i.test(e)) out.mechanics.add('mark')
+  if (/\bRush\b/i.test(e)) out.mechanics.add('rush')
   if (/\bStun(ned)?\b/i.test(e)) out.mechanics.add('stun')
   if (/\bSlow(ed)?\b/i.test(e)) out.mechanics.add('slow')
-  if (/\bFroze(n)?\b/i.test(e)) out.mechanics.add('freeze')
+  if (/\bFreeze\b|\bFroze(n)?\b/i.test(e)) out.mechanics.add('freeze')
   if (/\bCharm\b/i.test(e)) out.mechanics.add('charm')
   if (/\bBlight\b/i.test(e)) out.mechanics.add('blight')
   if (/\bRegen\b/i.test(e)) out.mechanics.add('regen')

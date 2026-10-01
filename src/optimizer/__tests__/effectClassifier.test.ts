@@ -221,8 +221,10 @@ describe('classifyEffect: "chance to <Status>" status-grant fix', () => {
   })
 
   it('the four directly-affected records all remain classification A (the fix adds a tag, never changes a tier)', () => {
-    // The corpus-wide A/B/C/D tally staying at 153/73/6/1 is asserted
-    // separately against the generated file in effectModel.test.ts.
+    // The corpus-wide A/B/C/D tally is asserted separately against the
+    // generated file in effectModel.test.ts (157/69/6/1 as of the Rush/Freeze
+    // mechanic-coverage correction; see the "Rush/Freeze mechanic coverage"
+    // block below).
     for (const [name, text] of [
       ['Burning Shots', '20% chance to Burn on Free Aim shot.'],
       ['Accelerating Shots', '20% chance to gain Rush on Free Aim shot.'],
@@ -231,6 +233,72 @@ describe('classifyEffect: "chance to <Status>" status-grant fix', () => {
     ] as const) {
       expect(classifyEffect(name, text).classification).toBe('A')
     }
+  })
+})
+
+describe('classifyEffect: Rush/Freeze mechanic coverage (PS-EXP33-003 correction)', () => {
+  // Rush is a documented STATUS_WORDS entry (drives apply_status:rush / the
+  // "chance to <Status>" and bridge rules) but, unlike every other named
+  // status, had no corresponding mechanics-detection rule or KNOWN_MECHANICS
+  // entry — so a Picto that only mentions Rush was invisible to any
+  // mechanics-tag query (including the relationship-extraction and
+  // corpus-inventory counts in OPTIMIZER_MODEL.md). This adds `rush` to the
+  // generic mechanics vocabulary, consistent with the other named statuses.
+  it('"rush" is now a documented mechanic', () => {
+    expect(KNOWN_MECHANICS).toContain('rush')
+  })
+
+  it('Greater Rush: pure Rush-stat wording now receives mechanic "rush" (previously untagged, classification B)', () => {
+    const r = classifyEffect('Greater Rush', '+25% to Rush Speed increase.')
+    expect(r.mechanics).toContain('rush')
+    expect(r.effects).toEqual(['increase_stat_pct:rush_speed_increase'])
+    expect(r.classification).toBe('A')
+  })
+
+  it('Auto Rush: "Apply Rush" wording now receives mechanic "rush" alongside its existing effect/trigger tags', () => {
+    const r = classifyEffect('Auto Rush', 'Apply Rush for 3 turns on battle start.')
+    expect(r.mechanics).toContain('rush')
+    expect(r.effects).toEqual(['apply_status:rush'])
+    expect(r.triggers).toContain('on_battle_start')
+  })
+
+  it('existing Rush effect-tag behavior is unchanged: "chance to gain Rush" still emits apply_status:rush + chance_trigger', () => {
+    const r = classifyEffect('Accelerating Shots', '20% chance to gain Rush on Free Aim shot.')
+    expect(r.effects).toEqual(expect.arrayContaining(['apply_status:rush', 'chance_trigger']))
+    expect(r.mechanics).toEqual(expect.arrayContaining(['free_aim', 'rush']))
+  })
+
+  // Freeze: the mechanic regex only recognized "Froze"/"Frozen" (e.g. a
+  // Picto that reacts to an enemy already being frozen), so "Immune to
+  // Freeze" correctly emitted the grant_immunity:freeze effect tag but never
+  // got a `freeze` mechanic tag, leaving it stuck at classification B.
+  it('Anti-Freeze: "Immune to Freeze" now receives mechanic "freeze"', () => {
+    const r = classifyEffect('Anti-Freeze', 'Immune to Freeze.')
+    expect(r.mechanics).toContain('freeze')
+    expect(r.effects).toEqual(['grant_immunity:freeze'])
+    expect(r.classification).toBe('A')
+  })
+
+  it('grant_immunity:freeze itself is unchanged by the fix', () => {
+    const r = classifyEffect('Anti-Freeze', 'Immune to Freeze.')
+    expect(r.effects).toEqual(['grant_immunity:freeze'])
+  })
+
+  it('existing "Froze"/"Frozen" wording still resolves to the same freeze mechanic (no regression)', () => {
+    const froze = classifyEffect('Test Froze', 'Deals 50% more damage to a Froze enemy.')
+    expect(froze.mechanics).toContain('freeze')
+    const frozen = classifyEffect('Test Frozen', 'Deals 50% more damage to a Frozen enemy.')
+    expect(frozen.mechanics).toContain('freeze')
+  })
+
+  it('unrelated mechanics/effects are unaffected by either fix (no Burn/Mark/Break tag changes)', () => {
+    const burning = classifyEffect('Burning Shots', '20% chance to Burn on Free Aim shot.')
+    expect(burning.mechanics).toEqual(expect.arrayContaining(['burn', 'free_aim']))
+    expect(burning.mechanics).not.toContain('rush')
+    expect(burning.mechanics).not.toContain('freeze')
+    const marking = classifyEffect('Marking Shots', '20% chance to apply Mark on Free Aim shot.')
+    expect(marking.mechanics).not.toContain('rush')
+    expect(marking.mechanics).not.toContain('freeze')
   })
 })
 

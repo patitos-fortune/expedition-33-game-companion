@@ -84,7 +84,14 @@ describe('picto_effects.json: corpus/data validation (Phase 2.2A task #4)', () =
   it('classification coverage matches the documented A/B/C/D counts (regenerate data/picto_effects.json if this drifts)', () => {
     const counts = { A: 0, B: 0, C: 0, D: 0 }
     for (const r of loadPictoEffects()) counts[r.classification]++
-    expect(counts).toEqual({ A: 153, B: 73, C: 6, D: 1 })
+    // 153/73/6/1 moved to 157/69/6/1 as of the Rush/Freeze mechanic-coverage
+    // correction (PS-EXP33-003): 4 records (Anti-Freeze, Greater Rush, Longer
+    // Rush, Time Tint) already had a structured effect tag but no mechanic/
+    // trigger/target tag, so they were stuck at classification B; giving them
+    // their legitimate `rush`/`freeze` mechanic tag promotes them to A. No
+    // effect/trigger/target tag changed for any record — see
+    // effectClassifier.test.ts's "Rush/Freeze mechanic coverage" block.
+    expect(counts).toEqual({ A: 157, B: 69, C: 6, D: 1 })
   })
 
   it('detects corpus drift: a Picto with no structured record produces a validation warning instead of silently passing', () => {

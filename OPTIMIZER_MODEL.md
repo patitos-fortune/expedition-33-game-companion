@@ -168,13 +168,17 @@ also reads `data/picto_effects.json` for a small additive HEURISTIC bonus plus a
 `data/optimizer_reference.json` → `statusBurnEffectModel`, and entirely independent of the Break constants above
 (changing one never affects the other).
 
-This model is **deliberately scoped to Burn and Mark only** — the corpus inventory behind this phase found 85 of 233
-records touch *some* status concept, but only 24 (14 Burn-specific, 9 Mark-specific, 1 Burn↔Mark bridge) are
-textually about Burn or Mark specifically; the rest either react to *any* status generically (the `status_effect`
-mechanic tag) or to an unrelated named status (Stun, Shell, Powerful, Regen, Slow, Defenceless, Powerless, Charm,
-Blight, Freeze, Inverted). None of those 61 other records receive any bonus here, on the same reasoning as the
-Stun/Break correction above: "mentions a status" is not the same claim as "helps the Burn/Mark strategy." Recognized
-signals, each with its own reason string:
+This model is **deliberately scoped to Burn and Mark only**. The precise, reproducible "Burn/Mark relevant" population
+is **24** records — **14 Burn-only, 9 Mark-only, 1 Burn↔Mark bridge** (by `mechanics.includes('burn'|'mark')`) — and
+only those 24 are textually about Burn or Mark specifically. A broader "status-mechanic-tagged" population also
+exists — any record whose `mechanics` includes a named status (Stun, Shell, Powerful, Regen, Slow, Defenceless,
+Powerless, Charm, Blight, Freeze, Inverted) or the generic `status_effect` tag — but that population's size is a
+mechanics-tag-only count, not a claim about "touching a status concept" in any broader sense (see the PS-EXP33-003
+corpus reconciliation note below); it is **not** quoted here as a specific number because the broader intuitive
+population it was meant to stand in for ("status-touching") has no single agreed, reproducible predicate across
+`mechanics`/`effects`/`targets`. None of the records outside the 24 Burn/Mark-relevant ones receive any bonus here,
+on the same reasoning as the Stun/Break correction above: "mentions a status" is not the same claim as "helps the
+Burn/Mark strategy." Recognized signals, each with its own reason string:
 
 - `apply_status:burn` present → **"applies Burn"** (Burn producer)
 - the `burning_enemy` target present → **"benefits from Burning enemies"** (Burn consumer/payoff)
@@ -201,7 +205,28 @@ known status word (not hardcoded to any one Picto), covering both the bare-verb 
 corrected four records (Burning Shots → `apply_status:burn`, Accelerating Shots → `apply_status:rush`, Powerful
 Shots → `apply_status:powerful`, Protecting Shots → `apply_status:shell`); all four were already classification A
 and remain A — the fix adds a tag, it never changes a classification tier. `data/picto_effects.json` was
-regenerated after this fix; the corpus-wide classification tally (A:153/B:73/C:6/D:1) is unchanged.
+regenerated after this fix; the corpus-wide classification tally at that point was A:153/B:73/C:6/D:1.
+
+**Rush/Freeze mechanic-coverage correction (PS-EXP33-003):** a later read-only corpus reconciliation (triggered by a
+stale `burn` producer-count test after the fix above) surfaced two further, unrelated taxonomy gaps: `rush` was a
+valid `STATUS_WORDS` entry (driving `apply_status:rush` and the "chance to `<Status>`" rule) but had no corresponding
+`mechanics`-detection rule or `KNOWN_MECHANICS` entry at all, so a Picto that only mentioned Rush was invisible to
+every mechanics-tag query; and the `freeze` mechanic rule only matched "Froze"/"Frozen," not "Freeze," so "Immune to
+Freeze" correctly emitted `grant_immunity:freeze` but never got a `freeze` mechanic tag. Both were fixed by adding
+`rush` to `KNOWN_MECHANICS`/the mechanic-detection rules and widening the freeze regex to also match "Freeze" —
+source-grounded, additive fixes with no change to any effect/trigger/target tag. This gave 13 records their correct
+`rush` and/or `freeze` mechanic tag; 4 of those (Anti-Freeze, Greater Rush, Longer Rush, Time Tint) had an effect tag
+but no mechanic/trigger/target tag before, so they move from classification B to A once correctly tagged (A
+classification requires both). `data/picto_effects.json` was regenerated again; the corpus-wide classification tally
+is now **A:157/B:69/C:6/D:1**. Neither fix touches Burn, Mark, Break, or any `status_burn`/`break`-profile scoring —
+`rush` and `freeze` are not consumed by `statusBurnEffectModel.ts` or `breakEffectModel.ts`, and the Burn/Mark-relevant
+inventory (24: 14/9/1) and every `effectRelationships.ts` producer/consumer count outside `burn` are unaffected.
+
+That same reconciliation also confirmed generic status-cleanse/removal/prevention/dispel wording (e.g. "Dispel the
+first negative Status Effect received," "Consume 1 AP to prevent Status Effects application") has no dedicated
+structured effect tag at all — only the generic `status_effect` mechanic tag. This is a known, explicitly
+out-of-scope taxonomy limitation, not addressed by this correction; see "Known, explicitly out-of-scope classifier
+gaps" below.
 
 **Known, explicitly out-of-scope classifier gaps (not fixed in this phase):** "Double Burn" ("On applying a Burn
 stack, apply a second one.") and "Double Mark" ("Mark requires 1 more hit to be removed.") are genuinely Burn/Mark-
@@ -210,6 +235,13 @@ relevant by mechanic tag but classify B with no effect tag — the classifier ha
 generic rule. "Powerful Mark" ("Gain Powerful on hitting a Marked enemy.") similarly classifies B with no effect tag.
 All three are therefore invisible to the signals above and receive zero Burn/Mark bonus — a conservative, honest gap
 rather than a silent miss, and consistent with this phase's brief not to force-fix every B-classified record.
+
+Separately, generic status-cleanse/removal/prevention/dispel wording (e.g. Beneficial Contamination, Cleansing Tint,
+Draining Cleanse, Energising Cleanse) has no dedicated structured effect tag — only the generic `status_effect`
+mechanic tag, with no corresponding `effects` entry at all. Whether and how to model "removes/prevents a status" is a
+separate modeling-design question (it isn't a Burn/Mark producer or consumer signal, and over-fitting a one-off tag
+for 4 records risks the same overfitting this phase otherwise avoids) — documented here as a known taxonomy
+limitation, intentionally not implemented.
 
 ## Lumina combination
 
