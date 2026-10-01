@@ -1,6 +1,6 @@
 # Clair Obscur: Expedition 33 Game Companion
 
-A spoiler-conscious build and inventory companion for **Clair Obscur: Expedition 33**.
+A build, inventory, and reference companion for **Clair Obscur: Expedition 33**.
 
 **[🎮 Try it online](https://tinyurl.com/exp33companion)**
 
@@ -12,6 +12,11 @@ it analyzes what you have and suggests ways to improve your current setup.
 
 The companion can be used directly in the browser, with player data stored locally. It can also be run locally on
 your own machine. No account or cloud service is required, and the project includes no telemetry.
+
+**Spoiler notice:** this companion is **not spoiler-free**. Its inventory/reference catalogue contains the game's
+Pictos, Luminas, and weapons, so browsing the catalogue can reveal content you have not encountered yet. The optional
+recommendation filter only limits what the optimizer recommends to items you have marked as owned/discovered; it does
+not make the catalogue itself spoiler-free.
 
 ## What it does
 
