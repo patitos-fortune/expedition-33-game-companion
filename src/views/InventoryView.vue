@@ -98,8 +98,7 @@ const weaponOwnedCount = computed(() => Object.values(state.inventory.weaponStat
     <p class="hint">
       Mark what you actually have. For Pictos, click each row to cycle <strong>Not discovered → Owned → Lumina unlocked</strong>. For weapons, click to cycle <strong>Not discovered → Owned → Equipped</strong>; marking one Equipped automatically sets that character's equipped weapon.
       “Lumina unlocked” means you still own the Picto, and its passive is now available to every character; each character
-      has their own Lumina-point capacity. Recommendations only use what is marked here — turn off spoiler protection in
-      Settings to browse the full reference database instead.
+      has their own Lumina-point capacity. The catalogue itself is not spoiler-free and may reveal content you have not encountered. The Recommendation filter in Settings controls whether the optimizer may recommend unmarked items; it does not hide catalogue entries.
     </p>
 
     <div class="toolbar">
